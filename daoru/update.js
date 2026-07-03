@@ -15,12 +15,12 @@ export default async (b) => {
 
 		game.importedPack = true;
 		const pList = ["https://proxy.aestarin.com/", "", "https://gh-proxy.com/", "https://hk.gh-proxy.com/", "https://tvv.tw/"];
-		let p = pList[lib.config.extension_新繁_daoru_update_source] || "";
+		let p = pList[lib.config.extension_新繁_update_source] || "";
 		let m;
 		let success = false;
 		for (const u of [p, ...pList.filter(x => x !== p)]) {
 			try {
-				const r = await fetch(`${u}https://raw.githubusercontent.com/xinfan920/xinfan/refs/heads/main/manifest.json`);
+				const r = await fetch(`${u}https://github.com/xinfan920/xinfan/manifest.json`);
 				if (r.ok) {
 					m = JSON.parse(await r.text());
 					p = u;
@@ -44,7 +44,7 @@ export default async (b) => {
 		const entries = Object.entries(m.files);
 
 		// 读取新增的配置：是否仅更新代码文件
-		const onlyCode = lib.config.extension_新繁_daoru_update_method;
+		const onlyCode = lib.config.extension_新繁_update_method;
 
 		for (let i = 0; i < entries.length; i += 5) {
 			const batch = entries.slice(i, i + 5);
@@ -84,7 +84,7 @@ export default async (b) => {
 				prog.setProgressValue(i + 1);
 				prog.setFileName(`正在下载：${f}`);
 
-				const r = await fetch(`${p}https://raw.githubusercontent.com/xinfan920/xinfan/refs/heads/main/${f}`);
+				const r = await fetch(`${p}https://github.com/xinfan920/xinfan/${f}`);
 				if (!r.ok) throw new Error(`下载失败: ${f}`);
 
 				const data = await r.arrayBuffer();
