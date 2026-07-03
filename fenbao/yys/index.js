@@ -23,6 +23,11 @@ game.import("character", function () {
 		characterSort: {
 			yys: characterSort,//记得这里也要改
 		},
+		characterFilter: {
+			xinfan_wunvzhiyuan: () => false,
+			xinfan_tianyuyuzhan: () => false,
+			xinfan_xiuluoguitongwan: () => false,
+		},
 		characterTitle: { ...characterTitles },
 		characterSubstitute: { ...characterSubstitute },
 		dynamicTranslate: { ...dynamicTranslates },
