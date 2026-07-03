@@ -51,7 +51,6 @@ const Yuhuns = {
 	},
 	//破势
 	xinfan_yuposhi:{
-		usable:1,
 		priority: 1,
 		priority: -4,
 		direct:true,
@@ -64,11 +63,11 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			trigger.num++;
+			player.tempBanSkill(event.name, "roundStart", false);
 		},
 	},
 	//心眼
 	xinfan_yuxinyan:{
-		usable:1,
 		priority: -4,
 		direct:true,
 		trigger:{
@@ -80,11 +79,11 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			trigger.num++;
+			player.tempBanSkill(event.name, "roundStart", false);
 		},
 	},
 	//鸣屋
 	xinfan_yumingwu:{
-		usable:1,
 		priority: -4,
 		direct:true,
 		trigger:{
@@ -96,11 +95,11 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			trigger.num++;
+			player.tempBanSkill(event.name, "roundStart", false);
 		},
 	},	
 	//狂骨
 	xinfan_yukuanggu:{
-		usable:1,
 		priority: -4,
 		direct:true,
 		trigger:{
@@ -112,6 +111,7 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			trigger.num++;
+			player.tempBanSkill(event.name, "roundStart", false);
 		},
 	},
 	//荒骷髅
@@ -203,6 +203,7 @@ const Yuhuns = {
 	},	
 	//网切
 	xinfan_yuwangqie: {
+		usable:1,
 		priority: -4,
 		trigger: {
 			player: ["useCardToPlayered"]
@@ -230,7 +231,6 @@ const Yuhuns = {
 	},
 	//蝠翼
 	xinfan_yufuyi: {
-		usable: 1,
 		forced: true,
 		locked: false,
 		priority: -4,
@@ -243,11 +243,11 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			await player.recover();
+			player.tempBanSkill(event.name, "roundStart", false);
 		}
 	},
 	//珍珠
 	xinfan_yuzhenzhu: {
-		usable: 1,
 		forced: true,
 		locked: false,
 		priority: -4,
@@ -260,6 +260,24 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			await trigger.player.changeHujia(1, "gain");
+			player.tempBanSkill(event.name, "roundStart", false);
+		}
+	},
+	//树妖
+	xinfan_yushuyao: {
+		forced: true,
+		locked: false,
+		priority: -4,
+		trigger: {
+			global: "recoverBegin"
+		},
+		filter(event, player) {
+			return event.source == player;
+		},
+		async content(event, trigger, player) {
+			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			trigger.num++;
+			player.tempBanSkill(event.name, "roundStart", false);
 		}
 	},
 	//涂佛
@@ -282,7 +300,7 @@ const Yuhuns = {
 		priority: -4,
 		direct:true,
 		trigger: {
-        player: "phaseEnd",
+        global: "phaseEnd",
         },
 	    filter(event, player) {
         return player.hp==1;
@@ -290,11 +308,11 @@ const Yuhuns = {
 		async content(event, trigger, player) {
 			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			await player.recover();
+			player.tempBanSkill(event.name, "roundStart", false);
 		},
 	},	
 	//地藏像
 		xinfan_yudizangxiang: {
-		usable: 1,
 		direct:true,
 		priority: -4,
 		trigger: {
@@ -306,6 +324,7 @@ const Yuhuns = {
 		async content(event, trigger, player) {
             player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
 			player.changeHujia(1)
+			player.tempBanSkill(event.name, "roundStart", false);
 		},
 	},
 	//青女坊
@@ -363,6 +382,7 @@ const Yuhuns = {
 		},
 	//木魅
 	xinfan_yumumei:{
+		usable: 1,
 		priority: -4,
 		direct:true,
 		trigger:{
@@ -392,15 +412,15 @@ Object.assign(lib.translate, {
 	_Yuhun: "御魂",
 	_Yuhun_info:`游戏开始时，你选择一个御魂(技能)获得`,
 	xinfan_yuposhi:`破势`,
-	xinfan_yuposhi_info:`每回合1次，你对未受伤的角色造成伤害+1。`,
+	xinfan_yuposhi_info:`每轮1次，你对未受伤的角色造成伤害+1。`,
 	xinfan_yuxinyan:`心眼`,
-	xinfan_yuxinyan_info:`每回合1次，你对体力值为1的角色造成伤害+1。`,
+	xinfan_yuxinyan_info:`每轮1次，你对体力值为1的角色造成伤害+1。`,
 	xinfan_yuzhaocai:`招财`,
 	xinfan_yuzhaocai_info: "准备阶段开始时，你可以摸1张牌或获得2张影。",
     xinfan_yuyinmoluo:`阴摩罗`,
 	xinfan_yuyinmoluo_info: "每回合1次，造成伤害时摸伤害值张牌。",
 	xinfan_yukuanggu:`狂骨`,
-	xinfan_yukuanggu_info: "每回合1次，对手牌数量小于你的角色，造成的伤害加1。",
+	xinfan_yukuanggu_info: "每轮1次，对手牌数量小于你的角色，造成的伤害加1。",
 	xinfan_yutufo:`涂佛`,
 	xinfan_yutufo_info: "你的回合结束后，若你本回合内未造成过伤害，你摸2张牌。",
 	xinfan_yuqingnvfang:`青女坊`,
@@ -408,22 +428,24 @@ Object.assign(lib.translate, {
 	xinfan_yuhuangkulou:`荒骷髅`,
 	xinfan_yuhuangkulou_info:`每回合1次，当你造成伤害时，你可以流失1点体力令本次造成的伤害+1。`,	
 	xinfan_yuniepanhuo:`涅槃火`,
-	xinfan_yuniepanhuo_info: "你的回合结束后，若你体力值为1，你回复1点体力。",	
+	xinfan_yuniepanhuo_info: "每轮1次，一名角色回合结束后，若你体力值为1，你回复1点体力。",	
 	xinfan_yumingwu:`鸣屋`,
-	xinfan_yumingwu_info:`每回合1次，你对判定区内有牌的角色造成伤害+1。`,	
+	xinfan_yumingwu_info:`每轮1次，你对判定区内有牌的角色造成伤害+1。`,	
 	xinfan_yumumei:`木魅`,
-	xinfan_yumumei_info:`受到伤害后，来源弃置1张牌。`,	
+	xinfan_yumumei_info:`每回合1次，受到伤害后，来源弃置1张牌。`,	
 	xinfan_yutouzigui:`骰子鬼`,
 	xinfan_yutouzigui_info:`准备阶段开始时，你可以弃置判定区内一张牌，并视为使用一张无距离限制的【杀】。`,	
 	xinfan_yuwangqie:`网切`,
-	xinfan_yuwangqie_info:`当你使用【杀】指定目标后，你可以弃置目标装备区内一张牌。`,	
+	xinfan_yuwangqie_info:`每回合1次，当你使用【杀】指定目标后，你可以弃置目标装备区内一张牌。`,	
 	xinfan_yuzheng:`狰`,
 	xinfan_yuzheng_info:`受到伤害后，你可以对来源使用一张【杀】。`,	
 	xinfan_yudizangxiang:`地藏像`,
-	xinfan_yudizangxiang_info:`每回合首次减少体力值后，你获得1点护甲。`,	
+	xinfan_yudizangxiang_info:`每轮首次减少体力值后，你获得1点护甲。`,	
 	xinfan_yufuyi:`蝠翼`,
-	xinfan_yufuyi_info:`每回合首次造成伤害后，你回复1点体力。`,	
+	xinfan_yufuyi_info:`每轮首次造成伤害后，你回复1点体力。`,	
 	xinfan_yuzhenzhu:`珍珠`,
-	xinfan_yuzhenzhu_info:`每回合一次，当一名角色回复体力后，若你为来源，则其获得1点护甲。`,	
+	xinfan_yuzhenzhu_info:`每轮1次，当一名角色回复体力后，若你为来源，则其获得1点护甲。`,	
+	xinfan_yushuyao:`树妖`,
+	xinfan_yushuyao_info:`每轮1次，你为来源的回复效果加1。`,	
 
 });

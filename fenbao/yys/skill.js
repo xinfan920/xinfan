@@ -2,7 +2,63 @@ import { lib, game, ui, get, ai, _status } from "../../../../noname.js";
 
 /** @type { importCharacterConfig['skill'] } */
 const skills = {
-
+    //狐妖
+    xinfan_hujuqi: {
+        trigger: {
+            player: "useCardAfter",
+        },
+        forced: true,
+        locked: false,
+        audio: "ext:新繁/fenbao/yys/juesebao/yaohu:2",
+        filter(event, player) {
+            if (!event.targets || !event.targets?.length) {
+                return true;
+            }
+            return event.targets.slice().remove(player).length == 0;
+        },
+        async content(event, trigger, player) {
+            const num = 3 + player.getHistory("useSkill", evt => evt.skill == event.name).length;
+            const cards = get.cards(num, true);
+            const result = await player
+                .chooseCardButton(get.translation(event.name), cards.slice(), true)
+                .set("ai", button => {
+                    return get.player().getUseValue(button.link);
+                })
+                .forResult();
+            if (result.bool && result.links?.length) {
+                await player.gain(result.links, "gain2");
+            }
+        },
+        },
+    xinfan_hukuanglan: {
+        trigger: {
+            player: "useCardToPlayered",
+        },
+        filter(event, player) {
+            return event.card.name == "sha";
+        },
+        logTarget: "target",
+        audio: "ext:新繁/fenbao/yys/juesebao/yaohu:1",
+        async content(event, trigger, player) {
+            while (true) {
+                const cards = get.cards();
+                await player.showCards(cards);
+                const card = cards[0];
+                await game.cardsGotoOrdering(cards);
+                if (card.name == "sha") {
+                    if (player.canUse(card, trigger.target, false, false)) {
+                        await player.chooseUseTarget(card, trigger.target, false, "nodistance");
+                    }
+                    const result = await player.chooseBool("是否继续展示牌堆顶的一张牌？").forResult();
+                    if (!result.bool) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        },
+    },
     //时耀泷夜叉姬
     xinfan_shixi: {
         name: "时隙",
@@ -11,7 +67,7 @@ const skills = {
         trigger: {
             player: "phaseBegin",
         },
-                audio: "ext:新繁/fenbao/yys/juesebao/shiyaolongyechaji:2",
+        audio: "ext:新繁/fenbao/yys/juesebao/shiyaolongyechaji:2",
         forced: true,
         async content(event, trigger, player) {
             await player[player.countMark(event.name) % 2 == 0 ? "gainMaxHp" : "recover"]();
@@ -374,51 +430,77 @@ xinfan_gewuguang: {
        },
 
           //不见岳
- xinfan_bushanxing: {
-                    audio: "ext:新繁/fenbao/yys/juesebao/bujianyue:2",
-         enable: 'phaseUse',
+    xinfan_bushanxing: {
+        enable: "phaseUse",
         usable: 1,
-        manualConfirm: true,
-        ai: {
-            order: 9,
-            result: {
-                player(player) {
-                    return game.countPlayer(c => (get.attitude(player, c) > 0 && c.isDamaged()) || get.damageEffect(c, player, player) > 0) * 2;
-                },
+        audio: "ext:新繁/fenbao/yys/juesebao/bujianyue:2",
+        chooseButton: {
+            dialog(event, player) {
+                return ui.create.dialog(get.translation("xinfan_bushanxing"), [
+                    [
+                        ["damage", "令一名角色受到1点伤害"],
+                        ["recover", "令一名角色回复1点体力"],
+                    ],
+                    "textbutton",
+                ]);
+            },
+            check(button) {
+                const player = get.player();
+                if (button.link == "recover") {
+                    return Math.max(
+                        ...game.filterPlayer().map(target => {
+                            return get.recoverEffect(target, player, player);
+                        })
+                    );
+                } else {
+                    return Math.max(
+                        ...game.filterPlayer().map(target => {
+                            return get.damageEffect(target, player, player);
+                        })
+                    );
+                }
+            },
+            backup(links, player) {
+                return {
+                    choice: links[0],
+                    filterTarget: true,
+                    ai1: () => 1,
+                    ai2(target) {
+                        const player = get.player();
+                        const sgn = get.sgnAttitude(player, target);
+                        const { choice } = get.info("xinfan_bushanxing_backup");
+                        if (choice == "recover") {
+                            return get.recoverEffect(target, player, player) * sgn;
+                        }
+                        return get.damageEffect(target, player, player);
+                    },
+                    async content(event, trigger, player) {
+                        const {
+                            targets: [target],
+                        } = event;
+                        const { choice } = get.info(event.name);
+                        await target[choice]();
+                    },
+                };
+            },
+            prompt(links, player) {
+                if (links[0] == "damage") {
+                    return "令一名角色受到1点伤害";
+                } else {
+                    return "令一名角色回复1点体力";
+                }
             },
         },
-        async content(event, trigger, player) {
-            const result = await player.chooseButtonTarget({
-                createDialog: [
-                    '山行：请选择一项',
-                    [
-                        [
-                            ['damage', '对一名角色造成一点伤害'],
-                            ['changeHujia', '令一名角色恢复1点体力'],
-                        ],
-                        'textbutton',
-                    ],
-                ],
-                complexTarget: true,
-                ai1(button) {
-                    const { player } = get.event();
-                    if (game.hasPlayer(i => get.damageEffect(i, player, player) > 0 && i.hp <= 1)) return button.link == 'damage' ? 66 : 0;
-                    if (game.hasPlayer(i => get.attitude(player, i) > 0 && i.getDamagedHp() > 1)) return button.link == 'changeHujia' ? 6 : 0;
-                    return button.link == 'damage' ? 5.5 + Math.random() : 0;
-                },
-                ai2(target) {
-                    return 1 / target.hp;
-                },
-            }).forResult();
-            if (result.bool) {
-                const target = result.targets[0];
-                const link = result.links[0];
-                if (link == 'damage') {
-                   await target.damage(1);
-                } else {
-                    await target.recover();
-                }
-            }
+        subSkill: {
+            backup: {
+
+            },
+        },
+        ai: {
+            order: 1,
+            result: {
+                player: 1,
+            },
         },
     },
             xinfan_buguyue: {
@@ -4807,7 +4889,7 @@ filter(event, player) {
         async content(event, trigger, player) {
             await player.addTempBackGroundOL("/extension/新繁/fenbao/yys/beijing/guitongwan.jpg", 0, {player:"phaseBegin"})
             if(_status.tempMusic != "ext:新繁/fenbao/yys/yinyue/shayushenghua.mp3"){
-            await player.addTempBgmOL("ext:新繁/fenbao/yys/yinyue/shayushenghua.mp3")
+            game.playBgmOL("ext:新繁/fenbao/yys/yinyue/shayushenghua.mp3"); 
             }
             await player.changeHujia(1);
             player.addTempSkill('xinfan_guiyueyin_out', { player: 'phaseBegin' });
@@ -5214,8 +5296,6 @@ filter(event, player) {
   },
   },
                     },
-
-
                 //缚骨清姬
                 xinfan_du: {
                 mark: true,
@@ -5350,7 +5430,7 @@ filter(event, player) {
                         const target = event.target;
             await player.addTempBackGroundOL("/extension/新繁/fenbao/yys/beijing/lingluyuqian.jpg", 0, {global: "phaseJieshuEnd"})
             if(_status.tempMusic != "ext:新繁/fenbao/yys/yinyue/luhaiweiwang.mp3"){
-            await player.addTempBgmOL("ext:新繁/fenbao/yys/yinyue/luhaiweiwang.mp3")
+                  game.playBgmOL("ext:新繁/fenbao/yys/yinyue/luhaiweiwang.mp3"); 
             }
                  const choiceList = ['获得等量点护甲,目标执行“义争”回合','目标受到等量点伤害'];
                        const choices = ['选项一','选项二'];
@@ -5434,9 +5514,6 @@ filter(event, player) {
                             },
 							},
 							},
-
-
-
            xinfan_luyili: {
           trigger: {
              player: "damageBegin4"

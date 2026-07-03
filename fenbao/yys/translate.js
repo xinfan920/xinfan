@@ -375,6 +375,12 @@ xinfan_chalunzhuan_info: `一名角色回合结束后，你可以执行一个${g
 xinfan_chashiji: '时寂',
 xinfan_chashiji_info: `你的${get.poptip("xinfan_shixi")}回合内，所有其他角色不能使用或打出牌，所有伤害效果延迟至下一名角色回合开始时，合并结算。`,
 
+xinfan_yaohu: "妖狐", 
+xinfan_hujuqi: '聚气',
+xinfan_hujuqi_info: '你不以其他角色为目标的牌结算完成后，你观看牌堆顶x张牌并获得其中一张（x为3+此技能本回合内使用次数）。',
+xinfan_hukuanglan: '狂岚',
+xinfan_hukuanglan_info: '当你使用【杀】指定目标后，你可以展示牌堆顶1张牌，若为【杀】，则你可以对其使用此牌，然后你可以重复此操作。',
+
 };
 
 export default translates;

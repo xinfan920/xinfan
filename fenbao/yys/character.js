@@ -154,6 +154,11 @@ xinfan_beimihu: ["female", "qun",5,["xinfan_beirihui","xinfan_beirilun"], ["ext:
 
 //时耀泷夜叉姬
 xinfan_shiyaolongyechaji: ["female", "qun",4,["xinfan_chashiyao","xinfan_chalunzhuan","xinfan_chashiji"], ["ext:新繁/fenbao/yys/juesebao/shiyaolongyechaji/xinfan_shiyaolongyechaji.jpg"]],
+
+//狐妖
+xinfan_yaohu: ["female", "qun",4,["xinfan_hujuqi","xinfan_hukuanglan"], ["ext:新繁/fenbao/yys/juesebao/yaohu/xinfan_yaohu.jpg"]],
+
+
 };
 
 export default characters;
