@@ -12,7 +12,7 @@ export async function content(config, pack) {
 				{
 					type: "players", data: [
 						"Irumyuui_yzs",
-						"Faputa_yzs"
+
 					]
 				},
 				{
