@@ -1,5 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "../../../noname.js";
-
+import update from '../daoru/update.js';
 //扩展设置
 export const config = {
 	"xinfan_Yuhun": {
