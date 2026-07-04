@@ -817,9 +817,9 @@ const skills = {
         filter(event, player) {
             return event.player != player;
         },
-              check: function (event,player){
-                 return get.attitude(player,event.player)<0;
-                },
+        	check(event, player) {
+							return get.attitude(player, event.player) < 0;
+						},
         async cost(event, trigger, player) {
             event.result = await player
                 .chooseToDiscard('she', card => get.type2(card) == get.type2(_status.event.getTrigger().card), `###智胜###是否弃置一张${get.translation(get.type2(trigger.card))}牌令${get.translation(trigger.player)}使用或打出的牌（${get.translation(trigger.card)}）无效并弃置？`)

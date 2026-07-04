@@ -27,6 +27,52 @@ const skills = {
 			trigger.num += config > 0 ? config : 0;
 		},
 	},
+	//背景音乐
+	_YINYUE: {
+		priority: -10,
+		ruleSkill: true,
+		locked: true,
+		forced: true,
+		nopop:true,
+		charlotte: true,
+		trigger: {
+			global: "phaseBefore",
+			player: "enterGame",
+		},
+		filter: function (event, player) {
+			if (!lib.config.extension_新繁_xinfan_bgm) {
+				return false;
+			}
+			return event.name != "phase" || game.phaseNumber == 0;
+		},
+		async content(event, trigger, player) {
+			let num = game.countPlayer();
+			while (num > 0) {
+			let zhu = game.findPlayer(i => i.getSeatNum() == num);
+            if(zhu.name == "xinfan_kongxiangmianlingqi"){
+                game.broadcastAll(function () {
+                        ui.background.setBackgroundImage('extension/新繁/fenbao/yys/beijing/kongxiangmianlingqi.jpg');
+                })
+               game.playBgmOL("ext:新繁/fenbao/yys/yinyue/kongxiang.mp3"); 
+			   break;
+					}else if(zhu.name == "xinfan_benzhensanweihu"){
+                game.broadcastAll(function () {
+                        ui.background.setBackgroundImage('extension/新繁/fenbao/yys/beijing/benzhensanweihu.jpg');
+                })
+               game.playBgmOL("ext:新繁/fenbao/yys/yinyue/xianyuezhixia.mp3"); 
+			   break;
+					}else if(zhu.name == "xinfan_qianji"){
+                game.broadcastAll(function () {
+                        ui.background.setBackgroundImage('extension/新繁/fenbao/yys/beijing/qianji.jpg');
+                })
+               game.playBgmOL("ext:新繁/fenbao/yys/yinyue/huanshidejintou.mp3"); 
+			   break;
+					} else {
+                    num -= 1;
+                }  
+}
+					},
+},
 		//毒
 		_xinfan_du: {
 		trigger: {

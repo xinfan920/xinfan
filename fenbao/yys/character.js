@@ -141,7 +141,7 @@ xinfan_guiwangjiutuntongzi: ["male", "qun",5,["xinfan_tunfentian","xinfan_tungui
 xinfan_yuyuanbore: ["male", "qun",5,["xinfan_boyuyuan","xinfan_bohenfan"], ["ext:新繁/fenbao/yys/juesebao/yuyuanbore/xinfan_yuyuanbore.jpg"]],
 
 //不见岳
-xinfan_bujianyue: ["female", "qun",4,["xinfan_bushanxing","xinfan_buguyue"], ["ext:新繁/fenbao/yys/juesebao/bujianyue/xinfan_bujianyue.jpg"]],
+xinfan_bujianyue: ["male", "qun",4,["xinfan_bushanxing","xinfan_buguyue"], ["ext:新繁/fenbao/yys/juesebao/bujianyue/xinfan_bujianyue.jpg"]],
 
 //歌留多
 xinfan_geliuduo: ["female", "qun",4,["xinfan_gewuguang","xinfan_gehuayi","xinfan_geqingduan"], ["ext:新繁/fenbao/yys/juesebao/geliuduo/xinfan_geliuduo.jpg"]],
@@ -156,7 +156,7 @@ xinfan_beimihu: ["female", "qun",5,["xinfan_beirihui","xinfan_beirilun"], ["ext:
 xinfan_shiyaolongyechaji: ["female", "qun",4,["xinfan_chashiyao","xinfan_chalunzhuan","xinfan_chashiji"], ["ext:新繁/fenbao/yys/juesebao/shiyaolongyechaji/xinfan_shiyaolongyechaji.jpg"]],
 
 //狐妖
-xinfan_yaohu: ["female", "qun",4,["xinfan_hujuqi","xinfan_hukuanglan"], ["ext:新繁/fenbao/yys/juesebao/yaohu/xinfan_yaohu.jpg"]],
+xinfan_yaohu: ["male", "qun",4,["xinfan_hujuqi","xinfan_hukuanglan"], ["ext:新繁/fenbao/yys/juesebao/yaohu/xinfan_yaohu.jpg"]],
 
 
 };

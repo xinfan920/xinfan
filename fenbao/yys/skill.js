@@ -475,6 +475,7 @@ xinfan_gewuguang: {
                         return get.damageEffect(target, player, player);
                     },
                     async content(event, trigger, player) {
+                        player.logSkill('xinfan_bushanxing');
                         const {
                             targets: [target],
                         } = event;
@@ -534,220 +535,6 @@ xinfan_gewuguang: {
                 }    
                                             },
                 },
-
-
-          //妙主九命猫
-                        xinfan_maomiaozhu: {
-                trigger: {
-                      global: "phaseBegin",
-                 },
-                forced: true,
-        audio: "ext:新繁/fenbao/yys/juesebao/miaozhujiumingmao:2",
-               async content(event, trigger, player) {
-            if(player.hasMark('xinfan_maomiaozhu_qing') && player.hasMark('xinfan_maomiaozhu_yuan') && player.hasMark('xinfan_maomiaozhu_yue') &&player.hasMark('xinfan_maomiaozhu_qiu')){
-   const choiceList = ['晴喵：令一名角色受到一点伤害','源喵：弃置一名角色区域内一张牌','乐喵：令一名角色摸一张牌','丘喵：令一名角色回复一点体力',];
-             const choices = ['晴喵','源喵','乐喵','丘喵','cancel2',];
-            if(player.countMark('xinfan_maomiaozhu_qing') != 1){
-               choiceList[0] = '<span style="opacity:0.5">' + choiceList[0] + "</span>";
-                 choices.remove('晴喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_yuan') != 1){
-                 choiceList[1] = '<span style="opacity:0.5">' + choiceList[1] + "</span>";
-                 choices.remove('源喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_yue') != 1){
-               choiceList[2] = '<span style="opacity:0.5">' + choiceList[2] + "</span>";
-                 choices.remove('乐喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_qiu') != 1){
-                 choiceList[3] = '<span style="opacity:0.5">' + choiceList[3] + "</span>";
-                 choices.remove('丘喵');
-                };
-            var result = await player
-            .chooseControl()
-            .set('controls', choices)
-            .set('choiceList', choiceList)
-            .set('prompt','妙主： 移除一个“喵卫”')
-              .forResult();
-            if (result.control == '晴喵'){
-            await player.removeMark('xinfan_maomiaozhu_qing', 1);
-            await player.useSkill('xinfan_maomiaozhu_qing');
-            }else if (result.control == '源喵'){
-            await player.removeMark('xinfan_maomiaozhu_yuan', 1);
-            await player.useSkill('xinfan_maomiaozhu_yuan');
-            }else if (result.control == '乐喵'){
-            await player.removeMark('xinfan_maomiaozhu_yue', 1);
-            await player.useSkill('xinfan_maomiaozhu_yue');
-            }else if (result.control == '丘喵'){
-            await player.removeMark('xinfan_maomiaozhu_qiu', 1);
-            await player.useSkill('xinfan_maomiaozhu_qiu');
-            }
-            }else{
-   const choiceList = ['晴喵：令一名角色受到一点伤害','源喵：弃置一名角色区域内一张牌','乐喵：令一名角色摸一张牌','丘喵：令一名角色回复一点体力',];
-             const choices = ['晴喵','源喵','乐喵','丘喵','cancel2',];
-            if(player.countMark('xinfan_maomiaozhu_qing') != 0){
-               choiceList[0] = '<span style="opacity:0.5">' + choiceList[0] + "</span>";
-                 choices.remove('晴喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_yuan') != 0){
-                 choiceList[1] = '<span style="opacity:0.5">' + choiceList[1] + "</span>";
-                 choices.remove('源喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_yue') != 0){
-               choiceList[2] = '<span style="opacity:0.5">' + choiceList[2] + "</span>";
-                 choices.remove('乐喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_qiu') != 0){
-                 choiceList[3] = '<span style="opacity:0.5">' + choiceList[3] + "</span>";
-                 choices.remove('丘喵');
-                };
-            var result = await player
-            .chooseControl()
-            .set('controls', choices)
-            .set('choiceList', choiceList)
-            .set('prompt','妙主： 请选择一个“喵卫”')
-              .forResult();
-            if (result.control == '晴喵'){
-            await player.addMark('xinfan_maomiaozhu_qing', 1);
-            }else if (result.control == '源喵'){
-            await player.addMark('xinfan_maomiaozhu_yuan', 1);
-            }else if (result.control == '乐喵'){
-            await player.addMark('xinfan_maomiaozhu_yue', 1);
-            }else if (result.control == '丘喵'){
-            await player.addMark('xinfan_maomiaozhu_qiu', 1);
-            }
-            }
-         }, 
-          subSkill: {
-            qing: {
-            	marktext: '晴喵',
-                         intro: {
-                                   content: 'mark',
-                                   name: '晴喵',
-                                 },
-                        forced: true,
-                        audio: "ext:新繁/fenbao/yys/juesebao/jinnaluo:1",
-                     trigger: {
-                      player: ['useCardBegin', 'respondBegin'],
-                   },
-                async content(event, trigger, player) {         
-               const  result  = await player.chooseTarget(`###宫###令一名角色受到一点伤害`)
-                       .set('ai', target => {
-                            const player = _status.event.player;
-                            return get.damageEffect(target, player, player,);      
-                        }).forResult();
-                         if(result.bool){
-                         await result.targets[0].damage(1,);
-                }
-            },
-            },
-            yuan: {
-            	marktext: '源喵',
-                         intro: {
-                                   content: 'mark',
-                                   name: '源喵',
-                                 },
-                        forced: true,
-                      audio: "ext:新繁/fenbao/yys/juesebao/jinnaluo:1",
-                     trigger: {
-                      player: ['useCardBegin', 'respondBegin'],
-                   },
-                async content(event, trigger, player) {         
-               const  result  = await player.chooseTarget(`###商###弃置一名角色一张牌`)
-               .set('ai', target => {
-                                        const player = get.player();
-                                        return get.effect(target, { name: 'guohe_copy' }, player, player);
-                                    }).forResult();
-                         if(result.bool){
-                         await player.discardPlayerCard(result.targets[0], 'hej', true);
-                }
-            },
-                      },  
-            yue: {
-            	marktext: '乐喵',
-                         intro: {
-                                   content: 'mark',
-                                   name: '乐喵',
-                                 },
-                        forced: true,
-                        audio: "ext:新繁/fenbao/yys/juesebao/jinnaluo:1",
-                     trigger: {
-                      player: ['useCardBegin', 'respondBegin'],
-                   },
-                async content(event, trigger, player) {         
-               await player.changeHujia(1);
-        },
-                     },   
-            qiu: {
-            	marktext: '丘喵',
-                         intro: {
-                                   content: 'mark',
-                                   name: '丘喵',
-                                 },
-                        forced: true,
-                        audio: "ext:新繁/fenbao/yys/juesebao/jinnaluo:1",
-                     trigger: {
-                      player: ['useCardBegin', 'respondBegin'],
-                   },
-                async content(event, trigger, player) {         
-                                player.draw(2);
-            },                  
-        },
-    },
-         }, 
-              xinfan_maohujia: {
-        trigger: {
-            target: 'useCardToTargeted',
-        },
-        audio: "ext:新繁/fenbao/yys/juesebao/miaozhujiumingmao:2",
-        filter(event, player) {
-            if(!player.hasMark('xinfan_maomiaozhu_qing') && !player.hasMark('xinfan_maomiaozhu_yuan') && !player.hasMark('xinfan_maomiaozhu_yue') && !player.hasMark('xinfan_maomiaozhu_qiu'))return false;         
-            return event.player != player;
-        },
-        check(event, player) {
-            return get.effect(player, event.card, event.player, player) < 0;
-        },
-        async content(event, trigger, player) {
-              trigger.getParent().excluded.add(player);
-const choiceList = ['晴喵：令一名角色受到一点伤害','源喵：弃置一名角色区域内一张牌','乐喵：令一名角色摸一张牌','丘喵：令一名角色回复一点体力',];
-             const choices = ['晴喵','源喵','乐喵','丘喵','cancel2',];
-            if(player.countMark('xinfan_maomiaozhu_qing') != 1){
-               choiceList[0] = '<span style="opacity:0.5">' + choiceList[0] + "</span>";
-                 choices.remove('晴喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_yuan') != 1){
-                 choiceList[1] = '<span style="opacity:0.5">' + choiceList[1] + "</span>";
-                 choices.remove('源喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_yue') != 1){
-               choiceList[2] = '<span style="opacity:0.5">' + choiceList[2] + "</span>";
-                 choices.remove('乐喵');
-                };
-            if(player.countMark('xinfan_maomiaozhu_qiu') != 1){
-                 choiceList[3] = '<span style="opacity:0.5">' + choiceList[3] + "</span>";
-                 choices.remove('丘喵');
-                };
-            var result = await player
-            .chooseControl()
-            .set('controls', choices)
-            .set('choiceList', choiceList)
-            .set('prompt','护驾： 移除一个“喵卫”')
-              .forResult();
-            if (result.control == '晴喵'){
-            await player.removeMark('xinfan_maomiaozhu_qing', 1);
-            await player.useSkill('xinfan_maomiaozhu_qing');
-            }else if (result.control == '源喵'){
-            await player.removeMark('xinfan_maomiaozhu_yuan', 1);
-            await player.useSkill('xinfan_maomiaozhu_yuan');
-            }else if (result.control == '乐喵'){
-            await player.removeMark('xinfan_maomiaozhu_yue', 1);
-            await player.useSkill('xinfan_maomiaozhu_yue');
-            }else if (result.control == '丘喵'){
-            await player.removeMark('xinfan_maomiaozhu_qiu', 1);
-            await player.useSkill('xinfan_maomiaozhu_qiu');
-            }
-  },
-  },
           //御怨般若
                 xinfan_boyuyuan: {
                         trigger: {
@@ -846,56 +633,38 @@ const choiceList = ['晴喵：令一名角色受到一点伤害','源喵：弃�
     },
                     },
                 },
+                                ai:{
+    order:9,
+    result:{
+        player(player) {
+            return 2;
+        },
+        },
+           },
             },    
                            xinfan_tunguiwang: {
                        audio: "ext:新繁/fenbao/yys/juesebao/guiwangjiutuntongzi:2",    
-                marktext: '鬼王',
-                         intro: {
-                                   content: '每回合一次受到伤害减1，每回合一次造成伤害加1',
-                                   name: '鬼王',
-                                 },
-                                         trigger: {
-            global: 'phaseBefore',
-        },
-        forced: true,
-        filter(event, player) {
-                                    return game.phaseNumber == 0;
-                                },
-		async content(event, trigger, player) {
-               player.addMark('xinfan_tunguiwang');
-            },
-                global: ['xinfan_tunguiwang_start','xinfan_tunguiwang_art'],
-             subSkill: { 
-                start: {
-                        forced: true,
-                        usable: 1,
+                mark: true,
+                intro: {
+                    content: '每回合1次，造成伤害加1或受到伤害减1。',
+                },
+                charlotte: true,
         trigger: {
+            player: 'damageBegin',
             source: 'damageBegin',
         },
-        filter(event, player) {
-                    return player.name == 'xinfan_guiwangjiutuntongzi' || player.hasMark('xinfan_tunguiwang');
-                },
-        content() {
-            player.logSkill('xinfan_tunguiwang');
-            trigger.num++;
-        },
-        },
-                art: {
-                usable: 1,
-                forced: true,
-                trigger: {
-                    player: 'damageBegin4',
-                },
-                filter(event, player) {
-                    if (event.num < 1) return false;
-                    return player.name == 'xinfan_guiwangjiutuntongzi' || player.hasMark('xinfan_tunguiwang');
-                },
-                content() {
-                    player.logSkill('xinfan_tunguiwang');
-                    trigger.num--;
-                },
-                     },
- }, 
+        usable: 1,
+        forced: true,
+		async content(event, trigger, player) {
+            
+               if(trigger.source == player){
+            trigger.source.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/guiwang.png`,[100,100])
+                trigger.num++;
+               }else{
+            trigger.player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/guiwang.png`,[100,100])
+                trigger.num--;
+               }
+            },
 },
 
                     xinfan_tunnuyan: {
@@ -920,30 +689,16 @@ const choiceList = ['晴喵：令一名角色受到一点伤害','源喵：弃�
              return `是否令${get.translation(event.player)}流失1点体力，弃置判断区内所有牌，直到其下个回合开始前获得“鬼王”？`;
         },
         async content(event, trigger, player) { 
-            await trigger.player.loseHp();
+            player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/nuyan.png`,[100,100])
+            trigger.player.loseHp();
             if(trigger.player.countCards("j") > 0){
                     const cards = trigger.player.getCards("j");
                     trigger.player.discard(cards);
             }
             if(trigger.player != player){
-            trigger.player.addMark('xinfan_tunguiwang');
+            trigger.player.addTempSkill("xinfan_tunguiwang", {player: "phaseBefore" });
             }
         
-                            },
-            global: ['xinfan_tunnuyan_start'],
-             subSkill: { 
-                start: {
-                trigger: {
-                    player: 'phaseBefore',
-                },
-                forced: true,
-            filter(event, player) {
-            return player.hasMark('xinfan_tunguiwang') && player.name != 'xinfan_guiwangjiutuntongzi';
-        },
-        async content(event, trigger, player) { 
-                      await player.clearMark('xinfan_tunguiwang');
-             },
-                            },
                             },
                             },
           //梦山白藏主
@@ -1059,12 +814,21 @@ async content(event, trigger, player) {
                   xinfan_fengfengyang: {
     audio: "ext:新繁/fenbao/yys/juesebao/fengyangjun:2",
          trigger: {
-            player: "phaseDrawEnd",
+            player: "phaseUseBefore",
         },
         async content(event, trigger, player) {
-                    await player.skip('phaseUse');
-                    await player.skip("phaseDiscard");
-           await player.chooseUseTarget({ name: 'sha' }, false, 'nodistance');
+        trigger.cancel();
+        const evt = event.getParent("phase", true);
+        if (evt) {
+        game.log(player, "结束了回合");
+        evt.num = evt.phaseList.length;
+        evt.goto(11);
+       }
+       const evtx = event.getParent("phaseUse", true);
+       if (evtx) {
+        evtx.skipped = true;
+       } 
+       player.chooseUseTarget({ name: 'sha' }, false, 'nodistance');
         },
         },
             xinfan_fengwangyue: {
@@ -1328,6 +1092,7 @@ async content(event, trigger, player) {
         },
                 audio: "ext:新繁/fenbao/yys/juesebao/huiyeji:2",
         async cost(event, trigger, player) {
+            player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/huiye.png`,[100,100])
             const controls = ['选项一', '选项二', 'cancel2'];
             const list = [`弃置2枚“辉”标记，令${get.translation(trigger.player)}摸2张牌`, `弃置3枚“辉”标记，令${get.translation(trigger.player)}自选一张牌获得`];
             if (player.countMark('xinfan_huiyuejing') < 3) {
@@ -1593,7 +1358,7 @@ async content(event, trigger, player) {
         },
     },
           //稻荷神御馔津
-              xinfan_daofengmou: {
+        xinfan_daofengmou: {
         trigger: {
             player: 'useCardToPlayered',
         },
@@ -1604,6 +1369,7 @@ async content(event, trigger, player) {
         logTarget: 'target',
         frequent: true,
         async content(event, trigger, player) {
+            trigger.target.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/feng.png`,[100,100])
             const result = await player.judge().forResult();
 
             if (['heart', 'diamond', 'club', 'spade'].includes(result.suit)) {
@@ -2083,16 +1849,12 @@ async content(event, trigger, player) {
               .forResult();
             if (result.control == '侵略'){
             player.addTempSkill("xinfan_chayueheng_qin", { player: "xinfan_chayuehengBegin" });
-            player.logSkill('xinfan_chayueheng_qin');
             }else if (result.control == '飞流'){
             player.addTempSkill("xinfan_chayueheng_liu", { player: "xinfan_chayuehengBegin" });
-            player.logSkill('xinfan_chayueheng_liu');
             }else if (result.control == '风疾'){
             player.addTempSkill("xinfan_chayueheng_feng", { player: "xinfan_chayuehengBegin" });
-            player.logSkill('xinfan_chayueheng_feng');
             }else if (result.control == '不动'){
             player.addTempSkill("xinfan_chayueheng_dong", { player: "xinfan_chayuehengBegin" });
-            player.logSkill('xinfan_chayueheng_dong');
             }
                    },
         group: ['xinfan_chayueheng_kai'], 
@@ -2124,6 +1886,7 @@ async content(event, trigger, player) {
                forced: true,
                 async content(event, trigger, player) {         
              player.gainPlayerCard(true, trigger.player,"he");
+             player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/qinlue.png`,[100,100])
             },
             },
             liu: {
@@ -2138,8 +1901,9 @@ async content(event, trigger, player) {
             source: "damageBegin",
         },
                forced: true,
-                async content(event, trigger, player) {         
-                        trigger.num++;
+                async content(event, trigger, player) {   
+                    player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/feiliu.png`,[100,100])      
+                    trigger.num++;
             },
                       },  
             feng: {
@@ -2156,6 +1920,7 @@ async content(event, trigger, player) {
         },
                forced: true,
                 async content(event, trigger, player) { 
+                    player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/fengji.png`,[100,100])
                     trigger.cancel();
                     const num = trigger.num;
                     trigger.player.loseHp(num);
@@ -2174,8 +1939,9 @@ async content(event, trigger, player) {
             source: "damageBegin",
         },
                forced: true,
-                async content(event, trigger, player) {         
-                              player.draw();
+                async content(event, trigger, player) {  
+                    player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/budong.png`,[100,100])       
+                    player.draw();
             },
                      
         },
@@ -2348,6 +2114,10 @@ xinfan_meichenlun: {
                 player.markSkill('xinfan_quemili');
                 player.tempBanSkill('xinfan_quequewu_use');
                 player.changeAvatarImageOL("extension/新繁/fenbao/yys/juesebao/kongquemingwang/xinfan_kongquemingwang_jie.jpg");
+                await player.addTempBackGroundOL("/extension/新繁/fenbao/yys/beijing/kongquemingwang.jpg", 0, {player: "phaseJieshuEnd"})
+                if(_status.tempMusic != "ext:新繁/fenbao/yys/yinyue/jingjimeigui.mp3"){
+                  game.playBgmOL("ext:新繁/fenbao/yys/yinyue/jingjimeigui.mp3"); 
+                }
             } else {
                 player.changeSkills(['xinfan_quemili'], ['xinfan_quequewu']);
                 player.changeAvatarImageOL("extension/新繁/fenbao/yys/juesebao/kongquemingwang/xinfan_kongquemingwang.jpg");
@@ -2598,7 +2368,8 @@ xinfan_meichenlun: {
 							return !player.hasMark('xinfan_yulinghai');
 						},
                             async content(event, trigger, player) {
-                             player.insertPhase().skill=event.name;
+                            player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/linghai.png`,[100,100])    
+                            player.insertPhase().skill=event.name;
                                },   
                                },                   
                                                              },                              
@@ -2612,11 +2383,11 @@ xinfan_meichenlun: {
     },
            },
            },             
-                                 xinfan_yulingbo: {
+    xinfan_yulingbo: {
                 trigger: {
                       global: "phaseEnd",
                  },
-                            filter(event, player) {
+        filter(event, player) {
             return player.hasMark('xinfan_yulinghai');
         }, 
         			check(event, player) {
@@ -2624,41 +2395,34 @@ xinfan_meichenlun: {
 						},
         audio: "ext:新繁/fenbao/yys/juesebao/linghaijinyuji:3",
               async content(event,trigger,player){
-           await player.removeMark('xinfan_yulinghai', 1);               
-    },
-            global: ['xinfan_yulingbo_bo'],
-        subSkill: {   
-                       bo: {
-                                          trigger: {
-                    global: 'xinfan_yulingboAfter',
-                },    
-                                             filter(event, player) {
-                                    return _status.currentPhase == player;
-                                        }, 
-                                              forced: true, 
-                               async content(event,trigger,player){
+           await player.removeMark('xinfan_yulinghai', 1); 
                  const choiceList = ['对一名其他角色造成1点伤害','回复1点体力',];
                        const choices = ['选项一','选项二'];
-                        var result = await player
+                        var result = await trigger.player
                          .chooseControl()
-                     .set('controls',choices)
-                      .set('choiceList',choiceList)
+                    .set('controls',choices)
+                    .set('choiceList',choiceList)
+                    .set("ai", () => {
+                        if (trigger.player.isDamaged() && trigger.player.hp <= trigger.player.isDamaged()) {
+                            return "选项二";
+                        }else{
+                            return "选项一";
+                        }  
+                        })
                                  .forResult();
                         if(result.control=="选项一"){
-               const  result  = await player.chooseTarget(`###凌波###对一名其他角色造成1点伤害`,lib.filter.notMe)
+               const  result  = await trigger.player.chooseTarget(`###凌波###对一名其他角色造成1点伤害`,lib.filter.notMe)
                        .set('ai', target => {
                             const player = _status.event.player;
-                            return get.damageEffect(target, player, player,);      
+                            return get.damageEffect(target,trigger.player,trigger.player,);      
                         }).forResult();
                          if(result.bool){
                          await result.targets[0].damage(1);
                 }
                     }else if(result.control=="选项二"){
-                        await player.recover();
-                }                                
-    },    
-    },                                
-        },   
+                        await trigger.player.recover();
+                }                                               
+    },
                 },   
                     //骁浪荒川之主
                         xinfan_chuanxiaolang:{
@@ -2729,11 +2493,12 @@ filter(event, player) {
                                 },
      getIndex: event => event.num,                           
         async content(event, trigger, player) {
-                     await player.addMark('xinfan_chuanchuannu', 1);
-                     if(player.countMark('xinfan_chuanchuannu') > 3){
-                     await player.clearMark('xinfan_chuanchuannu');       
-                     player.insertPhase().skill=event.name;
-                     }
+                    player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/chuannu.png`,[100,100])
+                    await player.addMark('xinfan_chuanchuannu', 1);
+                    if(player.countMark('xinfan_chuanchuannu') > 3){
+                    await player.clearMark('xinfan_chuanchuannu');       
+                    player.insertPhase().skill=event.name;
+                    }
        },   
               },   
                                              
@@ -3040,6 +2805,7 @@ filter(event, player) {
         player(player) {
             return 2;
         },
+           target:2,
     },
            },          
                         },         
@@ -3056,11 +2822,16 @@ filter(event, player) {
                 .forResult();
         },
         async content(event, trigger, player) {
-                    await player.skip('phaseJudge');
-                    await player.skip('phaseDraw');
-                    await player.skip('phaseUse');
-                    await player.skip("phaseDiscard");
-                    await player.skip('phaseJieshu');
+        const evt = event.getParent("phase", true);
+        if (evt) {
+        game.log(player, "结束了回合");
+        evt.num = evt.phaseList.length;
+        evt.goto(11);
+       }
+       const evtx = event.getParent("phaseUse", true);
+       if (evtx) {
+        evtx.skipped = true;
+       } 
                         player.draw(2);
         if(event.targets[0] == player ){
                   player.tempBanSkill('xinfan_chanjiekong_kong');
@@ -3072,53 +2843,42 @@ filter(event, player) {
             event.targets[0].insertPhase().skill=event.name;
          } 
         },
+                                      ai:{
+    order:9,
+    result:{
+        player(player) {
+            return 2;
+        },
+        target:2,
     },
-                
+           },  
+    },            
                     //季
                         xinfan_jisiji: {
-                   audio: "ext:新繁/fenbao/yys/juesebao/ji:1",
         trigger: {
             global: 'roundStart'
         },
                             forced: true,
         async content(event, trigger, player) {
-            if(player.countMark('xinfan_jisiji_chun') > 0){         
-                await player.clearMark('xinfan_jisiji_chun');
-                await player.addMark('xinfan_jisiji_xia', 1);      
-                await player.useSkill('xinfan_jisiji_chun');              
-                }else if(player.countMark('xinfan_jisiji_xia') > 0){         
-                await player.clearMark('xinfan_jisiji_xia');
-                await player.addMark('xinfan_jisiji_qiu', 1);    
-                await player.useSkill('xinfan_jisiji_xia');                           
-                }else if(player.countMark('xinfan_jisiji_qiu') > 0){         
-                await player.clearMark('xinfan_jisiji_qiu');
-                await player.addMark('xinfan_jisiji_dong', 1);   
-                await player.useSkill('xinfan_jisiji_qiu');                            
-                }else if(player.countMark('xinfan_jisiji_dong') > 0){         
-                await player.clearMark('xinfan_jisiji_dong');
-                await player.addMark('xinfan_jisiji_chun', 1);     
+                if(player.getStorage('xinfan_jisiji_used').includes("xinfan_xia")){         
+                await player.setStorage('xinfan_jisiji_used',"xinfan_qiu");   
+                await player.useSkill('xinfan_jisiji_xia'); 
+                }else if(player.getStorage('xinfan_jisiji_used').includes("xinfan_qiu")){         
+                await player.setStorage('xinfan_jisiji_used',"xinfan_dong");   
+                await player.useSkill('xinfan_jisiji_qiu');  
+                }else if(player.getStorage('xinfan_jisiji_used').includes("xinfan_dong")){         
+                await player.setStorage('xinfan_jisiji_used',"xinfan_chun");     
                 await player.useSkill('xinfan_jisiji_dong');           
-                await player.addMark('xinfan_jiliuzhuan', 1);         
+                await player.addMark('xinfan_jiliuzhuan', 1); 
+                }else{
+                await player.setStorage('xinfan_jisiji_used',"xinfan_xia");
+                await player.useSkill('xinfan_jisiji_chun'); 
+                if(game.phaseNumber == 1){
+                await player.addMark('xinfan_jiliuzhuan', 1);
+                }
                 }
         },
-       group: ['xinfan_jisiji_start'],
         subSkill: {
-                               start: {
-                trigger: {
-                                    global: 'phaseBefore',
-                                    player: 'enterGame',
-                                },
-                                        priority:25,
-                                filter(event, player) {
-                                    return game.phaseNumber == 0;
-                                },
-                forced: true,
-                content() {
-                    player.addMark('xinfan_jisiji_chun', 1);
-                    player.addMark('xinfan_jiliuzhuan', 1);
-                },
-            },
-  
             dong: {
             	marktext: '冬',
                          intro: {
@@ -3235,9 +2995,9 @@ filter(event, player) {
 				      filter(event, player) {
                             return player.countMark('xinfan_jiliuzhuan') > 0;
                         },
-						async content(event, trigger, player) {							
-					        await player.removeMark('xinfan_jiliuzhuan');					       
-					        await player.recover(player.maxHp - player.hp);
+						async content(event, trigger, player) {						
+					        await player.removeMark('xinfan_jiliuzhuan');				       
+					        await player.recoverTo(player.maxHp)
 					        await player.useSkill('xinfan_jisiji'); 
 						},
 					},
@@ -3255,12 +3015,13 @@ filter(event, player) {
 					     const target = event.target;
                  await player.useCard({ name: 'juedou' },target, false);
             },
-            global: ['xinfan_pingluanzhen_luan'],
+            group: ['xinfan_pingluanzhen_luan'],
                                 subSkill: {
                                     luan: {
         trigger: {
             source: 'damageAfter',
         },
+        priority:15,
                forced: true,
         filter(event, player) {
             return !player.getStorage('xinfan_pingluanzhen_used').includes(event.player) && _status.currentPhase == player;
@@ -3307,6 +3068,13 @@ filter(event, player) {
             .set('controls', choices)
             .set('choiceList', choiceList)
             .set('prompt','布都： 请选择其中一项')
+            .set("ai", () => {
+                if (player.hp < 4) {
+                    return "暖阳";
+                }else{
+                 return "烈日";
+                }  
+            })
               .forResult();
             if (result.control == '烈日'){
             player.addTempSkill("xinfan_pingbudu_lie", { player: "xinfan_pingbuduBegin" });
@@ -3389,7 +3157,7 @@ filter(event, player) {
             xinfan_pingjiaoyang: {
                 audio: "ext:新繁/fenbao/yys/juesebao/pingjiangmen:2",
                 intro: {
-                content: '造成或受到3次伤害后，平将门获得额外回合',
+                content: '造成或受到的伤害次数不小于你的体力上限后，平将门获得额外回合',
                 name: '骄阳',
                 },
         trigger: {
@@ -3397,9 +3165,9 @@ filter(event, player) {
             source: "damageEnd",
         },
                forced: true,
-                async content(event, trigger, player) {         
+                async content(event, trigger, player) {          
             await player.addMark('xinfan_pingjiaoyang', 1);
-            if(player.countMark('xinfan_pingjiaoyang') > 3){
+            if(player.countMark('xinfan_pingjiaoyang') >= player.maxHp){
             await player.clearMark('xinfan_pingjiaoyang'); 
             const next = player.insertPhase("xinfan_shixi");
             next.set("phaseList", ["phaseDraw", "phaseUse"]);
@@ -3639,9 +3407,13 @@ filter(event, player) {
                           const targets = trigger.targets.filter(i => i.isAlive());
                                     for (const target of targets) {
                                   await target.addMark('xinfan_xuexuezhan', 2);
+                                  if(target.countMark('xinfan_xuexuezhan') >= target.hp){
+                                    target.clearMark('xinfan_xuexuezhan');
+                                    target.loseHp();
+                                  }
                                    }
                             },
-                        global: ['xinfan_xuexuezhan_check','xinfan_xuexuezhan_shi'],
+                        global: ['xinfan_xuexuezhan_check'],
                         subSkill: {
                             check: {
                                  trigger: {
@@ -3656,19 +3428,6 @@ filter(event, player) {
                                     player.loseHp();
                                 },
                             },
-                            shi: {
-                                trigger: {
-                                     global: 'xinfan_xuexuezhanAfter',
-                                },
-                                forced: true,
-                                filter(event, player) {
-                                    return player.countMark('xinfan_xuexuezhan') >= player.hp;
-                                },
-                                async content(event, trigger, player) {
-                                    player.clearMark('xinfan_xuexuezhan');
-                                    player.loseHp();
-                       }
-                                },
                             },
                     },
     
@@ -4179,6 +3938,7 @@ filter(event, player) {
                 async content(event, trigger, player) {        
 					     const target = event.target;  
                 await player.changeHujia(1);
+                await player.addTempBackGroundOL("/extension/新繁/fenbao/yys/beijing/chanbingxuenv.jpg", 0, {player: "phaseBefore"})
                   if(_status.tempMusic != "ext:新繁/fenbao/yys/yinyue/xueyu.mp3"){ 
                     game.playBgmOL("ext:新繁/fenbao/yys/yinyue/xueyu.mp3");   
                     }
@@ -4199,7 +3959,7 @@ filter(event, player) {
                xinfan_xueshuanghan: {
                                     audio: "ext:新繁/fenbao/yys/juesebao/chanbingxuenv:2",
                         trigger: {
-                            global: "phaseEnd",
+                            global: ["phaseEnd","_xinfan_yongdongAfter"],
                         },
                                 marktext: '霜寒',
                          intro: {
@@ -4281,55 +4041,82 @@ filter(event, player) {
     },
 
                      //初翎山风
-                                         xinfan_shanchuling: {
-                    audio: "ext:新繁/fenbao/yys/juesebao/chulingshanfeng:2",
-        enable: 'phaseUse',
+    xinfan_shanchuling: {
+        enable: "phaseUse",
         usable: 1,
-        manualConfirm: true,
-        ai: {
-            order: 9,
-            result: {
-                player(player) {
-                    return game.countPlayer(c => (get.attitude(player, c) > 0 && c.isDamaged()) || get.damageEffect(c, player, player) > 0) * 2;
-                },
+        audio: "ext:新繁/fenbao/yys/juesebao/chulingshanfeng:3",
+        chooseButton: {
+            dialog(event, player) {
+                return ui.create.dialog(get.translation("xinfan_shanchuling"), [
+                    [
+                        ["damage", "令一名角色受到1点伤害"],
+                        ["changeHujia", "令一名角色获得1点护甲"],
+                    ],
+                    "textbutton",
+                ]);
+            },
+            check(button) {
+                const player = get.player();
+                if (button.link == "changeHujia") {
+                    return Math.max(
+                        ...game.filterPlayer().map(target => {
+                            return get.recoverEffect(target, player, player);
+                        })
+                    );
+                } else {
+                    return Math.max(
+                        ...game.filterPlayer().map(target => {
+                            return get.damageEffect(target, player, player);
+                        })
+                    );
+                }
+            },
+            backup(links, player) {
+                return {
+                    choice: links[0],
+                    filterTarget: true,
+                    ai1: () => 1,
+                    ai2(target) {
+                        const player = get.player();
+                        const sgn = get.sgnAttitude(player, target);
+                        const { choice } = get.info("xinfan_shanchuling_backup");
+                        if (choice == "changeHujia") {
+                            return get.recoverEffect(target, player, player) * sgn;
+                        }
+                        return get.damageEffect(target, player, player);
+                    },
+                    async content(event, trigger, player) {
+                        player.logSkill('xinfan_shanchuling');
+                        const {
+                            targets: [target],
+                        } = event;
+                        const { choice } = get.info(event.name);
+                        await target[choice]();
+                    },
+                };
+            },
+            prompt(links, player) {
+                if (links[0] == "damage") {
+                    return "令一名角色受到1点伤害";
+                } else {
+                    return "令一名角色获得1点护甲";
+                }
             },
         },
-        async content(event, trigger, player) {
-            const result = await player.chooseButtonTarget({
-                createDialog: [
-                    '初翎：请选择一项',
-                    [
-                        [
-                            ['damage', '对一名角色造成一点伤害'],
-                            ['changeHujia', '令一名角色获得一点护甲'],
-                        ],
-                        'textbutton',
-                    ],
-                ],
-                complexTarget: true,
-                ai1(button) {
-                    const { player } = get.event();
-                    if (game.hasPlayer(i => get.damageEffect(i, player, player) > 0 && i.hp <= 1)) return button.link == 'damage' ? 66 : 0;
-                    if (game.hasPlayer(i => get.attitude(player, i) > 0 && i.getDamagedHp() > 1)) return button.link == 'changeHujia' ? 6 : 0;
-                    return button.link == 'damage' ? 5.5 + Math.random() : 0;
-                },
-                ai2(target) {
-                    return 1 / target.hp;
-                },
-            }).forResult();
-            if (result.bool) {
-                const target = result.targets[0];
-                const link = result.links[0];
-                if (link == 'damage') {
-                   await target.damage(1);
-                } else {
-                    await target.changeHujia(1);
-                }
-            }
+        subSkill: {
+            backup: {
+
+            },
+        },
+        ai: {
+            order: 1,
+            result: {
+                player: 1,
+            },
         },
     },
                xinfan_shanxunyu: {
-                                    audio: "ext:新繁/fenbao/yys/juesebao/chulingshanfeng:2",
+                                    audio: "ext:新繁/fenbao/yys/juesebao/chulingshanfeng:3",
                         trigger: {
                             global: "phaseEnd",
                         },
@@ -4429,6 +4216,7 @@ filter(event, player) {
                 }
             }
             event.targets[0].addMark('xinfan_qieduane', 1, false);
+            player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/duane.png`,[100,100])
         },
         global: ['xinfan_qieduane_ban'],
         group: ['xinfan_qieduane_sha'],
@@ -4457,7 +4245,8 @@ filter(event, player) {
                     };
                 },
                 async content(event, trigger, player) {
-                     player.logSkill('xinfan_qieduane');
+                    player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/duane.png`,[100,100])
+                    player.logSkill('xinfan_qieduane');
                     await player.useCard({ name: 'sha' }, event.targets, false);
                 },
             },
@@ -4566,7 +4355,7 @@ filter(event, player) {
 							}).forResult();
                          if(result.bool){
                          await result.targets[0].addSkill('xinfan_guangxueqi_mark');
-                         result.targets[0].playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/yuanshi.png`,)
+                         result.targets[0].playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/yuanshi.png`,[100,100])
                 }
             },
         subSkill: {
@@ -4587,7 +4376,7 @@ filter(event, player) {
                 },
                 async content(event, trigger, player) {
                     player.logSkill('xinfan_guangxueqi');
-                    trigger.player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/yuanshi.png`,)
+                    trigger.player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/yuanshi.png`,[100,100])
                     trigger.num--;
                 },
             },                             
@@ -4640,66 +4429,83 @@ filter(event, player) {
                 .forResult();
         },
                 async content(event, trigger, player) {  
-                                        player.logSkill('xinfan_guangbuwu');
-                         await player.discardPlayerCard(trigger.player, 'e', true);
-                         await player.discardPlayerCard(trigger.player, 'h', true);
-                         await trigger.player.damage(1);
+                        player.logSkill('xinfan_guangbuwu');
+                        await trigger.player.damage(1);
                                    },
                                      },
                 //帝释天
-                    xinfan_dizhanfang: {
-                    audio: "ext:新繁/fenbao/yys/juesebao/dishitian:2",
-        enable: 'phaseUse',
+    xinfan_dizhanfang: {
+        enable: "phaseUse",
         usable: 1,
-        manualConfirm: true,
-        ai: {
-            order: 9,
-            result: {
-                player(player) {
-                    return game.countPlayer(c => (get.attitude(player, c) > 0 && c.isDamaged()) || get.damageEffect(c, player, player) > 0) * 2;
-                },
+        audio: "ext:新繁/fenbao/yys/juesebao/dishitian:2",
+        chooseButton: {
+            dialog(event, player) {
+                return ui.create.dialog(get.translation("xinfan_dizhanfang"), [
+                    [
+                        ["loseHp", "令一名角色流失1点体力"],
+                        ["recover", "令一名角色回复1点体力"],
+                    ],
+                    "textbutton",
+                ]);
+            },
+            check(button) {
+                const player = get.player();
+                if (button.link == "recover") {
+                    return Math.max(
+                        ...game.filterPlayer().map(target => {
+                            return get.recoverEffect(target, player, player);
+                        })
+                    );
+                } else {
+                    return Math.max(
+                        ...game.filterPlayer().map(target => {
+                            return get.damageEffect(target, player, player);
+                        })
+                    );
+                }
+            },
+            backup(links, player) {
+                return {
+                    choice: links[0],
+                    filterTarget: true,
+                    ai1: () => 1,
+                    ai2(target) {
+                        const player = get.player();
+                        const sgn = get.sgnAttitude(player, target);
+                        const { choice } = get.info("xinfan_dizhanfang_backup");
+                        if (choice == "recover") {
+                            return get.recoverEffect(target, player, player) * sgn;
+                        }
+                        return get.damageEffect(target, player, player);
+                    },
+                    async content(event, trigger, player) {
+                        player.logSkill('xinfan_dizhanfang');
+                        const {
+                            targets: [target],
+                        } = event;
+                        const { choice } = get.info(event.name);
+                        await target[choice]();
+                    },
+                };
+            },
+            prompt(links, player) {
+                if (links[0] == "loseHp") {
+                    return "令一名角色流失1点体力";
+                } else {
+                    return "令一名角色回复1点体力";
+                }
             },
         },
-        async content(event, trigger, player) {
-            const  result  = await player.chooseButtonTarget({
-                createDialog: [
-                    '绽放：请选择一项',
-                    [
-                        [
-                            ['damage', '令一名角色流失一点体力'],
-                            ['recover', '令一名角色回复一点体力'],
-                        ],
-                        'textbutton',
-                    ],
-                ],
-                filterTarget(_, __, target) {
-                    if (ui.selected.buttons[0]?.link == 'recover') {
-                        return target.isDamaged();
-                    }
-                    return true;
-                },
-                complexTarget: true,
-                ai1(button) {
-                    const { player } = get.event();
-                    if (game.hasPlayer(i => get.damageEffect(i, player, player) > 0 && i.hp <= 1)) return button.link == 'damage' ? 66 : 0;
-                    if (game.hasPlayer(i => get.attitude(player, i) > 0 && i.getDamagedHp() > 1)) return button.link == 'recover' ? 6 : 0;
-                    return button.link == 'damage' ? 5.5 + Math.random() : 0;
-                },
-                ai2(target) {
-                    return 1 / target.hp;
-                },
-            }).forResult();
-            if (result.bool) {
-                                 game.playVideoOL("/extension/新繁/fenbao/yys/juesebao/dishitian/zhanfang.MP4",0);
-                     await new Promise(r => setTimeout(r, 130));
-                const target = result.targets[0];
-                const link = result.links[0];
-                if (link == 'damage') {
-                   await target.loseHp();
-                } else {
-                    await target.recover();
-                }
-            }
+        subSkill: {
+            backup: {
+
+            },
+        },
+        ai: {
+            order: 1,
+            result: {
+                player: 1,
+            },
         },
     },
     xinfan_dilianhua: {
@@ -5324,7 +5130,7 @@ filter(event, player) {
             global: 'loseHpEnd',
         },
             async content(event, trigger, player) {
-            if(player.MaxHp < 10){
+            if(player.maxHp < 10){
             player.gainMaxHp();
             }else{
             player.draw(2);
@@ -5356,8 +5162,8 @@ filter(event, player) {
                         ui.background.setBackgroundImage('extension/新繁/fenbao/yys/beijing/fuguqingji.jpg');
                     })
                     game.playBgmOL("ext:新繁/fenbao/yys/yinyue/huazuoqingyan.mp3"); 
-                            target.addSkill('xinfan_qingjianggu_jian'); 
-                            player.awakenSkill('xinfan_qingjianggu');                
+                    target.addSkill('xinfan_qingjianggu_jian'); 
+                    player.awakenSkill('xinfan_qingjianggu');                
 			},
                             ai:{
     order:9,
@@ -5380,7 +5186,8 @@ filter(event, player) {
            return event.player == player || event.player.name == "xinfan_fuguqingji";
         },
                   async content(event, trigger, player) {
-                  player.addMark('xinfan_du');
+                player.playGifOL(1000, lib.assetURL + `/extension/新繁/fenbao/yys/tubiao/ningshi.png`,[100,100])    
+                player.addMark('xinfan_du');
                   },
             },
             },
@@ -5538,7 +5345,6 @@ filter(event, player) {
         },
                 audio: "ext:新繁/fenbao/yys/juesebao/xinyouquanshen:2",
         async cost(event, trigger, player) {
-                        game.playImageOL("/extension/新繁/fenbao/yys/juesebao/xinyouquanshen/心友.png","9999","600","right","down");
             event.result = await player
                 .chooseTarget(`###心友###请选择一名其他角色作为“心友”角色`, (card, player, target) => !player.getStorage('xinfan_xinyou').includes(target) && target != player)
                 .set('ai', target => {
@@ -5573,7 +5379,6 @@ filter(event, player) {
         frequent: true,
         audio: "ext:新繁/fenbao/yys/juesebao/xinyouquanshen:2",
         async content(event, trigger, player) {
-            game.playImageOL("/extension/新繁/fenbao/yys/juesebao/xinyouquanshen/守护.png","9999","600","right","down");
             const result = await trigger.player
                 .chooseBool(`###守护###取消此牌对${get.translation(trigger.target)}的目标效果。否则此牌结算完成后，${get.translation(player)}视为对你使用一张【杀】。`)
                 .set('ai', () => true)
