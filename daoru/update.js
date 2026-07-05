@@ -15,7 +15,7 @@ export default async (b) => {
 
 		game.importedPack = true;
 		const pList = ["https://proxy.aestarin.com/", "", "https://gh-proxy.com/", "https://hk.gh-proxy.com/", "https://tvv.tw/"];
-		let p = pList[lib.config.extension_新繁_update_source] || "";
+		let p = pList[lib.config.extension_阴阳师杀_update_source] || "";
 		let m;
 		let success = false;
 		for (const u of [p, ...pList.filter(x => x !== p)]) {
@@ -44,7 +44,7 @@ export default async (b) => {
 		const entries = Object.entries(m.files);
 
 		// 读取新增的配置：是否仅更新代码文件
-		const onlyCode = lib.config.extension_新繁_update_method;
+		const onlyCode = lib.config.extension_阴阳师杀_update_method;
 
 		for (let i = 0; i < entries.length; i += 5) {
 			const batch = entries.slice(i, i + 5);
@@ -54,7 +54,7 @@ export default async (b) => {
 					return;
 				}
 
-				const path = `extension/新繁/${f}`;
+				const path = `extension/阴阳师杀/${f}`;
 				if (await game.promises.checkFile(path) !== 1) {
 					updateFiles.push(f);
 					return;
@@ -73,9 +73,9 @@ export default async (b) => {
 		sessionStorage.yzs_check = true;
 
 		if (updateFiles.length === 0) return b && alert('已经是最新版本，无需更新');
-		if (!confirm(`《新繁》发现新版本 ${m.version}\n${updateFiles.length}个文件需更新，是否继续？\n更新说明:\n${m.update || '无'}`)) return
+		if (!confirm(`《阴阳师杀》发现新版本 ${m.version}\n${updateFiles.length}个文件需更新，是否继续？\n更新说明:\n${m.update || '无'}`)) return
 
-		const prog = createProgress("更新 新繁 扩展", updateFiles.length);
+		const prog = createProgress("更新 阴阳师杀 扩展", updateFiles.length);
 		game.importedPack = true;
 
 		try {
@@ -88,13 +88,13 @@ export default async (b) => {
 				if (!r.ok) throw new Error(`下载失败: ${f}`);
 
 				const data = await r.arrayBuffer();
-				const fullPath = `extension/新繁/${f}`;
+				const fullPath = `extension/阴阳师杀/${f}`;
 				const dir = fullPath.split("/").slice(0, -1).join("/");
 
 				await game.promises.createDir(dir);
 				await game.promises.writeFile(data, dir, fullPath.split("/").pop());
 			}
-			await game.promises.writeFile(JSON.stringify(m, null, 2), "extension/新繁", "manifest.json");
+			await game.promises.writeFile(JSON.stringify(m, null, 2), "extension/阴阳师杀", "manifest.json");
 
 			const clean = async (path, pre = '') => {
 				const [dirs, files] = await game.promises.getFileList(path);
@@ -104,7 +104,7 @@ export default async (b) => {
 			};
 
 			// 清理文件时同样做判断：如果开启了 onlyCode，未被包含在清单里的媒体文件（非 js/css）不应该被清理，否则会误删玩家本地的音视频
-			const f = (await clean("extension/新繁")).filter(file => {
+			const f = (await clean("extension/阴阳师杀")).filter(file => {
 				if (file === "manifest.json") return false;
 				if (m.files[file]) return false;
 				// 如果开启了仅更新代码，非 js/css 文件在此轮不参与清理
@@ -116,7 +116,7 @@ export default async (b) => {
 				const p = createProgress("清理文件", f.length);
 				for (let i = 0; i < f.length; i++) {
 					p.setProgressValue(i + 1);
-					await game.promises.removeFile(`extension/新繁/${f[i]}`)
+					await game.promises.removeFile(`extension/阴阳师杀/${f[i]}`)
 				}
 				p.remove();
 			}

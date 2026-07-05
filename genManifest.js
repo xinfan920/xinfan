@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const EXT_DIR = './';          // 脚本放在扩展根目录运行
 const OUTPUT = 'manifest.json';
 const VERSION = '0.70.5';      // 版本号，每次更新请修改
-const UPDATE_NOTE = '0.70.5：源赖光，鬼王酒吞童子，平将门削弱，增加了一些图标'; // 更新说明
+const UPDATE_NOTE = '0.70.5：扩展更名为“阴阳师杀”紧那罗大改，禅心云外镜手感优化，大部分角色ai都有优化'; // 更新说明
 
 // 递归获取所有文件相对路径
 function walkDir(dir, baseDir, fileList = []) {

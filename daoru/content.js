@@ -26,6 +26,6 @@ export async function content(config, pack) {
 					]
 				},
 			];
-			game.showExtensionChangeLog(xinfan_gengxin, "新繁");
-			if (lib.config.extension_新繁_auto_update && navigator.onLine) update(false);
+			game.showExtensionChangeLog(xinfan_gengxin, "阴阳师杀");
+			if (lib.config.extension_阴阳师杀_auto_update && navigator.onLine) update(false);
 };

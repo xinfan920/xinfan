@@ -4,6 +4,7 @@
 const Yuhuns = {
 	//御魂
 	_Yuhun: {
+		priority: 80,
 		ruleSkill: true,
 		locked: true,
 		forced: true,
@@ -14,7 +15,7 @@ const Yuhuns = {
 			player: "enterGame",
 		},
 		filter: function (event, player) {
-			if (!lib.config.extension_新繁_xinfan_Yuhun) {
+			if (!lib.config.extension_阴阳师杀_xinfan_Yuhun) {
 				return false;
 			}
 			return event.name != "phase" || game.phaseNumber == 0;
@@ -40,7 +41,19 @@ const Yuhuns = {
 					return !player.hasSkill(button.link)
 				})
 				.set("ai", (button) => {
-					return Math.random();
+					if(_status.event.player.name == "xinfan_chanxinyunwaijing" && button.link == "xinfan_yutufo"){
+					return 10;	
+					}else if(button.link == "xinfan_yumingwu"){
+				    return 0.04;
+					}else if(button.link == "xinfan_yuzhenzhu"){
+					return 0.05;	
+					}else if(button.link == "xinfan_yuposhi"){
+					return 0.06;	
+					}else if(button.link == "xinfan_yushuyao"){
+					return 0.07;	
+					}else{
+                    return Math.random();;
+					}
 				})
 				.forResult();
 			if (!result.bool) return
@@ -51,7 +64,6 @@ const Yuhuns = {
 	},
 	//破势
 	xinfan_yuposhi:{
-		priority: 1,
 		priority: -4,
 		direct:true,
 		trigger:{
@@ -61,7 +73,7 @@ const Yuhuns = {
 			return !event.player.isDamaged()
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			trigger.num++;
 			player.tempBanSkill(event.name, "roundStart", false);
 		},
@@ -77,7 +89,7 @@ const Yuhuns = {
 			return event.player.hp==1;
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			trigger.num++;
 			player.tempBanSkill(event.name, "roundStart", false);
 		},
@@ -93,7 +105,7 @@ const Yuhuns = {
 			return event.player.countCards("j") > 0;
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			trigger.num++;
 			player.tempBanSkill(event.name, "roundStart", false);
 		},
@@ -109,7 +121,7 @@ const Yuhuns = {
 			return event.player.countCards("h") < player.countCards("h");
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			trigger.num++;
 			player.tempBanSkill(event.name, "roundStart", false);
 		},
@@ -121,8 +133,11 @@ const Yuhuns = {
 		trigger:{
 			source:"damageBegin1"
 		},
+		check(event, player) {
+				return get.attitude(player, event.player) < 0;
+		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await player.loseHp();
 			trigger.num++;
 		},
@@ -140,7 +155,7 @@ const Yuhuns = {
 			return true;
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await player.chooseToUse(
 				`【狰】：你可对 ${get.translation(trigger.source)} 使用1张【杀】`,
 				function (card) {
@@ -171,19 +186,26 @@ const Yuhuns = {
 			player: ["phaseZhunbeiBegin"]
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
-			                 const choiceList = ['摸1张牌','获得2张影',];
-                       const choices = ['选项一','选项二'];
-                        var result = await player
-                         .chooseControl()
-                     .set('controls',choices)
-                      .set('choiceList',choiceList)
-                                 .forResult();
-                        if(result.control=="选项一"){
-			await player.draw();
-                    }else if(result.control=="选项二"){
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
+			const choiceList = ['摸1张牌','获得2张影',];
+            const choices = ['选项一','选项二'];
+            var result = await player
+            	.chooseControl()
+          	  .set('controls',choices)
+           	 .set('choiceList',choiceList)
+				.set("ai", () => {
+             	   if (_status.event.player.name == "xinfan_longyechaji") {
+               	     return "选项二";
+              		} else {
+               	     return "选项一";
+              		}  
+           		})		  
+           		.forResult();
+            if(result.control=="选项一"){
+				await player.draw();
+            }else if(result.control=="选项二"){
                   await player.gain(lib.card.ying.getYing(2), "gain2");
-                }
+            }
 		},
 	},
 	//骰子鬼
@@ -196,7 +218,7 @@ const Yuhuns = {
 			return player.countCards("j") > 0;
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
             player.discardPlayerCard(player, true, "j");
 			await player.chooseUseTarget({ name: 'sha' }, false, 'nodistance');
 		},
@@ -212,7 +234,7 @@ const Yuhuns = {
 			return event.card.name === "sha" && event.target.countCards("e");
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
             player.discardPlayerCard(trigger.target, true, "e");
 		},
 	},		
@@ -225,7 +247,7 @@ const Yuhuns = {
 			source:"damageAfter"
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await player.draw(trigger.num);
 		},
 	},
@@ -241,7 +263,7 @@ const Yuhuns = {
 			return true
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await player.recover();
 			player.tempBanSkill(event.name, "roundStart", false);
 		}
@@ -258,7 +280,7 @@ const Yuhuns = {
 			return event.source == player;
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await trigger.player.changeHujia(1, "gain");
 			player.tempBanSkill(event.name, "roundStart", false);
 		}
@@ -275,7 +297,7 @@ const Yuhuns = {
 			return event.source == player;
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			trigger.num++;
 			player.tempBanSkill(event.name, "roundStart", false);
 		}
@@ -291,7 +313,7 @@ const Yuhuns = {
         return !player.getStat("damage");
         },
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await player.draw(2);
 		},
 	},
@@ -306,7 +328,7 @@ const Yuhuns = {
         return player.hp==1;
         },
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			await player.recover();
 			player.tempBanSkill(event.name, "roundStart", false);
 		},
@@ -322,7 +344,7 @@ const Yuhuns = {
 			return event.num < 0;
 		},
 		async content(event, trigger, player) {
-            player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+            player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			player.changeHujia(1)
 			player.tempBanSkill(event.name, "roundStart", false);
 		},
@@ -335,7 +357,7 @@ const Yuhuns = {
 		player: "dying",
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 		    player.awakenSkill('xinfan_yuqingnvfang');            
 			player.recoverTo(1);
 			await player.changeHujia(2);
@@ -392,7 +414,7 @@ const Yuhuns = {
 			return event.source.countCards("he");
 		},
 		async content(event, trigger, player) {
-			player.playGifOL(1000, lib.assetURL + `/extension/新繁/Yuhun/${event.name}.png`,)
+			player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/Yuhun/${event.name}.png`,)
 			trigger.source.chooseToDiscard(1, true, "he");
 		},
 	},		

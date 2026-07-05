@@ -9,7 +9,7 @@ export let type = 'extension';
 
 export default async function () {
 	return {
-		name: "新繁",
+		name: "阴阳师杀",
 		editable: false,
 		content: content,
 		precontent: precontent,
