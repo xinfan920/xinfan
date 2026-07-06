@@ -29,7 +29,7 @@ const skills = {
 	},
 	//背景音乐
 	_YINYUE: {
-		priority: -10,
+		priority: 20,
 		ruleSkill: true,
 		locked: true,
 		forced: true,

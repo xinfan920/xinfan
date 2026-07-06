@@ -1813,7 +1813,7 @@ const skills = {
                 }
             },  
             ai:{
-                order:4,
+                order:9,
                 result:{
                     player(player) {
                         return 2;
@@ -1825,6 +1825,12 @@ const skills = {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/longyechaji:2",
             enable: "phaseUse",
             usable: 1,
+            mark: true,
+            onremove: true,
+                intro: {
+                    content: '当前招式：$',
+                },
+            charlotte: true,
             async content(event, trigger, player) {   
             const choiceList = ['侵略：造成伤害时，获得对方一张牌。','飞流：造成的伤害加一。','风疾：造成或受到的伤害视为体力流失。','不动：造成或受到伤害时，摸一张牌。',];
             const choices = ['侵略','飞流','风疾','不动'];
@@ -1842,16 +1848,16 @@ const skills = {
                         })
                 .forResult();
             if (result.control == '侵略'){
-            player.addTempSkill("xinfan_chayueheng_qin", { player: "xinfan_chayuehengBegin" });
+                await player.setStorage('xinfan_chayueheng',"xinfan_chayueheng_qin");
             }else if (result.control == '飞流'){
-            player.addTempSkill("xinfan_chayueheng_liu", { player: "xinfan_chayuehengBegin" });
+                await player.setStorage('xinfan_chayueheng',"xinfan_chayueheng_liu");
             }else if (result.control == '风疾'){
-            player.addTempSkill("xinfan_chayueheng_feng", { player: "xinfan_chayuehengBegin" });
+                await player.setStorage('xinfan_chayueheng',"xinfan_chayueheng_feng");
             }else if (result.control == '不动'){
-            player.addTempSkill("xinfan_chayueheng_dong", { player: "xinfan_chayuehengBegin" });
+                await player.setStorage('xinfan_chayueheng',"xinfan_chayueheng_dong");
             }
             },
-            group: ['xinfan_chayueheng_kai'], 
+            group: ['xinfan_chayueheng_kai','xinfan_chayueheng_qin','xinfan_chayueheng_liu','xinfan_chayueheng_feng','xinfan_chayueheng_dong'], 
             subSkill: {
                 kai: { 
                     trigger: {
@@ -1868,16 +1874,13 @@ const skills = {
                 },
                 qin: {
                     audio: "ext:阴阳师杀/fenbao/yys/juesebao/longyechaji:1",
-				    mark: true,
-                    intro: {
-                        content: '造成伤害后，获得目标一张牌',
-					    name: '侵略',
-                    },
-                    charlotte: true,
                     trigger: {
                         source: "damageBegin",
                     },
                     forced: true,
+                    filter(event, player) {
+                        return player.getStorage('xinfan_chayueheng').includes('xinfan_chayueheng_qin');
+                    },
                     async content(event, trigger, player) {         
                         player.gainPlayerCard(true, trigger.player,"he");
                         player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/fenbao/yys/tubiao/qinlue.png`,[100,100])
@@ -1885,16 +1888,13 @@ const skills = {
                 },
                 liu: {
                     audio: "ext:阴阳师杀/fenbao/yys/juesebao/longyechaji:1",
-					mark: true,
-                    intro: {
-                        content: '造成的伤害加1',
-                        name: '飞流',
-                    },
-                    charlotte: true,
                     trigger: {
                     source: "damageBegin",
                     },
                     forced: true,
+                    filter(event, player) {
+                        return player.getStorage('xinfan_chayueheng').includes('xinfan_chayueheng_liu');
+                    },
                     async content(event, trigger, player) {   
                         player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/fenbao/yys/tubiao/feiliu.png`,[100,100])      
                         trigger.num++;
@@ -1902,17 +1902,14 @@ const skills = {
                 },  
                 feng: {
                     audio: "ext:阴阳师杀/fenbao/yys/juesebao/longyechaji:1",
-					mark: true,
-                    intro: {
-                        content: '造成或受到的伤害视为体力流失',
-                        name: '风疾',
-                    },
-                    charlotte: true,
                     trigger: {
                     player: 'damageBefore',
                     source: "damageBefore",
                     },
                     forced: true,
+                    filter(event, player) {
+                        return player.getStorage('xinfan_chayueheng').includes('xinfan_chayueheng_feng');
+                    },
                     async content(event, trigger, player) { 
                         player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/fenbao/yys/tubiao/fengji.png`,[100,100])
                         trigger.cancel();
@@ -1922,17 +1919,14 @@ const skills = {
                 },   
                 dong: {
                     audio: "ext:阴阳师杀/fenbao/yys/juesebao/longyechaji:1",
-					mark: true,
-                    intro: {
-                        content: '造成或受到伤害时，摸一张牌',
-                        name: '不动',
-                    },
-                    charlotte: true,
                     trigger: {
                         player: 'damageBegin',
                         source: "damageBegin",
                     },
                     forced: true,
+                    filter(event, player) {
+                        return player.getStorage('xinfan_chayueheng').includes('xinfan_chayueheng_dong');
+                    },
                     async content(event, trigger, player) {  
                         player.playGifOL(1000, lib.assetURL + `/extension/阴阳师杀/fenbao/yys/tubiao/budong.png`,[100,100])       
                         player.draw();
@@ -1940,7 +1934,7 @@ const skills = {
                 },
             },
             ai:{
-                order:4,
+                order:9,
                 result:{
                     player(player) {
                         return 2;
@@ -1994,17 +1988,20 @@ const skills = {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/yixienamei:2",
             enable: "phaseUse",
             filterTarget(card, player, target) {
-                return target != player && !target.hasSkill('xinfan_meichenlun_skip') && !player.getStorage('xinfan_meichenlun_used').includes(target);
+                return target != player && !target.hasSkill('xinfan_meichenlun_skip') && !player.getStorage('xinfan_meichenlun').includes(target);
             },
             selectTarget:1,
+                onremove: true,
+                intro: {
+                    content: '不能成为目标的角色有：$',
+                },
+            charlotte: true,
             async content(event, trigger, player) {
-                if(!player.hasSkill('xinfan_meichenlun_used')){
-                    player.addSkill('xinfan_meichenlun_used')
-                }
                 const target = event.target;
                 target.addTempSkill("xinfan_meichenlun_skip", { player: "xinfan_meichenlun_skipAfter" }); 
-                player.markAuto('xinfan_meichenlun_used',  target);   
+                player.markAuto('xinfan_meichenlun',  target);   
             },
+            group: ['xinfan_meichenlun_used'],
             subSkill: { 
                 skip: {
                     trigger: {
@@ -2022,21 +2019,15 @@ const skills = {
                     },
                 },
                 used: {
-                    mark: true,
-                    onremove: true,
-                    intro: {
-                        content: '不能成为目标的角色有：$',
-                    },
-                    charlotte: true,
                     trigger: {
                         global: 'phaseEnd',
                     },
                     filter(event, player) {
-                        return player.getStorage('xinfan_meichenlun_used').includes(event.player);
+                        return player.getStorage('xinfan_meichenlun').includes(event.player);
                     },
                     forced: true,
                     async content(event, trigger, player) {
-                        player.unmarkAuto('xinfan_meichenlun_used', trigger.player);
+                        player.unmarkAuto('xinfan_meichenlun', trigger.player);
                     },
                     }
             },
@@ -2391,7 +2382,7 @@ const skills = {
 				return get.attitude(player, event.player) > 0;
 			},
             async content(event,trigger,player){
-                await player.removeMark('xinfan_yulinghai', 1); 
+                player.removeMark('xinfan_yulinghai', 1); 
                 const choiceList = ['对一名其他角色造成1点伤害','回复1点体力',];
                 const choices = ['选项一','选项二'];
                 var result = await trigger.player
@@ -2410,11 +2401,11 @@ const skills = {
                     const  result  = await trigger.player.chooseTarget(`###凌波###对一名其他角色造成1点伤害`,lib.filter.notMe)
                         .set('ai', target => {
                             const player = _status.event.player;
-                            return get.damageEffect(target,trigger.player,trigger.player,);      
+                            return get.damageEffect(target,trigger.player,trigger.player);      
                         })
                         .forResult();
                     if(result.bool){
-                        await result.targets[0].damage(1);
+                        await result.targets[0].damage(1,trigger.player);
                     }
                 }else if(result.control=="选项二"){
                     await trigger.player.recover();
@@ -2789,7 +2780,10 @@ const skills = {
                     player(player) {
                         return 2;
                     },
-                    target:2,
+                    target(player, target) {
+                        if (target.hp < 3 && target.isDamaged()) return 5;
+                        return 2;
+                    },
                     },
             },          
     },         
@@ -2830,7 +2824,10 @@ const skills = {
                     player(player) {
                         return 2;
                     },
-                    target:2,
+                    target(player, target) {
+                        if (player == target && player.isDamaged()) return 5;
+                        return 2;
+                    },
                 },
             },  
     },            
@@ -2840,22 +2837,25 @@ const skills = {
                 global: 'roundStart'
             },
             forced: true,
+            mark: true,
+            onremove: true,
+                intro: {
+                    content: '当前状态：$',
+                },
+            charlotte: true,
             async content(event, trigger, player) {
-                if(player.getStorage('xinfan_jisiji_used').includes("xinfan_xia")){         
-                    await player.setStorage('xinfan_jisiji_used',"xinfan_qiu");   
+                if(player.getStorage('xinfan_jisiji').includes("xinfan_xia")){         
+                    await player.setStorage('xinfan_jisiji',"xinfan_qiu");   
                     await player.useSkill('xinfan_jisiji_xia'); 
-                }else if(player.getStorage('xinfan_jisiji_used').includes("xinfan_qiu")){         
-                    await player.setStorage('xinfan_jisiji_used',"xinfan_dong");   
+                }else if(player.getStorage('xinfan_jisiji').includes("xinfan_qiu")){         
+                    await player.setStorage('xinfan_jisiji',"xinfan_dong");   
                     await player.useSkill('xinfan_jisiji_qiu');  
-                }else if(player.getStorage('xinfan_jisiji_used').includes("xinfan_dong")){         
-                    await player.setStorage('xinfan_jisiji_used',"xinfan_chun");     
+                }else if(player.getStorage('xinfan_jisiji').includes("xinfan_dong")){         
+                    await player.setStorage('xinfan_jisiji',"xinfan_chun");     
                     await player.useSkill('xinfan_jisiji_dong');           
                     await player.addMark('xinfan_jiliuzhuan', 1); 
                 }else{
-                    if(!player.hasSkill('xinfan_jisiji_used')){
-                        player.addSkill('xinfan_jisiji_used');
-                    }
-                    await player.setStorage('xinfan_jisiji_used',"xinfan_xia");
+                    await player.setStorage('xinfan_jisiji',"xinfan_xia");
                     await player.useSkill('xinfan_jisiji_chun'); 
                     if(game.phaseNumber == 1){
                         await player.addMark('xinfan_jiliuzhuan', 1);
@@ -2863,14 +2863,6 @@ const skills = {
                 }    
             },
             subSkill: {
-                used: {
-                    mark: true,
-                    onremove: true,
-                    intro: {
-                        content: '当前状态：$',
-                    },
-                    charlotte: true,
-                },
                 dong: {
                     audio: "ext:阴阳师杀/fenbao/yys/juesebao/ji:1",
             	    marktext: '冬',
@@ -3005,9 +2997,15 @@ const skills = {
             	return target != player && !player.getStorage('xinfan_pingluanzhen_used').includes(target);
             },
             selectTarget:1,
-            async content(event, trigger, player) {        
-				const target = event.target;
-                await player.useCard({ name: 'juedou' },target, false);
+            async content(event, trigger, player) {  
+                const next = player.useCard({
+                    card: get.autoViewAs({ name: "juedou", isCard: true }),
+                    targets: [event.target],
+                    nowuxie: true,
+                    noai: true
+                    }).set("animate", false);
+                await game.delay(0.5);
+                return next;      
             },
             group: ['xinfan_pingluanzhen_luan'],
             subSkill: {
@@ -3037,10 +3035,11 @@ const skills = {
             ai:{
     			order:9,
     			result:{
-        			player(player) {
-            			return 2;
-        			},
-					target:-1,
+        			player(player, target) {
+            			if (target.countCards("h") > 4 && player.hp < 3) return -1;
+                        return 2;
+                    },
+					target:-2,
     			},
         	},
     },
@@ -3278,12 +3277,12 @@ const skills = {
                 source: 'damageBegin',
             },
             filter(event, player) {
-                return event.card?.name == 'sha' || event.num >= event.player.hp;
+                return event.card?.name == 'sha' || event.num >= event.player.hp || event.player.name == 'xinfan_tianyuyuzhan';
             },      
             forced: true,
-            async content(event, trigger, player) {                 
+            async content(event, trigger, player) {                
                 if (trigger.card?.name == 'sha') trigger.nature = 'thunder';
-                if (trigger.num >= trigger.player.hp) {
+                if (trigger.num >= trigger.player.hp && trigger.player.name != 'xinfan_tianyuyuzhan') {
                     trigger.cancel();
                     const target = trigger.player;
                     target.storage.xinfan_xuxingjian = {
@@ -3294,6 +3293,7 @@ const skills = {
                         await target.reinitCharacter(target.name2, 'xinfan_tianyuyuzhan');
                         target.storage.xinfan_xuxingjian.name2 = target.name2;
                     }
+                    target.update();
                     const next = target.discard(target.getCards('hej'));
                     next.discarder = player;
                     await next;
@@ -3346,7 +3346,7 @@ const skills = {
                 player: 'dieBegin',
             },
             filter(event, player) {
-                return player.storage.xinfan_xuxingjian;
+                return player.storage.xinfan_xuxingjian && !event.source.hasSkill(xinfan_xushenfa);
             },
             forced: true,
             async content(event, trigger, player) {
@@ -3357,6 +3357,7 @@ const skills = {
                 }
                     player.recoverTo(1);
                 delete player.storage.xinfan_xuxingjian;
+                player.update();
             },
     },
     //雪御前
@@ -4498,12 +4499,14 @@ const skills = {
                 nocount: true,
             },
             marktext: '莲',
+            selectTarget:1,
             async content(event, trigger, player) {
-                const targets = game.filterPlayer(i => i.hasMark('xinfan_dilianhua'));
-                for (const targetz of targets) {
-                    targetz.clearMark('xinfan_dilianhua');
+                for (const target of game.filterPlayer()) {
+                    if (target.hasMark('xinfan_dilianhua')) {
+                        target.removeMark('xinfan_dilianhua');
+                    }
                 }
-                target.addMark('xinfan_dilianhua');
+                event.target.addMark('xinfan_dilianhua');
             },
             group: ['xinfan_dilianhua_remove'],
             subSkill: {
@@ -4514,20 +4517,43 @@ const skills = {
                     filter(event, player) {
                         return game.hasPlayer(i => i.hasMark('xinfan_dilianhua'));
                     },
-                    frequent: true,
                     async content(event, trigger, player) {
-                        const targets = game.filterPlayer(i => i.hasMark('xinfan_dilianhua'));
-                        for (const targetz of targets) {
-                            targetz.clearMark('xinfan_dilianhua');
+                    for (const target of game.filterPlayer()) {
+                        if (target.hasMark('xinfan_dilianhua')) {
+                            target.removeMark('xinfan_dilianhua');
                         }
-                        player.useSkill('xinfan_dizhanfang');
+                    }
+                    if (get.info("xinfan_dizhanfang")) {
+										const xinfan_dizhanfang = player.chooseToUse();
+										xinfan_dizhanfang.set("openskilldialog", get.prompt2("xinfan_dizhanfang"));
+										xinfan_dizhanfang.set("norestore", true);
+										xinfan_dizhanfang.set("_backupevent", "xinfan_dizhanfang");
+										xinfan_dizhanfang.set("custom", {
+											add: {},
+											replace: { window() { } },
+										});
+										xinfan_dizhanfang.backup("xinfan_dizhanfang");
+										player
+											.when("chooseButtonAfter")
+											.filter(evt => evt.getParent() == xinfan_dizhanfang)
+											.step(async (event, trigger, player) => {
+												if (!trigger?.result?.bool) {
+													xinfan_dizhanfang.cancel();
+												}
+											});
+										const result1 = await xinfan_dizhanfang.forResult();
+									}
                     },
                 },
             },
             ai: {
                 order: 11,
                 result: {
-                    target: -1,
+                    player: 2,
+                    target(player, target) {
+                        if (target.hp < 3) return -5;
+                        return -2;
+                    },
                 },
             },
     },
@@ -4797,24 +4823,26 @@ const skills = {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/jinnaluo:2",
             enable: 'phaseUse',
             usable: 1,
-            async content(event, trigger, player) {  
-                if(!player.hasSkill('xinfan_jinzouxu_used')){
-                        player.addSkill('xinfan_jinzouxu_used');
-                }      
+            onremove: true,
+            intro: {
+                content: '已解锁：$',
+            },
+            charlotte: true,
+            async content(event, trigger, player) {     
                 const cards = get.cards(4, true);
                 const result = await player
                 .chooseCardButton(get.translation(event.name), cards.slice(), true)
                 .set("ai", button => {
-                    if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_gong") && get.suit(cards) == "heart"){
+                    if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_gong") && get.suit(cards) == "heart"){
                         return get.player().getUseValue(button.link) + 2;
                     }
-                    if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_shang") && get.suit(cards) == "diamond"){
+                    if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_shang") && get.suit(cards) == "diamond"){
                         return get.player().getUseValue(button.link) + 3;
                     }
-                    if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_jiao") && get.suit(cards) == "spade"){
+                    if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_jiao") && get.suit(cards) == "spade"){
                         return get.player().getUseValue(button.link) + 6;
                     }
-                    if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_hui") && get.suit(cards) == "club"){
+                    if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_hui") && get.suit(cards) == "club"){
                         return get.player().getUseValue(button.link) + 4;
                     }
                     return get.player().getUseValue(button.link);
@@ -4834,14 +4862,6 @@ const skills = {
                 }
             },
             subSkill: {
-                used: {
-                    mark: true,
-                    onremove: true,
-                    intro: {
-                        content: '已解锁：$',
-                    },
-                    charlotte: true,
-                },
                 gong: {
                         audio: "ext:阴阳师杀/fenbao/yys/juesebao/jinnaluo:1",
                         forced: true, 
@@ -4857,8 +4877,8 @@ const skills = {
                                 .forResult();
                             if(result.bool){
                                 await result.targets[0].damage(1,);
-                                if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_gong")){
-                                    player.markAuto('xinfan_jinzouxu_used',"xinfan_jinzouxu_gong");
+                                if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_gong")){
+                                    player.markAuto('xinfan_jinzouxu',"xinfan_jinzouxu_gong");
                                 }
                             }
                         },
@@ -4878,8 +4898,8 @@ const skills = {
                                 .forResult();
                             if(result.bool){
                                 await player.discardPlayerCard(result.targets[0], 'hej', true);
-                                if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_shang")){
-                                    player.markAuto('xinfan_jinzouxu_used',"xinfan_jinzouxu_shang");
+                                if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_shang")){
+                                    player.markAuto('xinfan_jinzouxu',"xinfan_jinzouxu_shang");
                                 }
                             }
                         },
@@ -4898,8 +4918,8 @@ const skills = {
                                     .forResult();
                                 if(result.bool){
                                     await result.targets[0].draw(2);
-                                    if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_jiao")){
-                                        player.markAuto('xinfan_jinzouxu_used',"xinfan_jinzouxu_jiao");
+                                    if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_jiao")){
+                                        player.markAuto('xinfan_jinzouxu',"xinfan_jinzouxu_jiao");
                                     }
                                 }
                             },
@@ -4918,8 +4938,8 @@ const skills = {
                                 .forResult();
                             if(result.bool){
                                 await result.targets[0].recover(1);
-                                if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_hui")){
-                                    player.markAuto('xinfan_jinzouxu_used',"xinfan_jinzouxu_hui");
+                                if(!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_hui")){
+                                    player.markAuto('xinfan_jinzouxu',"xinfan_jinzouxu_hui");
                                 }
                             }
                         },             
@@ -4945,12 +4965,12 @@ const skills = {
                 content: "limited",
             },
             check(event, player) {
-                if (!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_gong")) {
+                if (!player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_gong")) {
                     return false;
-                }else if(!player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_jiao")){
+                }else if(!player.getStorage('xinfan_jinzouxu_').includes("xinfan_jinzouxu_jiao")){
                     return false;    
                 }
-                return  player.getStorage('xinfan_jinzouxu_used').length >= 2;
+                return  player.getStorage('xinfan_jinzouxu').length >= 2;
                 },
             async content(event, trigger, player) {
                 game.broadcastAll(function () {
@@ -4968,19 +4988,19 @@ const skills = {
             enable: 'phaseUse',
             usable: 1,   
             filter(event, player) {
-                return player.getStorage('xinfan_jinzouxu_used').length > 0;
+                return player.getStorage('xinfan_jinzouxu').length > 0;
             },
             async content(event, trigger, player) { 
-                if (player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_gong")){
+                if (player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_gong")){
                     await player.useSkill('xinfan_jinzouxu_gong');
                 }
-                if(player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_shang")){
+                if(player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_shang")){
                     await player.useSkill('xinfan_jinzouxu_shang');
                 }
-                if(player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_jiao")){
+                if(player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_jiao")){
                     await player.useSkill('xinfan_jinzouxu_jiao');
                 }
-                if(player.getStorage('xinfan_jinzouxu_used').includes("xinfan_jinzouxu_hui")){
+                if(player.getStorage('xinfan_jinzouxu').includes("xinfan_jinzouxu_hui")){
                     await player.useSkill('xinfan_jinzouxu_hui');
                 }
             },

@@ -1,6 +1,6 @@
 {
   "version": "0.70.5",
-  "update": "0.70.5：扩展更名为“阴阳师杀”紧那罗大改，禅心云外镜手感优化，大部分角色ai都有优化",
+  "update": "0.70.5：部分角色ai优化",
   "files": {
     "daoru/config.js": "8c483e8414d14af6aed38295313e133562be19dd",
     "daoru/content.js": "6d4683406044ea8e15e28b380559649e5faba82e",
@@ -28,7 +28,7 @@
     "fenbao/yys/beijing/yixienamei.jpg": "65643d255805cef99fe787f6bf6dd4abcab5e5cd",
     "fenbao/yys/character.js": "1f51ea4151655769ab14318a0d1d3305c82baa6b",
     "fenbao/yys/index.js": "38c025e965fbfa1ad71527d3329feed2046e202d",
-    "fenbao/yys/intros.js": "3c131a4ed6ad3fb38085a4471f0df0eb88c5206f",
+    "fenbao/yys/intros.js": "16a4e2165c6eedd219ffd3cfffcd95780e7e048f",
     "fenbao/yys/juesebao/beimihu/xinfan_beimihu.jpg": "44e4ebd1781e058fd5c15b90e94418e253e10a67",
     "fenbao/yys/juesebao/beimihu/xinfan_beirihui1.mp3": "4abe807cddb659a71a2b6d6ea0fe0c44f3047af8",
     "fenbao/yys/juesebao/beimihu/xinfan_beirihui2.mp3": "5073a7ec0924eadb4db35967855509718a2fa0e6",
@@ -357,9 +357,9 @@
     "fenbao/yys/juesebao/zhuiyueshen/xinfan_zhuiyaoyue2.mp3": "c976a9a14f6a83ab6af62776102c501dc4d557db",
     "fenbao/yys/juesebao/zhuiyueshen/xinfan_zhuiyueshen.jpg": "f921589cdb9dbcc440c652c7897927fd073b4e32",
     "fenbao/yys/shipin/liehun.mp4": "fa233ad9a1072c19ddd5454c7c5a7b14c2889564",
-    "fenbao/yys/skill.js": "b371efb08cd084c94c7499b7e8cec9dba023eaff",
+    "fenbao/yys/skill.js": "e8f563572e599159b7e23555159b72e94e577dd7",
     "fenbao/yys/sort.js": "e0ef41ce77066a04c19727eca91b0dd27e00d6aa",
-    "fenbao/yys/translate.js": "578e2fa846a9a14f9b77450922d921b5570f1d5b",
+    "fenbao/yys/translate.js": "7c5323692e4461f4a7c0d10845c3b216cba5cff3",
     "fenbao/yys/tubiao/budong.png": "d5d00f431fb3fb502e8ce3a479bd30c7b34cf5dd",
     "fenbao/yys/tubiao/chuannu.png": "00ef0f7e4d02d683696cddde68ed48f18a7afc91",
     "fenbao/yys/tubiao/duane.png": "48d5776021f0279e567db1945f9808105fb2467a",
@@ -394,7 +394,7 @@
     "fenbao/yys/yinyue/xueyu.mp3": "cedf1fca26c0bbe06139d19f3340693aaebf51d2",
     "fenbao/yys/yinyue/yanhuozhilv.mp3": "b7a63f5e622d79c88238c446df9f82af3c4b8801",
     "fenbao/yys/yinyue/zhanyushijiejintou.mp3": "b73aa043c0a2436e4f5c694b06edfdd00d4fd554",
-    "genManifest.js": "62340bdd3b1897dac2a21a618d49513525ef48dd",
+    "genManifest.js": "38876303594751ceeb224e0b7b2cf1099e85898d",
     "info.json": "6146cac458fac047a099a60468f29f19360d223c",
     "kapai/beta/card.js": "8c8e211f4b3abc2c7ed4cd2fb757327ea0f16dcc",
     "kapai/beta/cardList.js": "40487addad4bd1440864023766e60f2a2065eef3",
@@ -430,7 +430,7 @@
     "Yuhun/xinfan_yuzhenzhu.png": "6a2b2fc464977d3e49af5a608f901061c6dd760d",
     "zidingyi/buff.js": "395f2795c8758e005fc12c56df92ee9daaee39e3",
     "zidingyi/function.js": "7c002cf48c3fcc1150ddfce1c9c5172671b561cc",
-    "zidingyi/globalSkill.js": "16af6ee9f07bee67eba8c0daa41ad0534980d7a7",
+    "zidingyi/globalSkill.js": "fb6bf1f14bf27e0f33780e26cb2b63a875ad81df",
     "zidingyi/settle.js": "bbd6c047ec818275a4545261316704aa95c8deaa"
   }
 }

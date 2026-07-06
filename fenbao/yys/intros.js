@@ -32,11 +32,7 @@ const dynamicTranslates = {
     xinfan_yuehuoxing: player => {
         if (player.storage.xinfan_yuehuoxing) return '转换技，每回合一次，当你使用牌后，你可以转换，阳：“虚诞”，<span class="bluetext">阴：“天极”的阴阳形态。</span>';
         return '转换技，每回合一次，当你使用牌后，你可以转换，<span class="firetext">阳：“虚诞”， </span>阴：“天极”<span class="firetext">的阴阳形态。</span>';
-    },
-    xinfan_chichan : function (player) {
-        const tre = player.storage.xinfan_yuanningRe ? '其他' : '“爱”';
-        return `锁定技，你使用的[杀]无视防具。你对${tre}角色，使用[杀]/造成伤害时，额外结算一次/改为获得其等量体力值。每轮结束时，你视为对${tre == '其他' ? '一名' + tre : tre}角色使用一张[杀]。`;
-    },    
+    },   
 };
 
 //武将皮肤
