@@ -2,9 +2,9 @@
 
 /** @type {Record<string, Skill>} */
 const Bgms = {
-	//御魂
+	//背景音乐
 	_Bgm: {
-		priority: 80,
+		priority: 20,
 		ruleSkill: true,
 		locked: true,
 		forced: true,
