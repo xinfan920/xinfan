@@ -27,83 +27,6 @@ const skills = {
 			trigger.num += config > 0 ? config : 0;
 		},
 	},
-	//背景音乐
-	_YINYUE: {
-		priority: 20,
-		ruleSkill: true,
-		locked: true,
-		forced: true,
-		nopop:true,
-		charlotte: true,
-		trigger: {
-			global: "phaseBefore",
-			player: "enterGame",
-		},
-		filter: function (event, player) {
-			if (!lib.config.extension_阴阳师杀_xinfan_bgm) {
-				return false;
-			}
-			return event.name != "phase" || game.phaseNumber == 0;
-		},
-		async content(event, trigger, player) {
-			let num = game.countPlayer();
-			while (num > 0) {
-			let zhu = game.findPlayer(i => i.getSeatNum() == num);
-            if(zhu.name == "xinfan_kongxiangmianlingqi"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/kongxiangmianlingqi.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/kongxiang.mp3"); 
-			   break;
-			}else if(zhu.name == "xinfan_benzhensanweihu"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/benzhensanweihu.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/xianyuezhixia.mp3"); 
-			   break;
-			}else if(zhu.name == "xinfan_qianji"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/qianji.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/huanshidejintou.mp3"); 
-			   break;
-			}else if(zhu.name == "xinfan_guiqie"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/guiqie.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/weimingzhizui.mp3"); 
-			   break;
-			}else if(zhu.name == "xinfan_shenduobaqidashe"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/shenduobaqidashe.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/shenzhijiangzhi.mp3"); 
-			   break;
-			}else if(zhu.name == "xinfan_ji"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/ji.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/huasiji.mp3"); 
-			   break;
-			}else if(zhu.name == "xinfan_dishitian"){
-                game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/dishitian.jpg');
-                })
-               game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/Broken Hero.mp3"); 
-			   break;
-			} else {
-                    num -= 1;
-					if(num == 0){
-						game.broadcastAll(function () {
-                    	ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/fengmozhishi.jpg');
-                	})
-               		game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/fengmozhishi.mp3");	
-					break;
-					}
-                }  
-            }
-		},
-    },
 		//毒
 		_xinfan_du: {
 		trigger: {
@@ -247,9 +170,6 @@ const skills = {
 			player.removeSkill("removeBackGroundOL")
 		}
 	},
-
-
-
 };
 
 Object.assign(lib.skill, skills);

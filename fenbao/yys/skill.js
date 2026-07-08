@@ -650,7 +650,6 @@ const skills = {
             intro: {
                 content: '每回合1次，造成伤害加1或受到伤害减1。',
             },
-                charlotte: true,
             trigger: {
                 player: 'damageBegin',
                 source: 'damageBegin',
@@ -1016,56 +1015,713 @@ const skills = {
     },
     xinfan_geheshou: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/geye:2",
-            trigger: {
-                global: 'roundStart',
+            enable: 'phaseUse',
+            usable: 1,
+	    	filterTarget: true,
+            selectTarget:1,
+            filter(event, player){
+                return game.hasPlayer(function(current) {
+                    return current != player;
+                });
             },
-            limited: true,
-            async cost(event, trigger, player) {
-                event.result = await player
-                    .chooseTarget(`###合守###是否防止一名角色本轮内受到的所有伤害？`)
-                    .set('ai', target => {
-                        const player = get.player();
-                        if (!player.getFriends().length && player != target) {
-                            return get.rank(target.name1, true) + (target.name2 ? get.rank(target.name2, true) : 0);
-                        }
-                        if (get.attitude(player, target) > 2 && target.hp <= 2) {
-                            return 5;
-                        }
-                        return 0;
-                    })
-                    .forResult();
+            async content(event, trigger, player) { 
+                const target = event.target;
+                    if (!target.hasSkill('xinfan_geheshou_mark')) {	
+                        target.addSkill("xinfan_geheshou_mark");
+                    }
+                target.useSkill("xinfan_geheshou_shou");
+            },
+            group: ['xinfan_geheshou_he'],
+            subSkill: {
+                mark: {
+                    intro: {
+                        content: '受到的伤害无效，当前剩余#次',
+                    },
+                    mark: true,
+                    charlotte: true,
+                    usable: 1,
+                    forced: true,
+                    trigger: {
+                        global: 'damageBegin',
+                    },
+                    charlotte: true,
+                    filter(event, player) {
+                        return event.player.hasMark('xinfan_geheshou_mark') && event.num > 0;
+                    },
+                    async content(event, trigger, player) {
+                        player.removeMark('xinfan_geheshou_mark', 1);
+                        trigger.cancel();
+                    },
+                }, 
+                shou: {
+                    forced: true,
+                    trigger: {
+                        global: 'damageBegin',
+                    },
+                    charlotte: true,
+                    filter(event, player) {
+                        return event.player.hasMark('xinfan_geheshou_mark') && event.num > 0;
+                    },
+                    async content(event, trigger, player) {
+                        player.addMark('xinfan_geheshou_mark', 1);
+                    },
+                },                            
+            he: {
+                trigger: {  
+                    global: "xinfan_geheshou_shouEnd",
+                },
+                direct: true,
+                borrowAsSelf: true,
+            filter(event, player) {
+                if (!event.player || !event.player.isIn()) return false;
+                const source = event.player;
+                const actor = this.borrowAsSelf ? player : source;
+                if (!actor || !actor.isIn()) return false;
+                return this.getOptions(actor, source).length > 0;
             },
             async content(event, trigger, player) {
-                player.awakenSkill('xinfan_geheshou');
-                const target = event.targets[0];
-                target.addTempSkill('mianyi', 'roundStart');
-                if (player != target) {
-                    const skills = target.skills.filter(skill => {
-                        const info = get.info(skill);
-                        return info && !info.limited && !info.unique && !info.unique;
-                    });
-                    if (!skills.length) {
-                        return;
-                    }
-                    const { links } = await player
-                        .chooseButton(['选择获得一个技能', [skills, 'skill']])
-                        .set('displayIndex', false)
-                        .set('ai', button => {
-                            const player = get.player();
-                            let info = get.info(button.link);
-                            if (info?.ai?.neg || info?.ai?.halfneg) {
-                                return 0;
-                            }
-                            return get.skillRank(button.link, 'in');
+                const info = lib.skill[event.name];
+                if (!info) return;
+                const source = trigger.player;
+                const actor = info.borrowAsSelf ? player : source;
+                const options = info.getOptions(actor, source);
+                if (!options.length) return;
+                    const buttons = options.map((item, index) => {
+                        return [index, get.translation(item.skill) + "（" + item.text + "）"];
+                });
+                const result = await player
+                        .chooseButton(["###" + get.prompt(event.name, source) + "###选择发动" + get.translation(source) + "武将牌上的一个技能", [buttons, "textbutton"]])
+                        .set("options", options)
+                        .set("ai", button => {
+                                const option = get.event().options[button.link];
+                                let rank = 1;
+                                if (typeof get.skillRank == "function") {
+                                        rank = get.skillRank(option.skill, "inout");
+                                        if (typeof rank != "number") rank = 1;
+                                }
+                                return option.type == "phaseUse" ? rank + 0.5 : rank;
                         })
                         .forResult();
-                    if (!links?.length) {
-                        return;
-                    }
-                  await player.addSkills(links);
+                if (!result || !result.bool || !result.links || !result.links.length) return;
+                const option = options[result.links[0]];
+                player.logSkill(event.name, source == player ? false : source);
+                if (source != actor) {
+                        game.log(player, "发动了", source, "武将牌上的", "【" + get.translation(option.skill) + "】");
+                }
+                if (option.type == "phaseUse") {
+                        await info.runPhaseUse(event, actor, option.skill);
+                }
+                else {
+                        await info.runStageBegin(event, actor, option.skill, option.triggername, option.role, source);
                 }
             },
+            getSourceSkills(source) {
+                let skills = [];
+                if (source && typeof source.getStockSkills == "function") {
+                        skills = source.getStockSkills(false, false, false);
+                }
+                if ((!skills || !skills.length) && source && typeof source.getOriginalSkills == "function") {
+                        skills = source.getOriginalSkills();
+                }
+                return (skills || []).filter(skill => this.isSkillAllowed(skill)).unique();
+            },
+            isSkillAllowed(skill) {
+                const info = get.info(skill);
+                if (!info) return false;
+                if (!lib.translate[skill] || !lib.translate[skill + "_info"]) return false;
+                if (info.limited || info.zhuSkill || info.juexingji || info.dutySkill) return false;
+                if (info.persevereSkill || info.charlotte || info.hiddenSkill) return false;
+                if (info.temp || info.sub || info.groupSkill || info.silent) return false;
+                return true;
+            },
+            getBorrowableEntries(source, actor) {
+                const entries = [];
+                for (const skill of this.getSourceSkills(source)) {
+                    if (this.isPhaseUseType(actor, skill)) {
+                        entries.push({ skill, type: "phaseUse", text: "出牌阶段" });
+                    }
+                    for (const item of this.getStageBeginTriggers(skill)) {
+                        entries.push({
+                            skill,
+                            type: "stageBegin",
+                            triggername: item.name,
+                            role: item.role,
+                            text: this.getStageText(item.name)
+                        });
+                    }
+                }
+                return entries;
+              },
+            getOptions(actor, source) {
+                const list = [];
+                const entries = this.getBorrowableEntries(source, actor);
+                for (const item of entries) {
+                    if (item.type == "phaseUse") {
+                        if (this.canPhaseUse(actor, item.skill)) list.push(item);
+                    }
+                    else if (this.canStageBegin(actor, source, item.skill, item.triggername, item.role)) {
+                        list.push(item);
+                    }
+                }
+                return list;
+            },
+            withEvent(evt, func) {
+                const old = _status.event;
+                _status.event = evt;
+                try {
+                    return func();
+                }
+                finally {
+                    _status.event = old;
+                }
+            },
+            borrowInit(actor, skill, func) {
+                const info = get.info(skill);
+                const owned = actor && actor.hasSkill && actor.hasSkill(skill, null, null, false);
+                const hasStorage = actor && actor.storage && Object.prototype.hasOwnProperty.call(actor.storage, skill);
+                const oldStorage = hasStorage ? actor.storage[skill] : undefined;
+                let inited = false;
+                if (actor && info && !owned && typeof info.init == "function") {
+                    try {
+                        info.init(actor, skill);
+                        inited = true;
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+                const restore = () => {
+                    if (!inited || !actor || !actor.storage) return;
+                    if (hasStorage) actor.storage[skill] = oldStorage;
+                    else delete actor.storage[skill];
+                };
+                try {
+                    const result = func();
+                    if (result && typeof result.then == "function") {
+                            return result.finally(restore);
+                    }
+                    restore();
+                    return result;
+                }
+                catch (e) {
+                    restore();
+                    throw e;
+                }
+            },
+            enableMatches(enable, evt) {
+                if (typeof enable == "function") return enable(evt);
+                if (Array.isArray(enable)) return enable.some(item => this.enableMatches(item, evt));
+                if (enable == "phaseUse") return evt.type == "phase";
+                if (typeof enable == "string") return enable == evt.name;
+                return false;
+            },
+            makeChooseEvent(actor, skill) {
+                const phaseUse = {
+                    name: "phaseUse",
+                    type: "phase",
+                    player: actor,
+                    getParent(level, forced) {
+                        return forced ? undefined : {};
+                    }
+                };
+                const choose = {
+                    name: "chooseToUse",
+                    type: "phase",
+                    player: actor,
+                    skill,
+                    _aiexclude: [],
+                    filterCard(card, player, event) {
+                        return lib.filter.filterCard(card, player, event || choose);
+                    },
+                    filterTarget(card, player, target) {
+                        return lib.filter.filterTarget(card, player, target);
+                    },
+                    getParent(level, forced, includeSelf) {
+                        if ((includeSelf || level == 0) && (level == "chooseToUse" || level === 0)) return choose;
+                        if (level == "phaseUse" || level === 1) return phaseUse;
+                        if (typeof level == "function") {
+                                if (level(choose)) return choose;
+                                if (level(phaseUse)) return phaseUse;
+                            }
+                            return forced ? undefined : {};
+                        },
+                    getTrigger() {
+                        return null;
+                    }
+                };
+                return choose;
+            },
+            isPhaseUseType(actor, skill) {
+                const info = get.info(skill);
+                if (!info || !info.enable) return false;
+                const evt = this.makeChooseEvent(actor, skill);
+                return this.withEvent(evt, () => this.enableMatches(info.enable, evt));
+            },
+            canPhaseUse(actor, skill) {
+                if (!actor || !actor.isIn()) return false;
+                const info = get.info(skill);
+                if (!info || !info.enable) return false;
+                return this.borrowInit(actor, skill, () => {
+                    const evt = this.makeChooseEvent(actor, skill);
+                    return this.withEvent(evt, () => {
+                        if (!this.enableMatches(info.enable, evt)) return false;
+                        if (info.filter && !info.filter(evt, actor)) return false;
+                        if (info.viewAs && typeof info.viewAs != "function") {
+                                if (info.viewAsFilter && info.viewAsFilter(actor) === false) return false;
+                                if (evt.filterCard && !evt.filterCard(get.autoViewAs(info.viewAs, "unsure"), actor, evt)) return false;
+                        }
+                        if (info.usable != undefined) {
+                            let num = info.usable;
+                            if (typeof num == "function") num = info.usable(skill, actor);
+                            if (typeof num == "number" && get.skillCount(skill, actor) >= num) return false;
+                        }
+                        if (info.round && info.round - (game.roundNumber - actor.storage[skill + "_roundcount"]) > 0) return false;
+                        if (this.isTempBanned(actor, skill)) return false;
+                        return this.hasBasicCost(actor, info, evt);
+                    });
+                });
+            },
+            isTempBanned(actor, skill) {
+                if (!actor || !actor.storage) return false;
+                for (const item in actor.storage) {
+                    if (!item.startsWith("temp_ban_") || actor.storage[item] !== true) continue;
+                    const name = item.slice(9);
+                    if (!lib.skill[name]) continue;
+                    const list = [name];
+                    game.expandSkills(list);
+                    if (list.includes(skill)) return true;
+                }
+                return false;
+            },
+            hasBasicCost(actor, info, evt) {
+                if (info.chooseButton) return true;
+                let filterCard = info.filterCard ? get.filter(info.filterCard) : null;
+                let selectCard = info.selectCard == undefined ? (filterCard ? 1 : 0) : info.selectCard;
+                selectCard = this.withEvent(evt, () => get.select(selectCard));
+                if (selectCard[1] >= 0 && selectCard[0] > selectCard[1]) return false;
+                if (filterCard && (selectCard[0] > 0 || selectCard[0] < 0)) {
+                    const position = info.position || "h";
+                    let count = 0;
+                    for (const card of actor.getCards(position)) {
+                        let ok = false;
+                        try {
+                            ok = filterCard(card, actor, evt);
+                        }
+                        catch (e) {
+                            ok = false;
+                        }
+                        if (ok) count++;
+                        }
+                        if (selectCard[0] > 0 && count < selectCard[0]) return false;
+                        if (selectCard[0] < 0 && count <= 0) return false;
+                }
+                if (!this.hasTargetCost(actor, info, evt)) return false;
+                return true;
+            },
+            hasTargetCost(actor, info, evt) {
+                if (info.notarget) return true;
+                const filterTarget = info.filterTarget ? get.filter(info.filterTarget, 2) : null;
+                let selectTarget = info.selectTarget == undefined ? (filterTarget ? 1 : 0) : info.selectTarget;
+                let card = null;
+                if (info.viewAs && typeof info.viewAs != "function") {
+                    card = get.autoViewAs(info.viewAs, "unsure");
+                }
+                evt._get_card = card;
+                const range = this.withEvent(evt, () => get.select(selectTarget));
+                delete evt._get_card;
+                let min = range[0];
+                if (min < 0) min = filterTarget ? 1 : 0;
+                if (min <= 0) return true;
+                if (!filterTarget) return true;
+                let count = 0;
+                for (const target of game.filterPlayer(current => current.isIn())) {
+                    let ok = false;
+                    try {
+                        ok = filterTarget(card, actor, target);
+                    }
+                    catch (e) {
+                        ok = false;
+                    }
+                    if (ok) count++;
+                    if (count >= min) return true;
+                }
+                return false;
+            },
+            getStageBeginTriggers(skill) {
+                const info = get.info(skill);
+                const result = [];
+                const names = ["phaseBegin", "phaseZhunbeiBegin", "phaseJudgeBegin", "phaseDrawBegin", "phaseUseBegin",
+                "phaseDiscardBegin", "phaseJieshuBegin"];
+                if (!info || !info.trigger) return result;
+                for (const role in info.trigger) {
+                    let list = info.trigger[role];
+                    if (typeof list == "string") list = [list];
+                    if (!Array.isArray(list)) continue;
+                    for (const name of list) {
+                        if (names.includes(name)) result.push({ name, role });
+                    }
+                }
+                return result;
+            },
+            getStageText(name) {
+                const map = {
+                    phaseBegin: "回合开始",
+                    phaseZhunbeiBegin: "准备阶段开始",
+                    phaseJudgeBegin: "判定阶段开始",
+                    phaseDrawBegin: "摸牌阶段开始",
+                    phaseUseBegin: "出牌阶段开始",
+                    phaseDiscardBegin: "弃牌阶段开始",
+                    phaseJieshuBegin: "结束阶段开始"
+                };
+                return map[name] || name;
+            },
+            getPhaseEventName(triggername) {
+                if (triggername == "phaseBegin") return "phase";
+                if (triggername.endsWith("Begin")) return triggername.slice(0, -5);
+                return triggername;
+            },
+            makeFakeTrigger(actor, source, triggername, role) {
+                const name = this.getPhaseEventName(triggername);
+                const phaseOwner = role == "player" ? actor : (source || actor);
+                const fake = {
+                    name,
+                    player: phaseOwner,
+                    source: actor,
+                    target: actor,
+                    triggername,
+                    _notrigger: [],
+                    finished: false,
+                    getParent(level, forced, includeSelf) {
+                        if ((includeSelf || level == 0) && (level == name || level == triggername || level === 0)) return fake;
+                        if (level == name || level == triggername) return fake;
+                        if (typeof level == "function" && level(fake)) return fake;
+                        return forced ? undefined : {};
+                    },
+                    getTrigger() {
+                            return fake;
+                    },
+                    finish() {
+                            this.finished = true;
+                    },
+                    cancel() {
+                            this.finished = true;
+                    }
+                };
+                return fake;
+            },
+            canStageBegin(actor, source, skill, triggername, role) {
+                if (!actor || !actor.isIn()) return false;
+                const info = get.info(skill);
+                if (!info || !info.trigger || !info.content) return false;
+                return this.borrowInit(actor, skill, () => {
+                    const fake = this.makeFakeTrigger(actor, source, triggername, role);
+                    if (role != "global" && actor != fake[role]) return false;
+                    if (info.filter && !info.filter(fake, actor, triggername)) return false;
+                    if (fake._notrigger.includes(actor) && !lib.skill.global.includes(skill)) return false;
+                    if (info.usable != undefined) {
+                        let num = info.usable;
+                        if (typeof num == "function") num = info.usable(skill, actor);
+                        if (typeof num == "number" && (actor.getStat("triggerSkill")[skill] || 0) >= num) return false;
+                    }
+                    if (info.round && info.round - (game.roundNumber - actor.storage[skill + "_roundcount"]) > 0) return false;
+                    if (this.isTempBanned(actor, skill)) return false;
+                    return true;
+                });
+            },
+            makeDetachedEvent(name) {
+                const evt = game.createEvent(name, false);
+                if (evt.parent && evt.parent.next && evt.parent.next.includes(evt)) evt.parent.next.remove(evt);
+                if (evt.parent && evt.parent.after && evt.parent.after.includes(evt)) evt.parent.after.remove(evt);
+                evt.parent = undefined;
+                return evt;
+            },
+            reparentEvent(evt, parent) {
+                if (!evt || !parent) return evt;
+                if (evt.parent && evt.parent.next && evt.parent.next.includes(evt)) evt.parent.next.remove(evt);
+                if (evt.parent && evt.parent.after && evt.parent.after.includes(evt)) evt.parent.after.remove(evt);
+                evt.parent = undefined;
+                parent.next.push(evt);
+                return evt;
+            },
+            makeBorrowUseParent(actor, skill, cards, targets) {
+                const phaseUse = this.makeDetachedEvent("phaseUse");
+                phaseUse.player = actor;
+                phaseUse.type = "phase";
+                const chooseToUse = this.makeDetachedEvent("chooseToUse");
+                chooseToUse.player = actor;
+                chooseToUse.type = "phase";
+                chooseToUse.skill = skill;
+                chooseToUse.cards = cards || [];
+                chooseToUse.targets = targets || [];
+                chooseToUse._aiexclude = [];
+                const skillEvent = this.makeDetachedEvent("useSkill");
+                skillEvent.player = actor;
+                skillEvent.skill = skill;
+                skillEvent.cards = cards || [];
+                skillEvent.targets = targets || [];
+                skillEvent.num = 0;
+                phaseUse.next.push(chooseToUse);
+                chooseToUse.next.push(skillEvent);
+                return { phaseUse, chooseToUse, skillEvent };
+            },
+            async runPhaseUse(parent, actor, skill) {
+                await this.borrowInit(actor, skill, async () => {
+                    const next = actor.chooseToUse();
+                    next.set("type", "phase");
+                    next.set("chooseonly", true);
+                    next.set("prompt", "发动【" + get.translation(skill) + "】");
+                    next.backup(skill);
+                    const result = await next.forResult();
+                    if (!result || !result.bool) return;
+                    if (result._sendskill) {
+                        lib.skill[result._sendskill[0]] = result._sendskill[1];
+                    }
+                    if (result.skill) {
+                        const rinfo = get.info(result.skill);
+                        if (rinfo && rinfo.onuse) rinfo.onuse(result, actor);
+                    }
+                    if (result.card || !result.skill) {
+                        const card = result.card || (result.cards && result.cards[0]);
+                        if (!card) return;
+                        result.used = card;
+                        const use = actor.useCard(card, result.cards || [], result.targets || [], result.skill);
+                        if (result._apply_args) {
+                            for (const key in result._apply_args) use[key] = result._apply_args[key];
+                        }
+                        await use;
+                    }
+                    else if (result.skill == "xinxuanbei") {
+                         await this.executeXinxuanbei(parent, actor, result.targets || []);
+                    }
+                    else {
+                        result.used = result.skill;
+                        await this.executeEnabledSkill(parent, actor, result.skill, result.cards || [], result.targets || []);
+                    }
+                });
+            },
+            async runStageBegin(parent, actor, skill, triggername, role, source) {
+                const info = get.info(skill);
+                if (!info || !info.content) return;
+                await this.borrowInit(actor, skill, async () => {
+                    const fake = this.makeFakeTrigger(actor, source, triggername, role);
+                    let result = { bool: true };
+                    if (!info.forced && typeof info.cost == "function") {
+                        const cost = game.createEvent(skill + "_cost");
+                        cost.player = actor;
+                        cost.forceDie = true;
+                        cost.includeOut = true;
+                        cost._trigger = fake;
+                        cost.triggername = triggername;
+                        cost.skill = skill;
+                        if (info.forceDie) cost.forceDie = true;
+                        if (info.forceOut) cost.includeOut = true;
+                        cost.setContent(info.cost);
+                        result = await cost.forResult();
+                    }
+                    if (result && result.control) result.bool = !String(result.control).includes("cancel");
+                    if (!result || !result.bool) {
+                        if (info.oncancel) info.oncancel(fake, actor);
+                        return;
+                    }
+                    let targets = null;
+                    if (result.targets && result.targets.length) targets = result.targets.slice(0);
+                    else if (info.logTarget) {
+                        if (typeof info.logTarget == "string") targets = fake[info.logTarget];
+                        else if (typeof info.logTarget == "function") targets = info.logTarget(fake, actor, triggername);
+                    }
+                    if (get.itemtype(targets) == "player") targets = [targets];
+                    if (info.popup != false && !info.direct && !("skill_popup" in result && !result.skill_popup)) {
+                        actor.logSkill(typeof info.popup == "string" ? [skill, info.popup] : skill, info.logLine === false ? false : targets,
+                        info.line, null, [fake, actor, triggername, null, result]);
+                    }
+                    if (info.usable != undefined) {
+                        actor.getStat("triggerSkill")[skill] = (actor.getStat("triggerSkill")[skill] || 0) + 1;
+                    }
+                    if (info.round) {
+                        const roundname = skill + "_roundcount";
+                        actor.storage[roundname] = game.roundNumber;
+                        actor.syncStorage(roundname);
+                        actor.markSkill(roundname);
+                    }
+                    const next = game.createEvent(skill);
+                    next.player = actor;
+                    next._trigger = fake;
+                    next.triggername = triggername;
+                    next.skill = skill;
+                    if (info.forceDie) next.forceDie = true;
+                    if (info.forceOut) next.includeOut = true;
+                    if (get.itemtype(targets) == "players") next.targets = targets.slice(0);
+                    if (get.itemtype(result.cards) == "cards") next.cards = result.cards.slice(0);
+                    if ("cost_data" in result) next.cost_data = result.cost_data;
+                    next.setContent(info.content);
+                    await next;
+                });
+            },
+            async executeXinxuanbei(parent, actor, targets) {
+                const target = targets && targets[0];
+                if (!target || !target.isIn() || !target.hasCards("hej")) return;
+                actor.logSkill("xinxuanbei", target);
+                const result = await actor.choosePlayerCard({
+                    target,
+                    position: "hej",
+                    forced: true
+                }).forResult();
+                if (!result.bool || !result.cards || !result.cards.length) return;
+                const card = result.cards[0];
+                const cardx = get.autoViewAs({ name: "sha" }, [card]);
+                if (get.position(card) != "j" && !game.checkMod(card, target, "unchanged", "cardEnabled2", target) || !
+                target.canUse(cardx, actor, false)) return;
+                const damagedByThisSha = evt => {
+                    if (!evt || evt.source != target || !evt.card) return false;
+                    return evt.card.name == "sha" || get.name(evt.card) == "sha";
+                };
+                const before = actor.getHistory("damage", damagedByThisSha).length;
+                await target.useCard({
+                    card: cardx,
+                    cards: [card],
+                    targets: [actor],
+                    addCount: false
+                });
+                const after = actor.getHistory("damage", damagedByThisSha).length;
+                await actor.draw(after > before ? 2 : 1);
+            },
+            async executeEnabledSkill(parent, actor, skill, cards, targets) {
+                const info = get.info(skill);
+                if (!info || !info.content) return;
+                cards = cards || [];
+                targets = targets || [];
+                if (get.itemtype(targets) == "player") targets = [targets];
+                if (!Array.isArray(targets)) targets = [];
+                const context = this.makeBorrowUseParent(actor, skill, cards, targets);
+                const waitings = [];
+                let losecard = null;
+                if (cards.length) {
+                    if (info.discard != false && info.lose != false && !info.viewAs) {
+                        const next = actor.discard(cards);
+                        next.delay = false;
+                        this.reparentEvent(next, context.skillEvent);
+                        waitings.push(next);
+                    }
+                    else if (info.lose != false) {
+                        losecard = actor.lose(cards, ui.special);
+                        this.reparentEvent(losecard, context.skillEvent);
+                        if (info.losetrigger == false) losecard._triggered = null;
+                        if (info.visible) losecard.visible = true;
+                        if (info.loseTo) losecard.position = ui[info.loseTo];
+                        if (info.insert) losecard.insert_card = true;
+                        if (losecard.position == ui.special && info.toStorage) losecard.toStorage = true;
+                        waitings.push(losecard);
+                        if (!info.prepare && info.viewAs) {
+                            actor.$throw(cards);
+                            losecard.visible = true;
+                        }
+                    }
+                }
+                if (info.line != false && targets.length) {
+                    let line = {};
+                    if (get.is.object(info.line)) line = info.line;
+                    else if (info.line == "fire") line.color = "fire";
+                    else if (info.line == "thunder") line.color = "thunder";
+                    else if (info.line === undefined || info.line == "green") line.color = "green";
+                    if (info.multitarget && !info.multiline && targets.length > 1) actor.line2(targets, line);
+                    else actor.line(targets, line);
+                }
+                if (!info.direct && info.log !== false) {
+                    actor.logSkill(info.sourceSkill || skill, info.log == "notarget" ? false : targets, info.line);
+                }
+                if (actor.getStat) {
+                    const stat = actor.getStat("skill");
+                    stat[skill] = (stat[skill] || 0) + 1;
+                    if (info.sourceSkill) stat[info.sourceSkill] = (stat[info.sourceSkill] || 0) + 1;
+                    const allStat = actor.getStat();
+                    allStat.allSkills = (allStat.allSkills || 0) + 1;
+                }
+                if (info.prepare) {
+                    if (info.prepare == "give") {
+                            if (losecard) losecard.visible = true;
+                            actor.$give(cards, targets[0]);
+                    }
+                    else if (info.prepare == "give2") actor.$give(cards.length, targets[0]);
+                    else if (info.prepare == "throw") {
+                            if (losecard) losecard.visible = true;
+                            actor.$throw(cards);
+                    }
+                    else if (info.prepare == "throw2") actor.$throw(cards.length);
+                    else info.prepare(cards, actor, targets);
+                }
+                if (info.round) {
+                    const roundname = skill + "_roundcount";
+                    actor.storage[roundname] = game.roundNumber;
+                    actor.syncStorage(roundname);
+                    actor.markSkill(roundname);
+                }
+                if (waitings.length) await Promise.all(waitings);
+                if (info.contentBefore) {
+                    const before = game.createEvent(skill + "ContentBefore");
+                    this.reparentEvent(before, context.skillEvent);
+                    before.player = actor;
+                    before.skill = skill;
+                    before.cards = cards;
+                    before.targets = targets;
+                    if (info.forceDie) before.forceDie = true;
+                    if (info.forceOut) before.includeOut = true;
+                    before.setContent(info.contentBefore);
+                    await before;
+                }
+                const list = info.multitarget ? [targets[0]] : (targets.length ? targets.slice(0) : [undefined]);
+                if (!info.multitarget && targets.length > 1) {
+                    lib.tempSortSeat = actor;
+                    targets.sort(lib.sort.seat);
+                    delete lib.tempSortSeat;
+                }
+                for (let i = 0; i < list.length; i++) {
+                    const target = list[i];
+                    if (target && target.isDead && target.isDead() && !info.deadTarget) continue;
+                    if (target && target.isOut && target.isOut() && !info.includeOut) continue;
+                    const next = game.createEvent(skill);
+                    this.reparentEvent(next, context.skillEvent);
+                    next.player = actor;
+                    next.skill = skill;
+                    next.cards = cards;
+                    next.targets = targets;
+                    next.target = target;
+                    next.num = i;
+                    next.multitarget = info.multitarget;
+                    if (info.forceDie) next.forceDie = true;
+                    if (info.forceOut) next.includeOut = true;
+                    next.setContent(info.content);
+                    await next;
+                    if (info.multitarget) break;
+                    }
+                    if (info.contentAfter) {
+                        const after = game.createEvent(skill + "ContentAfter");
+                        this.reparentEvent(after, context.skillEvent);
+                        after.player = actor;
+                        after.skill = skill;
+                        after.cards = cards;
+                        after.targets = targets;
+                        if (info.forceDie) after.forceDie = true;
+                        if (info.forceOut) after.includeOut = true;
+                        after.setContent(info.contentAfter);
+                        await after;
+                    }
+                },
+            },   
+        },    
+        ai:{
+                order:9,
+                result:{
+                    player(player) {
+                        return 2;
+                    },
+                    target(player, target) {
+                        if (target == player) return 2;
+                        return 4;
+                    },
+                    },
+            },
     },
+
     //辉夜姬
     xinfan_huiyuejing: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/huiyeji:2",
@@ -1151,6 +1807,9 @@ const skills = {
                 target: "useCardToBefore",
             },
             usable: 1,
+            check(event, player) {
+                return get.effect(player, event.card, event.player, player) < 0;
+            },
             filter: function (event,player){
                 return event.player!=player;
             },
@@ -1830,7 +2489,6 @@ const skills = {
                 intro: {
                     content: '当前招式：$',
                 },
-            charlotte: true,
             async content(event, trigger, player) {   
             const choiceList = ['侵略：造成伤害时，获得对方一张牌。','飞流：造成的伤害加一。','风疾：造成或受到的伤害视为体力流失。','不动：造成或受到伤害时，摸一张牌。',];
             const choices = ['侵略','飞流','风疾','不动'];
@@ -2318,7 +2976,7 @@ const skills = {
                     if (tag == 'save' && storage.includes('tao')) return false;
                     return true;
                 },
-            },
+            },    
     },               
     //聆海金鱼姬
     xinfan_yulinghai: {
@@ -2712,6 +3370,16 @@ const skills = {
             async content(event, trigger, player) {         
                 await player.addMark('xinfan_zhuiliuguang', 2);
             },
+            ai: {
+                order: 1,
+                result: {
+                    player(player) {
+                        if(player.countCards("he") >= 3){
+                            return 5;
+                        } return 2;
+                    },
+                }, 
+            },
     },
     //禅心云外镜
     xinfan_chanjiekong: {
@@ -2743,7 +3411,6 @@ const skills = {
                     intro: {
                         content: '剩余：#回合',
                     },
-                    charlotte: true,
                     forced: true,           
                     filter(event, player) {
                         return player.hasMark('xinfan_chanjiekong_kong') && event.skill != "xinfan_chanjingming";
@@ -2842,7 +3509,6 @@ const skills = {
                 intro: {
                     content: '当前状态：$',
                 },
-            charlotte: true,
             async content(event, trigger, player) {
                 if(player.getStorage('xinfan_jisiji').includes("xinfan_xia")){         
                     await player.setStorage('xinfan_jisiji',"xinfan_qiu");   
@@ -4586,15 +5252,20 @@ const skills = {
             check(event, player) {
                 if (event.name == 'damage') {
                     return get.attitude(player, event.player) > 0;
+                } else if (get.type2(event.card) == "basic"){
+                    return true;
+                } else if (get.type(event.card) == "trick" && event.card.name != "shandian" && event.card.name != "tiesuo"){
+                    return true;
+                } else if (get.type(event.card) == "equip"){
+                    return event.card.name == "zhuge";  
                 }
-                return get.attitude(player, event.player) < 0;
+                return false; 
             },
             async content(event, trigger, player) {
                 trigger.cancel();
                 trigger.num = 0;
             },
     },
-
     //寻森小鹿男
     xinfan_lusenxin: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/xunsenxiaolunan:2",
@@ -4827,7 +5498,6 @@ const skills = {
             intro: {
                 content: '已解锁：$',
             },
-            charlotte: true,
             async content(event, trigger, player) {     
                 const cards = get.cards(4, true);
                 const result = await player

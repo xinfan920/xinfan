@@ -19,6 +19,8 @@ export async function precontent() {
 	await import("../zidingyi/globalSkill.js");
 	//导入buff
 	await import("../zidingyi/buff.js");
+    //导入Bgm
+	await import("../zidingyi/Bgm.js");
 	//导入其他机制格式相同
 	//await import("../assets/xxx.js");
 }

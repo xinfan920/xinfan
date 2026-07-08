@@ -7,10 +7,15 @@ export const config = {
 		init: false,
 		intro: `开启御魂后，游戏开始时，所有角色依次选择一个御魂(技能)获得<br>下局游戏生效`,
 	},
-	"xinfan_bgm": {
-		name: `<font color="#e91e63">专属BGM<small>(下局生效)`,
+	"xinfan_Bgm": {
+		name: `<font color="#e91e63">专属或随机BGM<small>(下局生效)`,
 		init: true,
 		intro: "场上存在本扩展角色时是否播放BGM<br><small>(下局生效)</small><br>开启后，部分的角色的角色曲将会加入背景BGM<small>(重启2次生效)",
+	},
+	"xinfan_zBgm": {
+		name: `<font color="#e91e63">自选BGM播放<small>(下局生效)`,
+		init: false,
+		intro: "游戏开始时，一号位自选BGM播放<br><small>(下局生效)</small><br>开启后，部分的角色的角色曲将会加入背景BGM<small>(重启2次生效)",
 	},
 			update_source: {
 				name: `<font color="#9c27b0">更新镜像源`,
