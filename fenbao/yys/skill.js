@@ -3717,7 +3717,7 @@ const skills = {
     		usable: 1,
     		forced: true,
             async content(event, trigger, player) {   
-                const choiceList = ['烈日：每回合每名角色首次受到你造成的伤害加1。','暖阳：每回合首次受到伤害后，你令你在内任意名角色回复1点体力。',];
+                const choiceList = ['烈日：每回合首次造成的伤害加1。','暖阳：每回合首次受到伤害后，你令你在内任意名角色回复1点体力。',];
             	const choices = ['烈日','暖阳'];
             	var result = await player
             		.chooseControl()
@@ -3757,10 +3757,11 @@ const skills = {
                 	audio: "ext:阴阳师杀/fenbao/yys/juesebao/pingjiangmen:1",
 					mark: true,
                 	intro: {
-                    	content: '每回合每名角色首次受到你造成的伤害加1。',
+                    	content: '每回合首次造成的伤害加1。',
 						name: '烈日',
                 	},
                 	charlotte: true,
+					usable: 1,
         			trigger: {
             			source: "damageBegin",
         			},
@@ -3768,9 +3769,7 @@ const skills = {
             			return !player.getStorage('xinfan_pingbudu_used').includes(event.player);
                     },
                		forced: true,
-                	async content(event, trigger, player) {
-            			player.markAuto('xinfan_pingbudu_used',  trigger.player);
-            			player.addTempSkill('xinfan_pingbudu_used');                     
+                	async content(event, trigger, player) {                    
             			trigger.num++;
             		},
             	},
@@ -3801,14 +3800,6 @@ const skills = {
                 		player.recover();
             		},
                 },  
-                used: {
-                    onremove: true,
-                    intro: {
-                    content: '本回合发动过的目标：$',
-                    },
-                    mark: true,
-                    charlotte: true,
-                    },
 			},  
 	},  
     xinfan_pingjiaoyang: {
@@ -4271,9 +4262,7 @@ const skills = {
             ai: {
                 order: 4.3,
                 result: {
-                    player(player) {
-                        return player.hp - 2;
-                    },
+                    player: 1,
                 },
             },
     },

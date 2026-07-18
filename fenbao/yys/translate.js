@@ -181,7 +181,7 @@ xinfan_pingbudu_info: `游戏开始时或回合结束时，你选择一个架势
 xinfan_pingjiaoyang: '骄阳',
 xinfan_pingjiaoyang_info: `每轮一次，当你累计造成或受到的伤害次数不小于你的体力上限后，你执行一个${get.poptip("xinfan_shixi")}回合并重新计数”。`,
 xinfan_pingbudu_lie: '烈日',
-xinfan_pingbudu_lie_info: '每回合内每名角色首次受到你造成的伤害加1。',
+xinfan_pingbudu_lie_info: '每回合首次造成的伤害加1。',
 xinfan_pingbudu_nuan: '暖阳',
 xinfan_pingbudu_nuan_info: '每回合首次受到伤害后，你与任意名角色回复1点体力。',
 
