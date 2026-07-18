@@ -1,6 +1,6 @@
 {
   "version": "0.70.5",
-  "update": "0.70.5：部分角色ai优化，音乐播放方式修改",
+  "update": "0.70.5：平将门削弱",
   "files": {
     "daoru/config.js": "ebd95be42010cc5afcc248df5c64caaa10999c18",
     "daoru/content.js": "6d4683406044ea8e15e28b380559649e5faba82e",
@@ -399,7 +399,7 @@
     "fenbao/yys/yinyue/xueyu.mp3": "cedf1fca26c0bbe06139d19f3340693aaebf51d2",
     "fenbao/yys/yinyue/yanhuozhilv.mp3": "b7a63f5e622d79c88238c446df9f82af3c4b8801",
     "fenbao/yys/yinyue/zhanyushijiejintou.mp3": "b73aa043c0a2436e4f5c694b06edfdd00d4fd554",
-    "genManifest.js": "194c1be2a190ef8b862547c959d9da9102f1f597",
+    "genManifest.js": "968396e3d40a6e7e31bdd0ac59e6ec9297cae77f",
     "info.json": "6146cac458fac047a099a60468f29f19360d223c",
     "kapai/beta/card.js": "8c8e211f4b3abc2c7ed4cd2fb757327ea0f16dcc",
     "kapai/beta/cardList.js": "40487addad4bd1440864023766e60f2a2065eef3",
