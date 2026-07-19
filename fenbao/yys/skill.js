@@ -475,7 +475,9 @@ const skills = {
                             return get.damageEffect(target, player, player);
                         },
                         async content(event, trigger, player) {
-                            player.logSkill('xinfan_bushanxing');
+                            game.broadcastAll(function (player) {
+						    game.playAudio(`../extension/阴阳师杀/fenbao/yys/juesebao/bujianyue/xinfan_bushanxing${[1,2].randomGet()}.mp3`);
+					    }, player);
                             const {
                                 targets: [target],
                             } = event;
@@ -1726,7 +1728,7 @@ const skills = {
     xinfan_huiyuejing: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/huiyeji:2",
             trigger: {
-                global: ['phaseBegin', 'damageBegin2'],
+                global: 'phaseBegin',
             },
             intro: {
                 content: 'mark',
@@ -1737,6 +1739,22 @@ const skills = {
             async content(event, trigger, player) {
                 player.addMark('xinfan_huiyuejing', 1);
             },
+            group: ['xinfan_huiyuejing_damage'],
+            subSkill: {
+                damage: {
+                    trigger: {
+                        global: 'damageBegin',
+                    },
+                    usable: 1,
+                    forced: true,
+                    async content(event, trigger, player) {
+                        player.addMark('xinfan_huiyuejing', 1);
+                        game.broadcastAll(function (player) {
+						    game.playAudio(`../extension/阴阳师杀/fenbao/yys/juesebao/huiyeji/xinfan_huiyuejing${[1,2].randomGet()}.mp3`);
+					    }, player);
+                    },
+                },
+            },    
     },
     xinfan_huihuiye: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/huiyeji:2",
@@ -4725,7 +4743,9 @@ const skills = {
                             return get.damageEffect(target, player, player);
                         },
                         async content(event, trigger, player) {
-                            player.logSkill('xinfan_shanchuling');
+                            game.broadcastAll(function (player) {
+						    game.playAudio(`../extension/阴阳师杀/fenbao/yys/juesebao/chulingshanfeng/xinfan_shanchuling${[1,2,3].randomGet()}.mp3`);
+					    }, player);
                             const {
                                 targets: [target],
                             } = event;
@@ -5114,7 +5134,10 @@ const skills = {
                             return get.damageEffect(target, player, player);
                         },
                         async content(event, trigger, player) {
-                            player.logSkill('xinfan_dizhanfang');
+                            player.addMark('xinfan_huiyuejing', 1);
+                        game.broadcastAll(function (player) {
+						    game.playAudio(`../extension/阴阳师杀/fenbao/yys/juesebao/dishitian/xinfan_dizhanfang${[1,2].randomGet()}.mp3`);
+					    }, player);
                             const {
                                 targets: [target],
                             } = event;
