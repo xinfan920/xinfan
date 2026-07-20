@@ -2773,7 +2773,7 @@ const skills = {
             },
             async content(event, trigger, player) {
                 if (player.countMark('xinfan_quemili') >= 5) {
-                    await player.recover(player.countMark('xinfan_quemili'));
+                    await player.recover();
                     await player.draw(player.countMark('xinfan_quemili'));
                     await player.changeSkills(['xinfan_quequewu'], ['xinfan_quemili']);
                     player.markSkill('xinfan_quemili');
@@ -6179,9 +6179,6 @@ const skills = {
                     async content(event, trigger, player) {
                         await trigger.player.clearMark('xinfan_ningshuang');
                         await trigger.player.chooseToDiscard(2, true, "h");
-                        if(trigger.player.countCards("h") == 0){
-                        await trigger.player.addMark('_xinfan_yongdong', 1);
-                        }
                     },
                 },
             },

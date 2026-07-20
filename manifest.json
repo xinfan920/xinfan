@@ -1,6 +1,6 @@
 {
   "version": "0.70.5",
-  "update": "0.70.5：辉夜姬削弱",
+  "update": "0.70.5：千姬削弱，孔雀明王削弱",
   "files": {
     "daoru/config.js": "ebd95be42010cc5afcc248df5c64caaa10999c18",
     "daoru/content.js": "6d4683406044ea8e15e28b380559649e5faba82e",
@@ -362,9 +362,9 @@
     "fenbao/yys/juesebao/zhuiyueshen/xinfan_zhuiyaoyue2.mp3": "c976a9a14f6a83ab6af62776102c501dc4d557db",
     "fenbao/yys/juesebao/zhuiyueshen/xinfan_zhuiyueshen.jpg": "f921589cdb9dbcc440c652c7897927fd073b4e32",
     "fenbao/yys/shipin/liehun.mp4": "fa233ad9a1072c19ddd5454c7c5a7b14c2889564",
-    "fenbao/yys/skill.js": "21f72e8d467f18ed7003529da0a492eb6be0f75b",
+    "fenbao/yys/skill.js": "7a02b8d389c5db57ff6890b38b7bd1adfd7bf303",
     "fenbao/yys/sort.js": "e0ef41ce77066a04c19727eca91b0dd27e00d6aa",
-    "fenbao/yys/translate.js": "e44c22c2b403a5927c71c3fabd11ef3174e9b95b",
+    "fenbao/yys/translate.js": "267f240ee45fef08075bddec695b9578d6504bde",
     "fenbao/yys/tubiao/budong.png": "d5d00f431fb3fb502e8ce3a479bd30c7b34cf5dd",
     "fenbao/yys/tubiao/chuannu.png": "00ef0f7e4d02d683696cddde68ed48f18a7afc91",
     "fenbao/yys/tubiao/duane.png": "48d5776021f0279e567db1945f9808105fb2467a",
@@ -399,7 +399,7 @@
     "fenbao/yys/yinyue/xueyu.mp3": "cedf1fca26c0bbe06139d19f3340693aaebf51d2",
     "fenbao/yys/yinyue/yanhuozhilv.mp3": "b7a63f5e622d79c88238c446df9f82af3c4b8801",
     "fenbao/yys/yinyue/zhanyushijiejintou.mp3": "b73aa043c0a2436e4f5c694b06edfdd00d4fd554",
-    "genManifest.js": "93291f726cf585138b45f72c84679b02fffb73cc",
+    "genManifest.js": "cdcc9cfcd261802e56e09f8a5f996b4d028fe4f7",
     "info.json": "6146cac458fac047a099a60468f29f19360d223c",
     "kapai/beta/card.js": "8c8e211f4b3abc2c7ed4cd2fb757327ea0f16dcc",
     "kapai/beta/cardList.js": "40487addad4bd1440864023766e60f2a2065eef3",
