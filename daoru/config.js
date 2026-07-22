@@ -8,26 +8,21 @@ export const config = {
 		intro: `开启御魂后，游戏开始时，所有角色依次选择一个御魂(技能)获得<br>下局游戏生效`,
 	},
 	"xinfan_Bgm": {
-		name: `<font color="#e91e63">专属或随机BGM<small>(下局生效)`,
-		init: true,
-		intro: "场上存在本扩展角色时是否播放BGM<br><small>(下局生效)</small><br>开启后，部分的角色的角色曲将会加入背景BGM<small>(重启2次生效)",
+		name: `<font color="#9c27b0">背景音乐随机播放的方式`,
+                init: "2",
+                item: {
+					0: "关闭播放",
+                    1: "单曲循环",
+					2: "随机播放",
+                }
 	},
-	"xinfan_zBgm": {
-		name: `<font color="#e91e63">自选BGM播放<small>(下局生效)`,
-		init: false,
-		intro: "游戏开始时，一号位自选BGM播放<br><small>(下局生效)</small><br>开启后，部分的角色的角色曲将会加入背景BGM<small>(重启2次生效)",
+	"xinfan_Bgms": {
+		name: `<font color="#9c27b0">音乐包`,
+                init: "0",
+                item: {
+					0: "阴阳师",
+                }
 	},
-			update_source: {
-				name: `<font color="#9c27b0">更新镜像源`,
-				init: "0",
-				item: {
-					0: "扩展官方源",
-					1: "GitHub官方源",
-					2: "gh-proxy全球镜像",
-					3: "gh-proxy国内镜像",
-					4: "tvv.tw镜像源",
-				}
-			},
 			update_method: {
 				name: `<font color="#2196f3">极速更新`,
 				init: false,

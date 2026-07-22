@@ -2628,7 +2628,7 @@ const skills = {
             priority:15,
             async content(event,trigger,player){
                 game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/yixienamei.jpg');
+                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/zhanyushijiejintou.jpg');
                     })
                 if(_status.tempMusic != "ext:阴阳师杀/fenbao/yys/yinyue/zhanyushijiejintou.mp3"){
                     game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/zhanyushijiejintou.mp3"); 
@@ -2779,7 +2779,7 @@ const skills = {
                     player.markSkill('xinfan_quemili');
                     player.tempBanSkill('xinfan_quequewu_use');
                     player.changeAvatarImageOL("extension/阴阳师杀/fenbao/yys/juesebao/kongquemingwang/xinfan_kongquemingwang_jie.jpg");
-                    await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/kongquemingwang.jpg", 0, {player: "phaseJieshuEnd"})
+                    await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/jingjimeigui.jpg", 0, {player: "phaseJieshuEnd"})
                     if(_status.tempMusic != "ext:阴阳师杀/fenbao/yys/yinyue/jingjimeigui.mp3"){
                         game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/jingjimeigui.mp3"); 
                     }
@@ -4341,7 +4341,7 @@ const skills = {
 		    },
 		    async content(event, trigger, player) {
                 game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/huangkulou.jpg');
+                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/kugushizhang.jpg');
                 })
                 game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/kugushizhang.mp3");  
                 player.awakenSkill('xinfan_kuzhanqi');
@@ -4595,7 +4595,7 @@ const skills = {
             async content(event, trigger, player) {        
 				const target = event.target;  
                 await player.changeHujia(1);
-                await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/chanbingxuenv.jpg", 0, {player: "phaseBefore"})
+                await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/xueyu.jpg", 0, {player: "phaseBefore"})
                 if(_status.tempMusic != "ext:阴阳师杀/fenbao/yys/yinyue/xueyu.mp3"){ 
                     game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/xueyu.mp3");   
                 }
@@ -5368,7 +5368,7 @@ const skills = {
             return game.phaseNumber == 0;
             },
             async content(event, trigger, player) {
-                await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/guitongwan.jpg", 0, {player:"phaseBegin"})
+                await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/shayushenghua.jpg", 0, {player:"phaseBegin"})
                 if(_status.tempMusic != "ext:阴阳师杀/fenbao/yys/yinyue/shayushenghua.mp3"){
                     game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/shayushenghua.mp3"); 
                 }
@@ -5656,7 +5656,7 @@ const skills = {
                 },
             async content(event, trigger, player) {
                 game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/jinnaluo.jpg');
+                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/xingchenzhilv.jpg');
                 })
                 game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/xingchenzhilv.mp3"); 
                 player.insertPhase().skill=event.name;
@@ -5834,7 +5834,7 @@ const skills = {
 			async content(event, trigger, player) {
                 const target = event.target;
                 game.broadcastAll(function () {
-                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/fuguqingji.jpg');
+                    ui.background.setBackgroundImage('extension/阴阳师杀/fenbao/yys/beijing/huazuoqingyan.jpg');
                 })
                 game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/huazuoqingyan.mp3"); 
                 target.addSkill('xinfan_qingjianggu_jian'); 
@@ -5910,7 +5910,7 @@ const skills = {
             async content(event, trigger, player) {
                 const num = event.cards.length;
                 const target = event.target;
-                await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/lingluyuqian.jpg", 0, {global: "phaseJieshuEnd"})
+                await player.addTempBackGroundOL("/extension/阴阳师杀/fenbao/yys/beijing/luhaiweiwang.jpg", 0, {global: "phaseJieshuEnd"})
                 if(_status.tempMusic != "ext:阴阳师杀/fenbao/yys/yinyue/luhaiweiwang.mp3"){
                     game.playBgmOL("ext:阴阳师杀/fenbao/yys/yinyue/luhaiweiwang.mp3"); 
                 }

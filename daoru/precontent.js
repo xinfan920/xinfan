@@ -17,8 +17,8 @@ export async function precontent() {
 	await import("../zidingyi/settle.js");
 	//导入全局技能
 	await import("../zidingyi/globalSkill.js");
-	//导入buff
-	await import("../zidingyi/buff.js");
+	//导入Yuhun
+	await import("../zidingyi/Yuhun.js");
     //导入Bgm
 	await import("../zidingyi/Bgm.js");
 	//导入其他机制格式相同
