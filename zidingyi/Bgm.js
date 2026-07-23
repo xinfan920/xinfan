@@ -21,25 +21,31 @@ const Bgms = {
 			return event.name != "phase" || game.phaseNumber == 0;
 		},
 		async content(event, trigger, player) {
-			if(lib.config.extension_阴阳师杀_xinfan_Bgms == 1 && "qlwh" in lib.characterPack){
-				var list = [
-					"麟趾马蹄金","天球仪","天王石刻","铜壶滴漏"
-				]
-				var lu ="五花米线/audio/background/";
-				var lu2 ="五花米线/skin/background/";
-				var tu =".png";
-			}else{
-				var list = [
+			var list2 = [
 					"Broken Hero","fengmozhishi","huanshidejintou","huasiji","kongxiang","lidaozhige",
 					"shenzhijiangzhi","weimingzhizui","xianyuezhixia","xingchenzhilv","xinshengqimian",
 					"yanhuozhilv","huazuoqingyan","jingjimeigui","kugushizhang","luhaiweiwang","xueyu",
 					"shayushenghua","zhanyushijiejintou"
-				]
+				];
+			if("qlwh" in lib.characterPack){
+				var list3 = [
+					"麟趾马蹄金","天球仪","天王石刻","铜壶滴漏"
+				];
+			}
+			if(lib.config.extension_阴阳师杀_xinfan_Bgms == 0 && "qlwh" in lib.characterPack){
+				var num = Math.floor(Math.random() * 2) + 1;
+			}
+			if(lib.config.extension_阴阳师杀_xinfan_Bgms == 2 || num == 1){
+				var name = list3.randomGet();
+				var lu ="五花米线/audio/background/";
+				var lu2 ="五花米线/skin/background/";
+				var tu =".png";
+			}else{
+                var name = list2.randomGet();
 				var lu ="阴阳师杀/fenbao/yys/yinyue/";
 				var lu2 ="阴阳师杀/fenbao/yys/beijing/";
 				var tu =".jpg";
-			}	
-			var name = list.randomGet();
+			}
 			game.broadcastAll(() => {
 				ui.background.setBackgroundImage(`extension/${lu2}${name}${tu}`);
 			});	
@@ -47,7 +53,20 @@ const Bgms = {
 			if(lib.config.extension_阴阳师杀_xinfan_Bgm == 2){
 				game.broadcastAll(() => {
 				ui.backgroundMusic.addEventListener('ended', () => {
-					var name = list.randomGet();	
+            	    if(lib.config.extension_阴阳师杀_xinfan_Bgms == 0 && "qlwh" in lib.characterPack){
+						var num = Math.floor(Math.random() * 2) + 1;
+					}
+					if(lib.config.extension_阴阳师杀_xinfan_Bgms == 2 || num == 1){
+						var name = list3.randomGet();
+						var lu ="五花米线/audio/background/";
+						var lu2 ="五花米线/skin/background/";
+						var tu =".png";
+					}else{
+           			    var name = list2.randomGet();
+						var lu ="阴阳师杀/fenbao/yys/yinyue/";
+						var lu2 ="阴阳师杀/fenbao/yys/beijing/";
+						var tu =".jpg";
+					}
 					ui.background.setBackgroundImage(`extension/${lu2}${name}${tu}`);
         			_status.tempMusic = `ext:${lu}${name}.mp3`;
 					game.playBackgroundMusic();
