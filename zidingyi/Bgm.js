@@ -21,26 +21,35 @@ const Bgms = {
 			return event.name != "phase" || game.phaseNumber == 0;
 		},
 		async content(event, trigger, player) {
-			if(lib.config.extension_阴阳师杀_xinfan_Bgms == 0){
+			if(lib.config.extension_阴阳师杀_xinfan_Bgms == 1 && "qlwh" in lib.characterPack){
+				var list = [
+					"麟趾马蹄金","天球仪","天王石刻","铜壶滴漏"
+				]
+				var lu ="五花米线/audio/background/";
+				var lu2 ="五花米线/skin/background/";
+				var tu =".png";
+			}else{
 				var list = [
 					"Broken Hero","fengmozhishi","huanshidejintou","huasiji","kongxiang","lidaozhige",
 					"shenzhijiangzhi","weimingzhizui","xianyuezhixia","xingchenzhilv","xinshengqimian",
 					"yanhuozhilv","huazuoqingyan","jingjimeigui","kugushizhang","luhaiweiwang","xueyu",
 					"shayushenghua","zhanyushijiejintou"
 				]
+				var lu ="阴阳师杀/fenbao/yys/yinyue/";
+				var lu2 ="阴阳师杀/fenbao/yys/beijing/";
+				var tu =".jpg";
 			}	
-			var num = list.length;
-			var num1 = Math.floor(Math.random() * num);	
+			var name = list.randomGet();
 			game.broadcastAll(() => {
-				ui.background.setBackgroundImage(`extension/阴阳师杀/fenbao/yys/beijing/${list[num1]}.jpg`);
+				ui.background.setBackgroundImage(`extension/${lu2}${name}${tu}`);
 			});	
-			game.playBgmOL(`ext:阴阳师杀/fenbao/yys/yinyue/${list[num1]}.mp3`);
+			game.playBgmOL(`ext:${lu}${name}.mp3`);
 			if(lib.config.extension_阴阳师杀_xinfan_Bgm == 2){
 				game.broadcastAll(() => {
 				ui.backgroundMusic.addEventListener('ended', () => {
-					var num1 = Math.floor(Math.random() * num);	
-					ui.background.setBackgroundImage(`extension/阴阳师杀/fenbao/yys/beijing/${list[num1]}.jpg`);
-        			_status.tempMusic = `ext:阴阳师杀/fenbao/yys/yinyue/${list[num1]}.mp3`;
+					var name = list.randomGet();	
+					ui.background.setBackgroundImage(`extension/${lu2}${name}${tu}`);
+        			_status.tempMusic = `ext:${lu}${name}.mp3`;
 					game.playBackgroundMusic();
     			});
 				});	

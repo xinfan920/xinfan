@@ -8,7 +8,7 @@ export async function precontent() {
 	//await import("../fenbao/wulie/index.js");//武将包：武烈
 	
 	//卡牌包导入
-	//await import("../kapai/beta/index.js");
+	//await import("../kapai/index.js");
 	
 	//自定义机制/函数导入
 	//自定义函数

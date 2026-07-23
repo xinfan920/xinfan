@@ -21,6 +21,7 @@ export const config = {
                 init: "0",
                 item: {
 					0: "阴阳师",
+					1: "物华弥新",
                 }
 	},
 			update_method: {
