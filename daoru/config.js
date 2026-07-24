@@ -9,7 +9,7 @@ export const config = {
 	},
 	"xinfan_Bgm": {
 		name: `<font color="#9c27b0">背景音乐随机播放的方式`,
-                init: "2",
+                init: 2,
                 item: {
 					0: "关闭播放",
                     1: "单曲循环",
@@ -19,7 +19,7 @@ export const config = {
 	},
 	"xinfan_Bgms": {
 		name: `<font color="#9c27b0">音乐包`,
-                init: "0",
+                init: 0,
                 item: {
 					0: "全部音乐包",
 					1: "阴阳师",

@@ -46,12 +46,12 @@ const Bgms = {
 				var lu2 ="阴阳师杀/fenbao/yys/beijing/";
 				var tu =".jpg";
 			}
-			game.broadcastAll(() => {
+			game.broadcastAll((lu2,name,tu) => {
 				ui.background.setBackgroundImage(`extension/${lu2}${name}${tu}`);
-			});	
+			},lu2,name,tu);	
 			game.playBgmOL(`ext:${lu}${name}.mp3`);
 			if(lib.config.extension_阴阳师杀_xinfan_Bgm == 2){
-				game.broadcastAll(() => {
+				game.broadcastAll((lu2,name,tu) => {
 				ui.backgroundMusic.addEventListener('ended', () => {
             	    if(lib.config.extension_阴阳师杀_xinfan_Bgms == 0 && "qlwh" in lib.characterPack){
 						var num = Math.floor(Math.random() * 2) + 1;
@@ -71,7 +71,7 @@ const Bgms = {
         			_status.tempMusic = `ext:${lu}${name}.mp3`;
 					game.playBackgroundMusic();
     			});
-				});	
+				},lu2,name,tu);	
 			}
 		},
 	},
