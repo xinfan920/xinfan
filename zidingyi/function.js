@@ -2,6 +2,248 @@ import { lib, game, ui, get, ai, _status } from "../../../noname.js";
 
 //添加player方法
 Object.assign(lib.element.Player.prototype, {
+	//单机、联机下将牌、武将框或图片从this移动至另一名角色头上
+	//将要移动的物品item为player自己时，target为player自己则原地跳一下，否则自己平移出去再回来
+	//为牌（card或cards)或图片时，item平移出去然后淡出消失
+	//传入的第一个player类型参数为目标target，出现第二个player类型参数则将第二个player变量对应的player以左慈牌的形式类似于牌方式移动
+	$moveImageTo() {
+		const player = this;
+		let target = false;
+		let item = false;
+		const args = Array.from(arguments);
+
+		// 默认值
+		let path = '';
+		let length = 200, height = 200; // 尺寸默认值
+		let x = 0, y = 0;               // 偏移默认值
+		let duration = 1000;            // 时长默认值
+
+		let arrayCount = 0; // 用于区分第几个数组
+
+		for (const arg of args) {
+			if (get.itemtype(arg)=="player") {
+				if (target) {
+					item = arg;
+				} else {
+					target = arg;
+				}
+			} else if (get.itemtype(arg) == "card" || get.itemtype(arg) == "cards") {
+				item = arg;
+			}
+			else {
+				if (typeof arg === 'string') {
+					// 识别路径：包含斜杠或后缀名，且不是单纯的数字字符串
+					if (arg.includes('.') || arg.includes('/')) {
+						path = arg;
+					}
+				} else if (Array.isArray(arg)) {
+					// 识别数组
+					arrayCount++;
+					if (arrayCount === 1) {
+						// 第一个数组分配给 [长, 宽]
+						length = arg[0] ?? 200;
+						height = arg[1] ?? length; // 如果只填了一个，宽默认等于长
+					} else if (arrayCount === 2) {
+						// 第二个数组分配给 [x, y]
+						x = arg[0] ?? 0;
+						y = arg[1] ?? 0;
+					}
+				} else if (typeof arg === 'number') {
+					// 单独的数字识别为时长
+					duration = arg;
+				}
+			}
+		}
+		if (!item) item = player
+		if (get.itemtype(item) == "player" && item == player&&!path) {
+			if (target == player) {
+				game.broadcastAll(function (player, target) {
+					var originalTransition = player.style.transition;
+					var originalPosition = player.style.position;
+					var originalZIndex = player.style.zIndex;
+					player.style.position = 'relative';
+					player.style.zIndex = '9999';
+					// 原地弹跳动画
+					player.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+					player.style.transform = 'scale(1.2)';
+					setTimeout(function () {
+						player.style.transition = 'transform 0.3s ease-out';
+						player.style.transform = 'scale(1)';
+						setTimeout(function () {
+							player.style.transition = originalTransition;
+							player.style.transform = '';
+							player.style.position = originalPosition;
+							player.style.zIndex = originalZIndex;
+						}, 300);
+					}, 300);
+				}, player, player);
+			} else {
+				// item 是玩家，且目标不是自己：平移到目标再返回
+				game.broadcastAll(function (movingPlayer, targetPlayer, duration) {
+					// 保存原始状态
+					var originalTransition = movingPlayer.style.transition;
+					var originalPosition = movingPlayer.style.position;
+					var originalZIndex = movingPlayer.style.zIndex;
+					var originalTransform = movingPlayer.style.transform;
+
+					// 获取坐标
+					var playerRect = movingPlayer.getBoundingClientRect();
+					var targetRect = targetPlayer.getBoundingClientRect();
+					var deltaX = targetRect.left - playerRect.left;
+					var deltaY = targetRect.top - playerRect.top;
+
+					// 提升层级，防止被遮挡
+					movingPlayer.style.position = 'relative';
+					movingPlayer.style.zIndex = '9999';
+
+					// 根据总时长分配各阶段（毫秒）
+					var goTime = duration * 0.4;
+					var pauseTime = duration * 0.2;
+					var backTime = duration * 0.4;
+
+					// 第一阶段：平移至目标处
+					movingPlayer.style.transition = 'transform ' + (goTime / 1000) + 's ease-in-out';
+					movingPlayer.style.transform = 'translate(' + deltaX + 'px, ' + deltaY + 'px)';
+
+					// 在目标处停顿后返回
+					setTimeout(function () {
+						// 第二阶段：返回原位
+						movingPlayer.style.transition = 'transform ' + (backTime / 1000) + 's ease-in-out';
+						movingPlayer.style.transform = 'translate(0px, 0px)';
+
+						// 动画结束，恢复所有样式
+						setTimeout(function () {
+							movingPlayer.style.transition = originalTransition;
+							movingPlayer.style.transform = originalTransform;
+							movingPlayer.style.position = originalPosition;
+							movingPlayer.style.zIndex = originalZIndex;
+						}, backTime);
+					}, goTime + pauseTime);
+				}, item, target, duration);
+			}
+		} else if (get.itemtype(item) == "card" || get.itemtype(item) == "cards" || (get.itemtype(item) == "player" && item !== player)) {
+			// 将所有情况统一为牌数组
+			let cards = [];
+			if (get.itemtype(item) == "card") {
+				cards = [item];
+			} else if (get.itemtype(item) == "cards") {
+				cards = item.slice(); // 避免直接引用原数组
+			} else {
+				// item 是其他武将（player 且不等于自己），创建一张临时虚拟牌来表现
+				let cardname = "huashen_card_" + item.name;
+				lib.card[cardname] = {
+					fullimage: true,
+					image: "character:" + item.name
+				};
+				lib.translate[cardname] = get.rawName2(item.name);
+				cards = [game.createCard(cardname, " ", " ")];
+			}
+
+			// 平移动画（所有客户端同步）
+			// 平移动画（所有客户端同步）
+			game.broadcastAll(function (source, target, cards, duration, x, y) {
+				// 获取 source 和 target 的视口矩形
+				let sourceRect = source.getBoundingClientRect();
+				let targetRect = target.getBoundingClientRect();
+
+				// source 中心点坐标
+				let sx = sourceRect.left + sourceRect.width / 2;
+				let sy = sourceRect.top + sourceRect.height / 2;
+
+				// target 中心点坐标（加上偏移量）
+				let tx = targetRect.left + targetRect.width / 2 + x;
+				let ty = targetRect.top + targetRect.height / 2 + y;
+
+				for (let i = 0; i < cards.length; i++) {
+					let card = cards[i];
+					let node;
+					if (get.itemtype(card) == "card") {
+						node = card.copy("card", "thrown", false);
+					} else {
+						node = ui.create.div(".card.thrown");
+					}
+					node.fixed = true;
+
+					// 使用固定的牌宽高（104×104），也可用实际 node 尺寸动态获取
+					let cardW = 104, cardH = 104;
+					// 起始位置：source 中心 - 半宽/半高
+					node.style.left = (sx - cardW / 2) + "px";
+					node.style.top = (sy - cardH / 2) + "px";
+
+					document.body.appendChild(node);
+					// 强制回流
+					node.offsetHeight;
+
+					let durationSec = duration / 1000;
+					node.style.transition = `all ${durationSec}s ease-in-out`;
+					node.style.transitionDelay = (i * 0.08) + "s";
+
+					// 计算目标位移（相对于当前 left/top 的差值）
+					let moveX = (tx - cardW / 2) - (sx - cardW / 2); // 其实就是 tx - sx
+					let moveY = (ty - cardH / 2) - (sy - cardH / 2);
+
+					node.style.transform = `translate(${moveX}px, ${moveY}px)`;
+					node.style.opacity = "0";
+
+					node.addEventListener("transitionend", function () {
+						if (node.parentNode) node.remove();
+					});
+				}
+			}, player, target, cards, duration, x, y);
+		} else {
+			// 图片类型（无卡牌、无玩家）
+			if (!path) return; // 无路径则跳过
+			const imagePath = lib.assetURL + path;
+			if (target == player) {
+				player.playGifOL(imagePath, length, height, x, y, duration)
+			} else {
+				game.broadcastAll(function (source, target, imagePath, length, height, x, y, duration) {
+					const container = document.createElement('div');
+					container.style.position = 'absolute';
+					container.style.width = length + 'px';
+					container.style.height = height + 'px';
+					container.style.zIndex = '1000';
+					container.style.pointerEvents = 'none';
+
+					// 获取精确视口矩形
+					let sourceRect = source.getBoundingClientRect();
+					let targetRect = target.getBoundingClientRect();
+
+					// 起点中心（叠加偏移）
+					let sx = sourceRect.left + sourceRect.width / 2 - length / 2 + x;
+					let sy = sourceRect.top + sourceRect.height / 2 - height / 2 + y;
+					container.style.left = sx + 'px';
+					container.style.top = sy + 'px';
+
+					const img = document.createElement('img');
+					img.src = imagePath;
+					img.style.width = '100%';
+					img.style.height = '100%';
+					img.style.objectFit = 'cover';
+					container.appendChild(img);
+
+					document.body.appendChild(container);
+					container.offsetHeight;
+
+					// 终点中心
+					let targetX = targetRect.left + targetRect.width / 2 - length / 2 
+					let targetY = targetRect.top + targetRect.height / 2 - height / 2 
+
+					let durationSec = duration / 1000;
+					container.style.transition = `all ${durationSec}s ease-in-out`;
+
+					container.style.left = targetX + 'px';
+					container.style.top = targetY + 'px';
+					container.style.opacity = '0';
+
+					container.addEventListener('transitionend', function () {
+						if (container.parentNode) container.remove();
+					});
+				}, player, target, imagePath, length, height, x, y, duration);
+			}
+		}
+	},
+
 
 	//联机在武将头像上播放gif动画(也可以传入普通图片)
 	//参数顺序必须为：图片路径、预播放的长、宽(不填则默认均为200像素)、持续时间(不填则默认2000ms)、图片相对于武将框中心的偏移量)

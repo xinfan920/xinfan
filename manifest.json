@@ -1,6 +1,6 @@
 {
   "version": "0.71.5",
-  "update": "0.71.6：，新增音乐包分类，可以从所有音乐包中一直随机抽取播放",
+  "update": "0.71.6：，新增整合了一些功能",
   "files": {
     "daoru/config.js": "b73b32429165a27e3014f0f29e3dd42fba6b049d",
     "daoru/content.js": "6d4683406044ea8e15e28b380559649e5faba82e",
@@ -399,7 +399,7 @@
     "fenbao/yys/yinyue/xueyu.mp3": "cedf1fca26c0bbe06139d19f3340693aaebf51d2",
     "fenbao/yys/yinyue/yanhuozhilv.mp3": "b7a63f5e622d79c88238c446df9f82af3c4b8801",
     "fenbao/yys/yinyue/zhanyushijiejintou.mp3": "b73aa043c0a2436e4f5c694b06edfdd00d4fd554",
-    "genManifest.js": "f9b2b09ca2cd3d736932858833c612583cda8d0e",
+    "genManifest.js": "93727956aeaa28cd91000403baf8e2ced0038893",
     "info.json": "6146cac458fac047a099a60468f29f19360d223c",
     "kapai/card.js": "8c8e211f4b3abc2c7ed4cd2fb757327ea0f16dcc",
     "kapai/cardList.js": "40487addad4bd1440864023766e60f2a2065eef3",
@@ -434,7 +434,7 @@
     "Yuhun/xinfan_yuzhenhunshou.png": "7deca5b09b15eb1725835ee3b8942d1f88ca9299",
     "Yuhun/xinfan_yuzhenzhu.png": "6a2b2fc464977d3e49af5a608f901061c6dd760d",
     "zidingyi/Bgm.js": "e9b6d8e582a49598452fae33cf3253f8ccb87e8c",
-    "zidingyi/function.js": "7c002cf48c3fcc1150ddfce1c9c5172671b561cc",
+    "zidingyi/function.js": "233c573f6d389058a8b9638b31734174b2b0165a",
     "zidingyi/globalSkill.js": "9dbc063331f77f8347cce71bb6d65d7e9c4b27ef",
     "zidingyi/settle.js": "bbd6c047ec818275a4545261316704aa95c8deaa",
     "zidingyi/Yuhun.js": "395f2795c8758e005fc12c56df92ee9daaee39e3"
