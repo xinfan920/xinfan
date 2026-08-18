@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const EXT_DIR = './';          // 脚本放在扩展根目录运行
 const OUTPUT = 'manifest.json';
 const VERSION = '0.71.5';      // 版本号，每次更新请修改
-const UPDATE_NOTE = '0.71.6：，新增整合了一些功能'; // 更新说明
+const UPDATE_NOTE = '0.71.6：，新增酒吞童子'; // 更新说明
 
 // 递归获取所有文件相对路径
 function walkDir(dir, baseDir, fileList = []) {

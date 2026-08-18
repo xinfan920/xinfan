@@ -2,6 +2,123 @@ import { lib, game, ui, get, ai, _status } from "../../../../noname.js";
 
 /** @type { importCharacterConfig['skill'] } */
 const skills = {
+    //酒吞童子
+        xinfan_guikuangqi: {
+            audio: "ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi:2",
+            trigger: {
+                player: ["damageBegin4","phaseEnd"],
+            },
+            mark: true,
+            intro: {
+                content: 'mark',
+            },
+            forced: true,
+            filter: function (event, player) {
+		        return !player.hasMark('xinfan_guikuangqi_gui');
+            },
+            async content(event, trigger, player) {
+				player.addMark("xinfan_guikuangqi", 1, false);
+                await player.draw(1);
+                if(player.countMark('xinfan_guikuangqi') > 5){
+                    player.addMark("xinfan_guikuangqi_gui", 1, false);
+                    await player.recover(4);
+                }
+		    },
+            global: ["xinfan_guikuangqi_gui","xinfan_guikuangqi_qie"],
+            subSkill: {
+                qie: {
+                    trigger: {
+                        player: "useCardToTargeted",
+                    },
+                    filter(event, player) {
+                        return event.card.name == "sha" && player.hasMark('xinfan_guikuangqi_gui');
+                    },
+                    forced: true,
+                    async content(event, trigger, player) {
+                        trigger.target.addTempSkill("qinggang2");
+                        trigger.target.storage.qinggang2.add(trigger.card);
+                        trigger.target.markSkill("qinggang2");
+                    },
+                },    
+                gui: {
+                    mod: {
+                        targetInRange(card, player, target) {
+                            if (card.name == 'sha' && player.hasMark('xinfan_guikuangqi_gui')) return true;
+                        },
+                    },
+                    trigger: {
+                        global: "phaseEnd",
+                    },
+                    filter(event, player) {
+                        return player.hasMark('xinfan_guikuangqi') && player.hasMark('xinfan_guikuangqi_gui');
+                    },
+                    mark: true,
+                    intro: {
+                        content: 'mark',
+                    },
+                    forced: true,
+                    async content(event, trigger, player) {
+                        game.broadcastAll(function (player) {
+						    game.playAudio(`../extension/阴阳师杀/fenbao/yys/juesebao/jiutuntongzi/xinfan_guikuangqi_gui${[1,2].randomGet()}.mp3`);
+					    }, player);
+                        player.removeMark('xinfan_guikuangqi', 1);
+                        await player.draw(2);
+                        if(player.countMark('xinfan_guikuangqi') == 0){
+                            player.removeMark("xinfan_guikuangqi_gui", 1, false);
+                        }
+                    },
+                }, 
+            },    
+    },
+    xinfan_guikuangxiao: {
+            audio: "ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi:2",
+            forced: true,
+            trigger: {
+                player: 'useCard',
+            },
+            filter(event, player) {
+                return event.card.name == "sha";
+            },
+            forced: true,
+            async content(event, trigger, player) {
+                trigger.effectCount += 1;
+            },      
+            global: "xinfan_guikuangxiao_qie",
+            subSkill: {
+                qie: {
+                    trigger: {
+                        player: 'useCard2',
+                    },
+                    filter(event, player) {
+                        return event.card.name == "jiu";
+                    },
+                    forced: true,
+                    async content(event, trigger, player) {
+                        player.logSkill('xinfan_guikuangxiao');  
+                        const name = trigger.card.name;
+                        game.broadcastAll(
+                            function (cardName, next) {
+                                _status.xinfan_guikuangxiao = [cardName, lib.card[cardName]];
+                                lib.card[cardName] = next;
+                            },
+                            name,
+                            {
+                                audio: lib.card[name].audio,
+                                fullskin: lib.card[name].fullskin,
+                                fullimage: lib.card[name].fullimage,
+                                cardcolor: lib.card[name].cardcolor,
+                                image: lib.card[name].image,
+                                type: lib.card[name].type,
+                                subtype: lib.card[name].subtype,
+                                async content(event,trigger,player){
+                                    player.addMark("xinfan_guikuangqi", 1, false);
+                                },
+                            }
+                        );
+                    },
+                },
+            },           
+    },
     //狐妖
     xinfan_hujuqi: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/yaohu:2",
