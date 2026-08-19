@@ -159,7 +159,7 @@ xinfan_shiyaolongyechaji: ["female", "qun",4,["xinfan_chashiyao","xinfan_chalunz
 xinfan_yaohu: ["male", "qun",4,["xinfan_hujuqi","xinfan_hukuanglan"], ["ext:阴阳师杀/fenbao/yys/juesebao/yaohu/xinfan_yaohu.jpg"]],
 
 //酒吞童子
-xinfan_jiutuntongzi: ["male", "qun",4,["xinfan_guikuangqi","xinfan_guikuangxiao"], ["ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi/xinfan_jiutuntongzi.jpg"]],
+xinfan_jiutuntongzi: ["male", "qun",4,["xinfan_guikuangqi","xinfan_guikuangxiao","xinfan_guiguishen"], ["ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi/xinfan_jiutuntongzi.jpg"]],
 
 };
 

@@ -399,11 +399,11 @@ xinfan_hukuanglan_info: '当你使用【杀】指定目标后，你可以展示�
 
 xinfan_jiutuntongzi: "酒吞童子",
 xinfan_guikuangqi: "狂气",
-xinfan_guikuangqi_info: `锁定技，非${get.poptip("xinfan_guikuangqi_gui")}状态下，结束阶段或受到伤害时，你摸1张牌并获得1枚“狂”。此标记数量大于5后，你回复4点体力，进入“鬼神”状态。`,
+xinfan_guikuangqi_info: `锁定技，非${get.poptip("xinfan_guiguishen")}状态下，结束阶段或受到伤害时，你摸1张牌并获得1枚“狂”。此标记数量大于5后，你回复4点体力，进入“鬼神”状态。`,
 xinfan_guikuangxiao: "狂啸",
-xinfan_guikuangxiao_info: `锁定技，你的【杀】结算2次。你的【酒】效果改为获得1枚“狂”`,
-xinfan_guikuangqi_gui: "鬼神",
-xinfan_guikuangqi_gui_info:`锁定技，你使用【杀】无视距离和防具。每名角色回合结束后，你弃置1枚“狂”并摸2张牌，当你失去最后的“狂”后，你退出“鬼神”状态。`,
+xinfan_guikuangxiao_info: `锁定技，你的【杀】结算2次，“鬼神”状态下额外无视距离和防具。使用【酒】后，获得1枚“狂”，“鬼神”状态下额外回复1点体力。`,
+xinfan_guiguishen: "鬼神",
+xinfan_guiguishen_info:`锁定技，每回合首次受到伤害/每名角色回合结束时，你弃置1枚“狂”，此伤害减1/摸2张牌并回复1点体力。当你失去最后的“狂”后，你退出“鬼神”状态。`,
 
 };
 
