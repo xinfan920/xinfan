@@ -161,6 +161,12 @@ xinfan_yaohu: ["male", "qun",4,["xinfan_hujuqi","xinfan_hukuanglan"], ["ext:阴�
 //酒吞童子
 xinfan_jiutuntongzi: ["male", "qun",4,["xinfan_guikuangqi","xinfan_guikuangxiao","xinfan_guiguishen"], ["ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi/xinfan_jiutuntongzi.jpg"]],
 
+//海忍
+xinfan_hairen: ["female", "qun",3,["xinfan_haiyingren","xinfan_haihuiren","xinfan_haiqianying"], ["ext:阴阳师杀/fenbao/yys/juesebao/hairen/xinfan_hairen.jpg"]],
+
+//玉藻前
+xinfan_yuzaoqian: ["male", "qun",4,["xinfan_yuduotian"], ["ext:阴阳师杀/fenbao/yys/juesebao/yuzaoqian/xinfan_yuzaoqian.jpg"]],
+
 };
 
 export default characters;

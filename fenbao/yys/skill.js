@@ -2,6 +2,454 @@ import { lib, game, ui, get, ai, _status } from "../../../../noname.js";
 
 /** @type { importCharacterConfig['skill'] } */
 const skills = {
+        //海忍
+    xinfan_haiyingren: {
+        audio: "ext:阴阳师杀/fenbao/yys/juesebao/hairen:2",
+        beginMarkCount: 1,
+        getLimit: 4,
+        enable: ["chooseToUse", "chooseToRespond"],
+        viewAs: {
+            name: "sha",
+            isCard: true,
+        },
+        filter(event, player) {
+            return player.hasMark("xinfan_haiyingren_mark");
+        },
+        filterCard: () => false,
+        selectCard: -1,
+        log: false,
+        async precontent(event, trigger, player) {
+            player.logSkill("xinfan_haiyingren");
+            player.removeMark("xinfan_haiyingren_mark");
+        },
+        group: ["xinfan_haiyingren_init", "xinfan_haiyingren_charge"],
+        subSkill: {
+            init: {
+                trigger: {
+                    player: "enterGame",
+                    global: "phaseBefore",
+                },
+                filter(event, player) {
+                  return event.name != "phase" || game.phaseNumber == 0;
+                },
+                forced: true,
+                locked: false,
+                async content(event, trigger, player) {
+                  const num = lib.skill.xinfan_haiyingren.beginMarkCount;
+                  player.addMark("xinfan_haiyingren_mark", num);
+                  await game.delayx();
+                },
+            },
+            charge: {
+                trigger: {
+                    player: "phaseUseEnd",
+                },
+                popup: false,
+                async cost(event, trigger, player) {
+                    event.result = await player
+                        .chooseToDiscard("he", [1, 2], get.prompt(event.skill), "弃置至多两张牌并获得等量标记")
+                        .set("logSkill", event.skill)
+                        .set("ai", function (card) {
+                            if (_status.event.goon) {
+                                return 7 - get.value(card);
+                            }
+                            return 0;
+                        })
+                        .set(
+                            "goon",
+                            (() => {
+                                if (player.needsToDiscard()) {
+                                    return true;
+                                }
+                                return player.countMark("xinfan_haiyingren_mark") < lib.skill.xinfan_haiyingren.getLimit;
+                            })()
+                        )
+                        .forResult();
+                },
+                async content(event, trigger, player) {
+                    player.addMark("xinfan_haiyingren_mark", event.cards.length);
+                },
+            },
+            mark: {
+                intro: {
+                    content: "mark",
+                },
+            },
+        },
+    },
+    xinfan_haihuiren: {
+        audio: "ext:阴阳师杀/fenbao/yys/juesebao/hairen:2",
+        beginMarkCount: 2,
+        chargeSkill: 4,
+        trigger: {
+            global: "useCardAfter",
+        },
+        filter(event, player) {
+            if (!player.countCharge()) {
+                return false;
+            }
+            return event.card.name == "sha" && (event.player == player || event.targets.includes(player));
+        },
+        check(trigger, player) {
+            const card = new lib.element.VCard({ name: "sha" });
+            const targets = game.filterPlayer(target => {
+                if (trigger.player == player) {
+                    return trigger.targets.includes(target) && player.canUse(card, target, true, false);
+                }
+                return trigger.player == target && player.canUse(card, target, true, false);
+            });
+            return targets.reduce((sum, target) => sum + get.effect(target, card, player, player), 0) > 0;
+        },
+        async content(event, trigger, player) {
+            player.removeCharge();
+            await player.draw();
+            const card = new lib.element.VCard({ name: "sha" });
+            const targets = game.filterPlayer(target => {
+                if (trigger.player == player) {
+                    return trigger.targets.includes(target) && player.canUse(card, target, true, false);
+                }
+                return trigger.player == target && player.canUse(card, target, true, false);
+            });
+            if (targets.length) {
+                const next = player.useCard(card, targets, false);
+                next.card.xinfan_haihuiren = true;
+                await next;
+            }
+        },
+        ai: {
+            unequip: true,
+            skillTagFilter (player, tag, arg) {
+                if (!arg || !arg.card || !arg.card.xinfan_haihuiren) {
+                    return false;
+                }
+            },
+        },
+        group: ["xinfan_haihuiren_init", "xinfan_haihuiren_charge"],
+        subSkill: {
+            init: {
+                trigger: {
+                    player: "enterGame",
+                    global: "phaseBefore",
+                },
+                filter(event, player) {
+                  if (!player.countCharge(true)) {
+                    return false;
+                  }
+                  return event.name != "phase" || game.phaseNumber == 0;
+                },
+                forced: true,
+                locked: false,
+                async content(event, trigger, player) {
+                  const num = lib.skill.xinfan_haihuiren.beginMarkCount;
+                  player.addCharge(num);
+                  await game.delayx();
+                },
+            },
+            charge: {
+                trigger: {
+                    global: "phaseEnd",
+                },
+                forced: true,
+                locked: false,
+                filter(event, player) {
+                    if (!player.countCharge(true)) {
+                        return false;
+                    }
+                    return !game.hasPlayer2(target => target.hasHistory("sourceDamage"));
+                },
+                async content(event, trigger, player) {
+                    player.addCharge();
+                    await game.delayx();
+                },
+            },
+        },
+    },
+    xinfan_haiqianying: {
+        audio: "ext:阴阳师杀/fenbao/yys/juesebao/hairen:2",
+        trigger: {
+            source: "damageBegin1",
+            player: "damageBegin3",
+        },
+        usable: 1,
+        check(event, player, name) {
+            if (name == "damageBegin1") {
+                var target = event.player;
+                if (get.attitude(player, target) >= 0) {
+                    return true;
+                }
+                return get.damageEffect(target, player, player, event.nature) < 0;
+            }
+            return true;
+        },
+        async content(event, trigger, player) {
+            trigger.num--;
+            player.addTempSkill("xinfan_haiqianying_effect");
+            player.addMark("xinfan_haiqianying_effect", 1, false);
+        },
+        subSkill: {
+            effect: {
+                trigger: {
+                    source: "damageBegin1",
+                    player: "damageBegin3",
+                },
+                forced: true,
+                charlotte: true,
+                onremove: true,
+                async content(event, trigger, player) {
+                    trigger.num += player.countMark(event.name);
+                    player.removeSkill(event.name);
+                },
+                mark: true,
+                intro: {
+                    content: "本回合你下一次造成或受到的伤害+#",
+                },
+            },
+        },
+    },
+    //玉藻前
+    xinfan_yuduotian: {
+        audio: "ext:阴阳师杀/fenbao/yys/juesebao/yuzaoqian:2",
+        init(player, skill) {
+            player.addSkill("xinfan_yuduotian_record");
+            player.addTempSkill("xinfan_yuduotian_mark");
+            const num = player.getHistory("sourceDamage").reduce((sum, evt) => sum + evt.num, 0);
+            if (num > 0) {
+                player.setMark("xinfan_yuduotian_mark", num, false);
+            }
+        },
+        onremove(player, skill) {
+            player.removeSkill("xinfan_yuduotian_record");
+        },
+        getNum(player) {
+            return Math.max(0, 2 - player.countMark("xinfan_yuduotian_mark"));
+        },
+        enable: "phaseUse",
+        usable: 1,
+        chooseButton: {
+            dialog(event, player) {
+                const num = lib.skill.xinfan_yuduotian.getNum(player);
+                const deslist = [
+                    `令至多三名角色各摸${num}张牌，各受到1点火焰伤害`,
+                    `你弃置${num}张牌，然后对一名角色造成2点火焰伤害`,
+                ];
+                const dialog = ui.create.dialog(get.translation("xinfan_yuduotian"));
+                dialog.add([
+                    deslist.map((item, i) => {
+                        return [i == 0 ? "draw" : "discard", item];
+                    }),
+                    "tdnodes",
+                ]);
+                dialog.direct = true;
+                return dialog;
+            },
+            backup(links) {
+                const next = get.copy(lib.skill[`xinfan_yuduotian_${links[0]}`]);
+                return next;
+            },
+            check(button) {
+                const player = get.player();
+                switch (button.link) {
+                    case 0: {
+                        return 1.2 + Math.random();
+                    }
+                        break;
+                    case 1: {
+                        return 1.1 + Math.random();
+                    }
+                        break;
+                }
+                return 1;
+            },
+            prompt(links) {
+                const player = get.player();
+                const num = lib.skill.xinfan_yuduotian.getNum(player);
+                const deslist = [
+                    `令至多三名角色各摸${num}张牌，各受到1点火焰伤害`,
+                    `你弃置${num}张牌，然后对一名角色造成2点火焰伤害`,
+                ];
+                return deslist[links[0] == "draw" ? 0 : 1];
+            },
+        },
+        ai: {
+            order: 1,
+            result: {
+                player: 1,
+            },
+        },
+        subSkill: {
+            backup: {},
+            draw: {
+                filterTarget: true,
+                selectTarget() {
+                    return [1, 3];
+                },
+                multitarget: true,
+                multiline: false,
+                line: false,
+                async content(event, trigger, player) {
+                    player.logSkill('xinfan_yuduotian'); 
+                    const num = lib.skill.xinfan_yuduotian.getNum(player);
+                    await game.asyncDraw(event.targets, num);
+                    for (const target of event.targets) {
+                        if (!target.isIn()) {
+                            continue;
+                        }
+                        await target.damage("fire");
+                    }
+                    if (
+                        game.getGlobalHistory("everything", evt => {
+                            if (evt.name != "die") {
+                                return false;
+                            }
+                            return evt.getParent(event.name) == event;
+                        }).length
+                    ) {
+                        const skill = "xinfan_yuduotian_discard";
+                        const prompt2 = get.info("xinfan_yuduotian").chooseButton.prompt(["discard"]);
+                        const result = await player
+                            .chooseCardTarget({
+                                prompt: get.translation(skill),
+                                prompt2: prompt2,
+                                forceDie: true,
+                                filterCard(card) {
+                                    return lib.skill.xinfan_yuduotian_discard.filterCard(card);
+                                },
+                                selectCard() {
+                                    return lib.skill.xinfan_yuduotian_discard.selectCard();
+                                },
+                                filterTarget: true,
+                                ai1(card) {
+                                    return 7 - get.value(card);
+                                },
+                                ai2(target) {
+                                    const player = get.player();
+                                    return get.damageEffect(target, player, player, "fire") * 2;
+                                },
+                            })
+                            .forResult();
+                        if (result?.targets?.length) {
+                            const next = game.createEvent(skill);
+                            next.set("forceDie", true);
+                            next.player = player;
+                            next.cards = result.cards;
+                            next.targets = result.targets;
+                            next.setContent(lib.skill[skill].content);
+                            await next;
+                        }
+                    }
+                },
+                ai: {
+                    result: {
+                        target(player, target) {
+                            const draw = get.effect(target, { name: "draw" }, player, player);
+                            const damage = get.damageEffect(target, player, target, "fire");
+                            return draw + damage;
+                        },
+                    },
+                },
+            },
+            discard: {
+                filterTarget: true,
+                filterCard: (card) => {
+                    const player = get.player();
+                    if (!lib.filter.cardDiscardable(card, player, "xinfan_yuduotian")) {
+                        return false;
+                    }
+                    const num = lib.skill.xinfan_yuduotian.getNum(player);
+                    if (num <= 0) {
+                        return false;
+                    }
+                    return true;
+                },
+                selectCard() {
+                    const player = get.player();
+                    const num = lib.skill.xinfan_yuduotian.getNum(player);
+                    if (num >= player.countDiscardableCards(player, "he")) {
+                        return -1;
+                    }
+                    return num;
+                },
+                check(card) {
+                    return 7 - get.value(card);
+                },
+                position: "he",
+                lose: false,
+                discard: false,
+                delay: false,
+                async content(event, trigger, player) {
+                    player.logSkill('xinfan_yuduotian'); 
+                    const target = event.targets[0];
+                    if (event?.cards?.length) {
+                        await player.discard(event.cards);
+                    }
+                    const next = target.damage(2, "fire");
+                    await next;
+                    if (
+                        game.getGlobalHistory("everything", evt => {
+                            if (evt.name != "die") {
+                                return false;
+                            }
+                            return evt.getParent(2) == next;
+                        }).length
+                    ) {
+                        const skill = "xinfan_yuduotian_draw";
+                        const prompt2 = get.info("xinfan_yuduotian").chooseButton.prompt(["draw"]);
+                        const result = await player
+                            .chooseTarget({
+                                prompt: get.translation(skill),
+                                prompt2: prompt2,
+                                forceDie: true,
+                                selectTarget() {
+                                    return lib.skill.xinfan_yuduotian_draw.selectTarget();
+                                },
+                                ai(target) {
+                                    const player = get.player();
+                                    const att = get.attitude(player, target);
+                                    return att * lib.skill.xinfan_yuduotian_draw.ai.result.target(player, target);
+                                },
+                            })
+                            .forResult();
+                        if (result?.targets?.length) {
+                            const next = game.createEvent(skill);
+                            next.set("forceDie", true);
+                            next.player = player;
+                            next.targets = result.targets;
+                            next.setContent(lib.skill[skill].content);
+                            await next;
+                        }
+                    }
+                },
+                ai: {
+                    result: {
+                        target(player, target) {
+                            return get.damageEffect(target, player, target, "fire") * 2;
+                        },
+                    },
+                },
+            },
+            record: {
+                charlotte: true,
+                onremove: true,
+                trigger: {
+                    source: "damageSource",
+                },
+                forced: true,
+                firstDo: true,
+                silent: true,
+                filter(event, player) {
+                    return event.num > 0;
+                },
+                async content(event, trigger, player) {
+                    player.addTempSkill("xinfan_yuduotian_mark");
+                    player.addMark("xinfan_yuduotian_mark", trigger.num, false);
+                },
+            },
+            mark: {
+                charlotte: true,
+                onremove: true,
+            },
+        },
+    },
     //酒吞童子
         xinfan_guikuangqi: {
             audio: "ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi:2",

@@ -405,6 +405,18 @@ xinfan_guikuangxiao_info: `锁定技，你的【杀】结算2次，“鬼神”�
 xinfan_guiguishen: "鬼神",
 xinfan_guiguishen_info:`锁定技，每回合首次受到伤害/每名角色回合结束时，你弃置1枚“狂”，此伤害减1/摸2张牌并回复1点体力。当你失去最后的“狂”后，你退出“鬼神”状态。`,
 
+xinfan_hairen: "海忍",
+xinfan_haiyingren: "影刃",
+xinfan_haiyingren_info: "出牌阶段结束时，你可以弃置至多两张牌获得等量枚“影”标记(上限4)，当年需要时，你可以弃置一枚“影”标记视为使用或打出一张【杀】。",
+xinfan_haihuiren: "回刃",
+xinfan_haihuiren_info: `蓄力技（2/4），你为来源或目标的【杀】结算完成后，你可以消耗1点蓄力摸1张牌，并对对方使用一张无视防具的【杀】。每个未造成过伤害的回合结束后，你获得1点蓄力`,
+xinfan_haiqianying: '潜影',
+xinfan_haiqianying_info: '每回合限一次，当你造成或受到伤害时，你可以令此伤害减1，本回合你下一次造成或受到的伤害加1。',
+
+xinfan_yuzaoqian: "玉藻前", 
+xinfan_yuduotian: '堕天',
+xinfan_yuduotian_info: '出牌阶段限一次，你选择一项：1.令至多3名角色依次摸x张牌后，依次受到1点火焰伤害。2.弃置x张牌（不足则全弃），对一名角色造成2点火焰伤害。当你以此法击杀角色后，你执行另外一项(x为2-你本回合内造成伤害值)',
+
 };
 
 export default translates;

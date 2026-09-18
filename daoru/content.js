@@ -11,7 +11,7 @@ export async function content(config, pack) {
 				},
 				{
 					type: "players", data: [
-						"xinfan_beimihu",
+						"xinfan_yuzaoqian",
 
 					]
 				},
