@@ -2,7 +2,7 @@ import { lib, game, ui, get, ai, _status } from "../../../../noname.js";
 
 /** @type { importCharacterConfig['skill'] } */
 const skills = {
-        //海忍
+    //海忍
     xinfan_haiyingren: {
         audio: "ext:阴阳师杀/fenbao/yys/juesebao/hairen:2",
         beginMarkCount: 1,
@@ -34,7 +34,9 @@ const skills = {
                 },
                 forced: true,
                 locked: false,
+                priority:15,
                 async content(event, trigger, player) {
+                  player.logSkill('xinfan_haiyingren');
                   const num = lib.skill.xinfan_haiyingren.beginMarkCount;
                   player.addMark("xinfan_haiyingren_mark", num);
                   await game.delayx();
@@ -45,9 +47,13 @@ const skills = {
                     player: "phaseUseEnd",
                 },
                 popup: false,
+                filter(event, player) {
+                    return player.countMark("xinfan_haiyingren_mark") < lib.skill.xinfan_haiyingren.getLimit;
+                },
                 async cost(event, trigger, player) {
+                    const num = Math.min(2, lib.skill.xinfan_haiyingren.getLimit - player.countMark("xinfan_haiyingren_mark"));
                     event.result = await player
-                        .chooseToDiscard("he", [1, 2], get.prompt(event.skill), "弃置至多两张牌并获得等量标记")
+                        .chooseToDiscard("he", [1, num], get.prompt(event.skill), "弃置至多两张牌并获得等量标记")
                         .set("logSkill", event.skill)
                         .set("ai", function (card) {
                             if (_status.event.goon) {
@@ -68,6 +74,7 @@ const skills = {
                 },
                 async content(event, trigger, player) {
                     player.addMark("xinfan_haiyingren_mark", event.cards.length);
+                    player.logSkill('xinfan_haiyingren');
                 },
             },
             mark: {
@@ -106,15 +113,34 @@ const skills = {
             const card = new lib.element.VCard({ name: "sha" });
             const targets = game.filterPlayer(target => {
                 if (trigger.player == player) {
-                    return trigger.targets.includes(target) && player.canUse(card, target, true, false);
+                    return trigger.targets.includes(target) && player.canUse(card, target, false, false);
                 }
-                return trigger.player == target && player.canUse(card, target, true, false);
+                return trigger.player == target && player.canUse(card, target, false, false);
             });
-            if (targets.length) {
-                const next = player.useCard(card, targets, false);
-                next.card.xinfan_haihuiren = true;
-                await next;
+            if (!targets.length) {
+                return;
             }
+            await player
+                .chooseToUse("是否对" + get.translation(targets) + "使用一张无视防具的杀？", function (card, player, event) {
+                    if (get.name(card) != "sha") {
+                        return false;
+                    }
+                    return lib.filter.filterCard.apply(this, arguments);
+                })
+                .set("targetRequired", true)
+                .set("complexSelect", true)
+                .set("complexTarget", true)
+                .set("filterTarget", function (card, player, target) {
+                    if (!get.event().targets.includes(target)) {
+                        return false;
+                    }
+                    return lib.filter.targetEnabled.call(this, card, player, target) ?? false;
+                })
+                .set("targets", targets)
+                .set("oncard", (card) => {
+                    card.xinfan_haihuiren = true;
+                })
+                .set("addCount", false);
         },
         ai: {
             unequip: true,
@@ -143,6 +169,7 @@ const skills = {
                   const num = lib.skill.xinfan_haihuiren.beginMarkCount;
                   player.addCharge(num);
                   await game.delayx();
+                  player.logSkill('xinfan_haihuiren');
                 },
             },
             charge: {
@@ -160,6 +187,7 @@ const skills = {
                 async content(event, trigger, player) {
                     player.addCharge();
                     await game.delayx();
+                    player.logSkill('xinfan_haihuiren');
                 },
             },
         },
@@ -183,8 +211,14 @@ const skills = {
         },
         async content(event, trigger, player) {
             trigger.num--;
-            player.addTempSkill("xinfan_haiqianying_effect");
-            player.addMark("xinfan_haiqianying_effect", 1, false);
+            const next = game.createEvent("xinfan_haiqianying_effect", false);
+            next.player = player;
+            next.setContent(() => {
+                player.addTempSkill("xinfan_haiqianying_effect");
+                player.addMark("xinfan_haiqianying_effect", 1, false);
+            });
+            event.next.remove(next);
+            trigger.after.push(next);
         },
         subSkill: {
             effect: {
