@@ -4,6 +4,7 @@ import { lib, game, ui, get, ai, _status } from '../../../noname.js';
 export async function precontent() {
 	//武将包导入
 	await import("../fenbao/yys/index.js");//武将包：阴阳师
+	await import("../fenbao/yjsj/index.js");//武将包：异戒神将
 	//await import("../fenbao/xingfan/index.js");//武将包：星繁
 	//await import("../fenbao/wulie/index.js");//武将包：武烈
 	
