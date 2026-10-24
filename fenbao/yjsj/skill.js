@@ -3,7 +3,7 @@ import { lib, game, ui, get, ai, _status } from "../../../../noname.js";
 /** @type { importCharacterConfig['skill'] } */
 const skills = {
     //侠隐江湖-宇智波佐助
-    xinfa_xiazyanhuang: {
+xinfa_xiazyanhuang: {
         audio: "ext:阴阳师杀/fenbao/yjsj/juesebao/xiayuzhibozuozhu:2",
         getViewAs(player) {
             let name = "sha", nature = "fire";
@@ -22,15 +22,27 @@ const skills = {
         },
         enable: "chooseToUse",
         usable: 1,
-        viewAs(cards, player) {
+        onChooseToUse(event) {
+            if (game.online || event.xinfa_xiazyanhuang) {
+                return;
+            }
+            const player = event.player;
             const info = get.info("xinfa_xiazyanhuang").getViewAs(player);
+            event.set("xinfa_xiazyanhuang", info);
+        },
+        viewAs(cards, player) {
+            const event = _status.event;
+            const info = event.xinfa_xiazyanhuang;
             if (!info) {
                 return null;
             }
             return { name: info.name, nature: info.nature };
         },
         filter(event, player) {
-            const info = get.info("xinfa_xiazyanhuang").getViewAs(player);
+            const info = event.xinfa_xiazyanhuang;
+            if (!info) {
+                return false;
+            }
             const card = new lib.element.VCard({ name: info.name, nature: info.nature });
             return event.filterCard(
               card,
@@ -45,6 +57,17 @@ const skills = {
             const info = get.info("xinfa_xiazyanhuang").getViewAs(player);
             const card = new lib.element.VCard({ name: info.name, nature: info.nature });
             return `每回合限一次，你可以视为使用一张${get.translation(card)}。`;
+        },
+        log: false,
+        async precontent(event, trigger, player) {
+            const card = event.result.card;
+            if (card.name == "sha" && card.nature == "fire") {
+                player.logSkill("xinfa_xiazyanhuang", null, null, null, [1]);
+            } else if (card.name == "sha" && card.nature == "thunder") {
+                player.logSkill("xinfa_xiazyanhuang", null, null, null, [2]);
+            } else {
+                player.logSkill("xinfa_xiazyanhuang", null, null, null, [3]);
+            }
         },
         hiddenCard(player, name) {
             const info = get.info("xinfa_xiazyanhuang").getViewAs(player);
@@ -68,7 +91,7 @@ const skills = {
         },
     },
     xinfa_xiazyujie: {
-            audio: "ext:阴阳师杀/fenbao/yjsj/juesebao/xiayuzhibozuozhu:2",
+        audio: "ext:阴阳师杀/fenbao/yjsj/juesebao/xiayuzhibozuozhu:2",
         getViewAs(player) {
             let name = "shan", nature = null;
             var history = player.getHistory("useCard");
@@ -85,15 +108,27 @@ const skills = {
         },
         enable: "chooseToUse",
         usable: 1,
-        viewAs(cards, player) {
+        onChooseToUse(event) {
+            if (game.online || event.xinfa_xiazyujie) {
+                return;
+            }
+            const player = event.player;
             const info = get.info("xinfa_xiazyujie").getViewAs(player);
+            event.set("xinfa_xiazyujie", info);
+        },
+        viewAs(cards, player) {
+            const event = _status.event;
+            const info = event.xinfa_xiazyujie;
             if (!info) {
                 return null;
             }
             return { name: info.name, nature: info.nature };
         },
         filter(event, player) {
-            const info = get.info("xinfa_xiazyujie").getViewAs(player);
+            const info = event.xinfa_xiazyujie;
+            if (!info) {
+                return false;
+            }
             const card = new lib.element.VCard({ name: info.name, nature: info.nature });
             return event.filterCard(
               card,
@@ -148,15 +183,27 @@ const skills = {
         },
         enable: "chooseToUse",
         usable: 1,
-        viewAs(cards, player) {
+        onChooseToUse(event) {
+            if (game.online || event.xinfa_xiazjingzhe) {
+                return;
+            }
+            const player = event.player;
             const info = get.info("xinfa_xiazjingzhe").getViewAs(player);
+            event.set("xinfa_xiazjingzhe", info);
+        },
+        viewAs(cards, player) {
+            const event = _status.event;
+            const info = event.xinfa_xiazjingzhe;
             if (!info) {
                 return null;
             }
             return { name: info.name, nature: info.nature };
         },
         filter(event, player) {
-            const info = get.info("xinfa_xiazjingzhe").getViewAs(player);
+            const info = event.xinfa_xiazjingzhe;
+            if (!info) {
+                return false;
+            }
             const card = new lib.element.VCard({ name: info.name, nature: info.nature });
             return event.filterCard(
               card,
