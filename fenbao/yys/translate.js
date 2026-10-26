@@ -299,7 +299,7 @@ xinfan_yinfanhuiyeji: "因幡辉夜姬",
 xinfan_fanyuanman: '愿满',
 xinfan_fanyuanman_info: '一名角色回合开始时,你可以令其从前x项中,选择一项:1.摸两张。2.回复1点体力。3造成1点伤害。4.增加1点体力上限。然后你获得一枚“愿”标记。(x为“愿”标记数量+1)。',
 xinfan_fanyueying: '月盈',
-xinfan_fanyueying_info: '一名角色造成伤害或恢复体力时，你可以弃置一枚“愿”标记，本次数值加1。',
+xinfan_fanyueying_info: '一名角色造成伤害或恢复体力时，你可以弃置2枚“愿”标记，本次数值加1。',
 
 xinfan_zhuiyueshen: "追月神",    
 xinfan_zhuiqinghui: '清辉',
@@ -399,7 +399,7 @@ xinfan_hukuanglan_info: '当你使用【杀】指定目标后，你可以展示�
 
 xinfan_jiutuntongzi: "酒吞童子",
 xinfan_guikuangqi: "狂气",
-xinfan_guikuangqi_info: `锁定技，非${get.poptip("xinfan_guiguishen")}状态下，结束阶段或受到伤害时，你摸1张牌并获得1枚“狂”。此标记数量大于5后，你回复4点体力，进入“鬼神”状态。`,
+xinfan_guikuangqi_info: `锁定技，非${get.poptip("xinfan_guiguishen")}状态下，结束阶段或受到伤害时，你摸1张牌并获得1枚“狂”。此标记数量大于5后，你进入“鬼神”状态。`,
 xinfan_guikuangxiao: "狂啸",
 xinfan_guikuangxiao_info: `锁定技，你的【杀】结算2次，“鬼神”状态下额外无视距离和防具。使用【酒】后，获得1枚“狂”，“鬼神”状态下额外回复1点体力。`,
 xinfan_guiguishen: "鬼神",

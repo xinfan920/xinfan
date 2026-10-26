@@ -2530,7 +2530,7 @@ const skills = {
                 global: ['damageBegin', 'recoverBegin'],
             },  
             filter(event, player) {
-                return player.countMark('xinfan_fanyuanman') > 0;
+                return player.countMark('xinfan_fanyuanman') > 1;
                 }, 
             check(event, player) {
                 if(event.name == 'damage'){
@@ -2541,7 +2541,7 @@ const skills = {
                 }	
 			},
             async content(event, trigger, player) {
-                await player.removeMark('xinfan_fanyuanman', 1);      
+                await player.removeMark('xinfan_fanyuanman', 2);      
                 trigger.num++;
             },
     },

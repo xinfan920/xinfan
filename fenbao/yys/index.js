@@ -27,6 +27,7 @@ game.import("character", function () {
 			xinfan_wunvzhiyuan: () => false,
 			xinfan_tianyuyuzhan: () => false,
 			xinfan_xiuluoguitongwan: () => false,
+			xinfan_geye: () => false,
 		},
 		characterTitle: { ...characterTitles },
 		characterSubstitute: { ...characterSubstitute },

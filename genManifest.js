@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const EXT_DIR = './';          // 脚本放在扩展根目录运行
 const OUTPUT = 'manifest.json';
 const VERSION = '0.71.8';      // 版本号，每次更新请修改
-const UPDATE_NOTE = '0.71.8：，新增异戒神将包，新武将：侠隐江湖—宇智波佐助。特效还在肘击ai，先用语音玩吧'; // 更新说明
+const UPDATE_NOTE = '0.71.8：，因幡辉夜姬削弱'; // 更新说明
 
 // 递归获取所有文件相对路径
 function walkDir(dir, baseDir, fileList = []) {
