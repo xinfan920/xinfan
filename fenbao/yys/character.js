@@ -1,7 +1,7 @@
 import { lib, game, ui, get, ai, _status } from "../../../../noname.js";
 
 const characters = {
-
+//阴阳师
 //神启荒
 xinfan_shenqihuang: ["male", "qun",4,["xinfan_qishenqi","xinfan_qimingding","xinfan_qixinggui"], ["ext:阴阳师杀/fenbao/yys/juesebao/shenqihuang/xinfan_shenqihuang.jpg"]],
 
@@ -158,6 +158,119 @@ xinfan_shiyaolongyechaji: ["female", "qun",4,["xinfan_chashiyao","xinfan_chalunz
 //狐妖
 xinfan_yaohu: ["male", "qun",4,["xinfan_hujuqi","xinfan_hukuanglan"], ["ext:阴阳师杀/fenbao/yys/juesebao/yaohu/xinfan_yaohu.jpg"]],
 
+//酒吞童子
+xinfan_jiutuntongzi: ["male", "qun",4,["xinfan_guikuangqi","xinfan_guikuangxiao","xinfan_guiguishen"], ["ext:阴阳师杀/fenbao/yys/juesebao/jiutuntongzi/xinfan_jiutuntongzi.jpg"]],
+
+//海忍
+xinfan_hairen: ["female", "qun",3,["xinfan_haiyingren","xinfan_haihuiren","xinfan_haiqianying"], ["ext:阴阳师杀/fenbao/yys/juesebao/hairen/xinfan_hairen.jpg"]],
+
+//玉藻前
+xinfan_yuzaoqian: ["male", "qun",4,["xinfan_yuduotian"], ["ext:阴阳师杀/fenbao/yys/juesebao/yuzaoqian/xinfan_yuzaoqian.jpg"]],
+
+
+//武烈
+	//烈黄盖
+xinfan_liehuanggai: ["male", "wu", 4, ["xinfan_zhaxiang", "xinfan_kurou" ,"xinfan_renhuo"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liehuanggai.jpg"]],
+    //烈张辽
+xinfan_liezhangliao: ["male", "wei", 4, ["xinfan_tuxi",  "xinfan_kuibing",  "xinfan_wucuo"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liezhangliao.jpg"]],
+    //烈张角
+xinfan_liezhangjiao: ["male", "qun", 3, ["xinfan_jiaoyi",  "xinfan_xingdao","xinfan_zhangshi"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liezhangjiao.jpg"]],
+    //烈王异
+xinfan_liewangyi: ["female", "wei", 3, ["xinfan_liezhenlie", "xinfan_liemiji"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liewangyi.jpg"]],	
+    //烈关羽
+xinfan_lieguanyu: ["male","shu",  4, ["xinfan_zhonglun", "xinfan_aoyi"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_lieguanyu.jpg"]], 
+    //烈姜维
+xinfan_liejiangwei: ["male", "shu", 4, ["xinfan_weijian", "xinfan_kuzhi"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liejiangwei.jpg"]],
+    //烈曹操
+xinfan_liecaocao: ["male", "qun", 4, ["xinfan_kuaichou", "xinfan_jisi", "xinfan_fuji"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liecaocao.jpg"]],
+    //烈徐庶
+xinfan_liexvshu: ["male", "qun", 4, ["xinfan_yixing", "xinfan_renxia"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liexvshu.jpg"]],
+    //烈赵云
+xinfan_liezhaoyun: ["male", "shu", 4, ["xinfan_jvqi", "xinfan_nuzhan"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liezhaoyun.jpg"]],
+    //烈袁绍
+xinfan_lieyuanshao: ["male", "qun", 4, ["xinfan_lirui", "xinfan_shiya"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_lieyuanshao.jpg"]],
+    //烈诸葛亮
+xinfan_liezhugeliang: ["male", "shu", 7, ["xinfan_jieze", "xinfan_zhisheng"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liezhugeliang.jpg"]],  
+    //烈庞统
+xinfan_liepangtong: ["male", "shu", 3, ["xinfan_lianhuan", "xinfan_niepan"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liepangtong.jpg"]], 
+    //烈高顺
+xinfan_liegaoshun: ["male","qun",  4, ["xinfan_xianzhen", "xinfan_yongjue"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liegaoshun.jpg"]],
+    //烈卧龙诸葛亮
+xinfan_liewolongzhugeliang: ["male", "shu", 3, ["xinfan_liangtianshu", "xinfan_liangqihe"], ["ext:阴阳师杀/fenbao/yys/juesebao/wulie/xinfan_liewolongzhugeliang.jpg"]], 
+
+//星繁
+//星孙坚
+xinfan_xingsunjian: ["male", "wu", 4, ["xinfan_yinghun"],["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingsunjian.jpg"]],
+
+//星曹操
+xinfan_xingcaocao: ["male", "qun", 4, ["xinfan_zhiyuan", "xinfan_haina"],["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingcaocao.jpg"]],
+
+//星黄月英
+xinfan_xinghuangyueying: ["female", "qun", 3, ["xinfan_lingdong", "xinfan_lingqiao"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xinghuangyueying.jpg"]],
+
+//星司马懿
+xinfan_xingsimayi: ["male", "wei", 3, ["xinfan_yingshi", "xinfan_chengbing"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingsimayi.jpg"]],
+
+//星曹仁
+xinfan_xingcaoren: ["male", "wei", 4, ["xinfan_dingjun", "xinfan_jiyuan"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingcaoren.jpg"]],
+
+//星姜维
+xinfan_xingjiangwei: ["male", "shu", 4, ["xinfan_tiaoxin","xinfan_hemou","xinfan_zhiji"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingjiangwei.jpg"]],
+
+//星赵云
+xinfan_xingzhaoyun:["male","shu",4,["xinfan_qiangshi","xinfan_zhenjun","xinfan_youlong"],['doublegroup:qun:shu',"ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingzhaoyun.jpg"]], 
+
+//星张春华
+xinfan_xingzhangchunhua: ["female", "wei", 3, ["xinfan_jueqin", "xinfan_zhinian"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingzhangchunhua.jpg"]],
+
+//星童渊
+xinfan_xingtongyuan: ["male", "qun", 4, ["xinfan_bailian", "xinfan_cba", "xinfan_cad", "xinfan_cbd"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingtongyuan.jpg"]],
+
+//星孙鲁班
+xinfan_xingsunluban: ["female", "wu", 3, ["xinfan_fugu", "xinfan_gongfu"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingsunluban.jpg"]],
+
+//星费祎
+xinfan_xingfeiyi: ["male", "shu", 3, ["xinfan_huyuan", "xinfan_zhige"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingfeiyi.jpg"]],
+
+//星钟会
+xinfan_xingzhonghui: ["male", "wei", 4, ["xinfan_quanji", "xinfan_zili"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingzhonghui.jpg"]],
+
+//星司马昭
+xinfan_xingsimazhao: ["male", "wei", 4, ["xinfan_daigong", "xinfan_qiantun"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingsimazhao.jpg"]],
+
+//星周仓
+xinfan_xingzhoucang: ["male", "shu", "4/4/4", ["xinfan_zhongyong","xinfan_xiezhan"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingzhoucang.jpg"]],
+
+//星卧龙凤雏
+xinfan_xingwolongfengchu: ["male", "shu", "2/4/2", ["xinfan_longpo","xinfan_fengming","xinfan_huizhuan"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingwolongfengchu.jpg"]],
+
+//星徐氏
+xinfan_xingxushi: ["female", "wu", 3, ["xinfan_bugua", "xinfan_bixiong"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingxushi.jpg"]],
+
+//星夏侯氏
+xinfan_xingxiahoushi: ["female", "wei", 3, ["xinfan_degui", "xinfan_qiaoshi", "xinfan_yanyv"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingxiahoushi.jpg"]],
+
+//星王异
+xinfan_xingwangyi: ["female", "wei", 3, ["xinfan_zhenlie", "xinfan_miji"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingwangyi.jpg"]],
+
+//星蔡文姬
+xinfan_xingcaiwenji: ["female","wei",  3, ["xinfan_boyue", "xinfan_moshi"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingcaiwenji.jpg"]],
+
+//星魏延
+xinfan_xingweiyan:["male","shu",4,["xinfan_kuanggu","xinfan_yexi","xinfan_zhukou"],['doublegroup:qun:shu',"ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingweiyan.jpg"]],
+
+//星于吉
+xinfan_xingyuji: ["male", "qun", 3, ["xinfan_guanshi",  "xinfan_rushi"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingyuji.jpg"]],
+
+//星诸葛果
+xinfan_xingzhugeguo: ["female", "qun", 3, ["xinfan_chenyuan", "xinfan_chaotuo"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingzhugeguo.jpg"]],
+
+//星周宣
+xinfan_xingzhouxuan: ["male", "wei", 3, ["xinfan_wuwei", "xinfan_qingmeng"], ["ext:阴阳师杀/fenbao/yys/juesebao/xingfan/xinfan_xingzhouxuan.jpg"]],
+
+//异戒神将
+//侠隐江湖-宇智波佐助
+xinfan_xiayuzhibozuozhu: ["male", "qun",4,["xinfa_xiazyanhuang","xinfa_xiazyujie","xinfa_xiazjingzhe","xinfan_xiazbianzhen"], ["ext:阴阳师杀/fenbao/yys/juesebao/yjsj/xiayuzhibozuozhu/xinfan_xiayuzhibozuozhu.jpg"]],
 
 };
 
