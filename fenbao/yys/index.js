@@ -16,6 +16,14 @@ import { characterIntros, characterTitles, characterReplaces, dynamicTranslates,
 
 //导入武将包[yysCharacter]
 game.import("character", function () {
+	const banRarities = ["rare", "epic", "legend", "prestige"];
+	const characterFilter = {};
+	for (const name of Object.keys(characters)) {
+					characterFilter[name] = () => {
+						const threshold = banRarities.indexOf(lib.config.extension_阴阳师杀_xinfan_jin);
+						return threshold < 0 || banRarities.indexOf(game.getRarity(name)) < threshold;
+					};
+				}
 	const yys = {
 		name: "yys",//武将包名
 		connect: true,
@@ -23,12 +31,7 @@ game.import("character", function () {
 		characterSort: {
 			yys: characterSort,//记得这里也要改
 		},
-		characterFilter: {
-			xinfan_wunvzhiyuan: () => false,
-			xinfan_tianyuyuzhan: () => false,
-			xinfan_xiuluoguitongwan: () => false,
-			xinfan_geye: () => false,
-		},
+		characterFilter,
 		characterTitle: { ...characterTitles },
 		characterSubstitute: { ...characterSubstitute },
 		dynamicTranslate: { ...dynamicTranslates },
@@ -37,6 +40,7 @@ game.import("character", function () {
 		skill: { ...skills },
 		translate: { ...translates, ...voices, ...sortTranslate },
 	};
+	
 	//为未设置图片/阵亡语音的武将设置默认路径
 	//for (const name in yysCharacter.character) {//记得这里也要改
 	//	const info = yysCharacter.character[name];//记得这里也要改

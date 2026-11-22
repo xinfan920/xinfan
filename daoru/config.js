@@ -2,6 +2,18 @@ import { lib, game, ui, get, ai, _status } from "../../../noname.js";
 import update from '../daoru/update.js';
 //扩展设置
 export const config = {
+	"xinfan_jin": {
+				name: "一键禁用",
+				intro: "生成选将候选时，禁用所选品质及以上的《阴阳师杀》武将。",
+				init: "off",
+				item: {
+					off: "关闭",
+					rare: "精品及以上",
+					epic: "史诗及以上",
+					legend: "传说及以上",
+					prestige: "仅至臻",
+				},
+			},
 	"xinfan_Yuhun": {
 		name: `<font color="#E661A0">开启 御魂<small>(下局生效)`,
 		init: false,
