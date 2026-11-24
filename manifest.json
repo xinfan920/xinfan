@@ -1,11 +1,11 @@
 {
-  "version": "0.74.8",
-  "update": "0.74.8：，武将分级",
+  "version": "0.75.8",
+  "update": "0.75.8：，武将分级",
   "files": {
     "daoru/config.js": "021c1690f4a3f344f325f632b0048eb245096101",
     "daoru/content.js": "9295257f554de5e8880e97cd4a7e1671f748459e",
     "daoru/package.js": "8dd9e59101748cbd361fb31a92df800ac3f642e5",
-    "daoru/precontent.js": "4693c3ad0f7451b5ce0630c7533253f1d8dc26a1",
+    "daoru/precontent.js": "a80f740b0d09c70c1e1a1052e6e908784205e592",
     "daoru/update.js": "ff890fbe52a98d1b82e7c00ab65d7ecc5b1037c0",
     "extension.js": "a8ad51a25c09b55f5c5120969df100fef7c643cc",
     "fenbao/yys/beijing/benzhensanweihu.jpg": "c68dbe1c7f1c31e3beeb8ed267114ee12a5e3fc5",
@@ -498,7 +498,7 @@
     "fenbao/yys/yinyue/xueyu.mp3": "cedf1fca26c0bbe06139d19f3340693aaebf51d2",
     "fenbao/yys/yinyue/yanhuozhilv.mp3": "b7a63f5e622d79c88238c446df9f82af3c4b8801",
     "fenbao/yys/yinyue/zhanyushijiejintou.mp3": "b73aa043c0a2436e4f5c694b06edfdd00d4fd554",
-    "genManifest.js": "eacbf8484bfcddc4db2a1b9fad9dd86a45cabaec",
+    "genManifest.js": "72c42308d3ae70fa4bf7d4e03f80e274d4abc273",
     "info.json": "6146cac458fac047a099a60468f29f19360d223c",
     "kapai/beta/card.js": "8c8e211f4b3abc2c7ed4cd2fb757327ea0f16dcc",
     "kapai/beta/cardList.js": "40487addad4bd1440864023766e60f2a2065eef3",
