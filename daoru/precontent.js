@@ -12,18 +12,18 @@ export async function precontent() {
 		var pj_sss = [
 			"xinfan_shenduobaqidashe","xinfan_dishitian","xinfan_chulingshanfeng","xinfan_xunxiangxing","xinfan_zhuiyueshen","xinfan_huiyeji",
 			"xinfan_liezhangjiao","xinfan_lieliuhong","xinfan_liehuanggai","xinfan_liezhaoyun","xinfan_liejiangwei",
-			"xinfan_liegaoshun","xinfan_xingjiangwei","xinfan_xingsimayi","xinfan_xingcaocao","xinfan_xinghuangyueying","xinfan_xingyuji","xinfan_xingzhouxuan",
-			"xinfan_xiayuzhibozuozhu"
+			"xinfan_liegaoshun","xinfan_xingjiangwei","xinfan_xingsimayi","xinfan_xingcaocao","xinfan_xinghuangyueying","xinfan_xingyuji",
+			"xinfan_xiayuzhibozuozhu","xinfan_xingzhouxuan",
 		];
 		//史诗 SS
 		var pj_ss = [
 			"xinfan_liexvshu","xinfan_lingluyuqian","xinfan_guitongwan","xinfan_xunsenxiaolunan","xinfan_yuanlaiguang",
 			"xinfan_cimutongzi","xinfan_chanbingxuenv","xinfan_xueyuqian","xinfan_xuzuozhinan",
 			"xinfan_pingjiangmen","xinfan_kongxiangmianlingqi","xinfan_kongquemingwang","xinfan_yixienamei","xinfan_benzhensanweihu",
-			"xinfan_yinfanhuiyeji","xinfan_fengyangjun","xinfan_bujianyue","xinfan_xingsunluban",,"xinfan_xingzhoucang",
+			"xinfan_yinfanhuiyeji","xinfan_fengyangjun","xinfan_bujianyue","xinfan_xingsunluban","xinfan_xingzhoucang",
 			"xinfan_beimihu","xinfan_liezhugeliang","xinfan_liecaocao","xinfan_liezhangliao","xinfan_liewolongzhugeliang",
-			"xinfan_xingzhonghui","xinfan_xingfeiyi","xinfan_xingtongyuan","xinfan_xingzhugeguo","xinfan_xingzhaoyun"
-			"xinfan_xingxushi","xinfan_xingxiahoushi","xinfan_xingcaiwenji"
+			"xinfan_xingzhonghui","xinfan_xingfeiyi","xinfan_xingtongyuan","xinfan_xingzhugeguo","xinfan_xingzhaoyun",
+			"xinfan_xingxushi","xinfan_xingxiahoushi","xinfan_xingcaiwenji",
 		];
 		//精品 S
 		var pj_s = [
@@ -37,7 +37,7 @@ export async function precontent() {
 			"xinfan_linghaijinyuji","xinfan_yanling","xinfan_longyechaji","xinfan_yuedu","xinfan_lieyuanshao",
 			"xinfan_yuyuanbore","xinfan_geliuduo","xinfan_shiyaolongyechaji","xinfan_yaohu","xinfan_jiutuntongzi",
 			"xinfan_hairen","xinfan_yuzaoqian","xinfan_liewangyi","xinfan_liepangtong","xinfan_xingzhangchunhua",
-			"xinfan_xingcaoren","xinfan_xingweiyan","xinfan_xingsimazhao","xinfan_xingwolongfengchu","xinfan_xingsunjian"
+			"xinfan_xingcaoren","xinfan_xingweiyan","xinfan_xingsimazhao","xinfan_xingwolongfengchu","xinfan_xingsunjian",
 		];
 
 		lib.rank.rarity.prestige ??= [];
